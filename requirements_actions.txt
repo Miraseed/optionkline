@@ -1,0 +1,6 @@
+akshare
+pandas
+requests
+py_mini_racer
+lxml
+openpyxl

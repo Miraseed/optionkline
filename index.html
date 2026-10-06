@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>期权时空容错交易系统 - K线数据</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "微软雅黑", -apple-system, sans-serif;
+    background: #f0f2f5; color: #333; padding: 12px;
+    -webkit-text-size-adjust: 100%;
+  }
+  /* ===== 登录页 ===== */
+  #login-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 50%, #2b6cb0 100%);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .login-box {
+    background: white; border-radius: 16px; padding: 40px 36px;
+    width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .login-box h1 { font-size: 20px; color: #2c5282; text-align: center; margin-bottom: 6px; }
+  .login-box p.sub { font-size: 13px; color: #718096; text-align: center; margin-bottom: 28px; }
+  .login-box label { display: block; font-size: 13px; color: #4a5568; margin-bottom: 8px; font-weight: bold; }
+  .login-box input {
+    width: 100%; padding: 12px 14px; border: 1px solid #cbd5e0; border-radius: 8px;
+    font-size: 15px; outline: none; transition: border-color 0.2s;
+  }
+  .login-box input:focus { border-color: #4299e1; box-shadow: 0 0 0 3px rgba(66,153,225,0.15); }
+  .login-box button {
+    width: 100%; padding: 13px; margin-top: 20px;
+    background: linear-gradient(135deg, #2b6cb0, #2c5282); color: white;
+    border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer;
+  }
+  .login-box button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .login-error { background: #fed7d7; color: #c53030; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-top: 16px; display: none; }
+  .login-tip { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 16px; }
+
+  /* ===== 主界面 ===== */
+  .header {
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+    color: white; padding: 16px; border-radius: 10px; margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .header h1 { font-size: 18px; margin-bottom: 10px; }
+  .header-info { display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 12px; align-items: center; }
+  .status-badge { padding: 3px 10px; border-radius: 10px; font-weight: bold; font-size: 11px; }
+  .status-trading { background: #48bb78; color: white; }
+  .status-closed { background: #a0aec0; color: white; }
+  .refresh-btn {
+    background: #ed8936; color: white; border: none; padding: 6px 14px;
+    border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;
+  }
+  .refresh-btn:disabled { background: #cbd5e0; cursor: not-allowed; }
+  .interval-selector {
+    background: #2b6cb0; color: white; border: none; padding: 6px 10px;
+    border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;
+  }
+  .logout-btn {
+    background: #e53e3e; color: white; border: none; padding: 6px 14px;
+    border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;
+  }
+  .countdown { font-size: 11px; color: #cbd5e0; }
+
+  .summary {
+    background: white; border-radius: 10px; padding: 14px; margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .summary h2 { font-size: 14px; color: #2c5282; margin-bottom: 10px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; }
+  .etf-card {
+    border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px;
+    cursor: pointer; transition: all 0.2s; background: #fafbfc;
+  }
+  .etf-card:hover { border-color: #4299e1; box-shadow: 0 2px 6px rgba(66,153,225,0.15); }
+  .etf-card.active { border-color: #2b6cb0; background: #ebf8ff; }
+  .etf-card-title { font-weight: bold; font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .card-right { text-align: right; line-height: 1.3; }
+  .etf-card-rating { display: flex; gap: 6px; font-size: 9px; justify-content: space-between; align-items: center; }
+  .rating-left { display: flex; gap: 4px; flex: 1; min-width: 0; }
+  .rating-right { display: flex; align-items: center; gap: 3px; flex-shrink: 0; white-space: nowrap; }
+  .rating-tag { padding: 1px 5px; border-radius: 4px; color: white; font-weight: bold; }
+  .pe-tag { padding: 1px 5px; border-radius: 4px; color: #333; font-weight: bold; font-size: 9px; white-space: nowrap; }
+
+  .detail { background: white; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+  .detail-header h2 { font-size: 15px; color: #2c5282; }
+  .period-tabs { display: flex; gap: 4px; }
+  .tab {
+    padding: 5px 14px; border: 1px solid #cbd5e0; background: #edf2f7;
+    cursor: pointer; font-size: 12px; border-radius: 6px;
+  }
+  .tab.active { background: #2b6cb0; color: white; border-color: #2b6cb0; }
+
+  .chart-container { width: 100%; height: 380px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+  .stats-panel {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px;
+    margin-bottom: 12px; font-size: 13px; line-height: 1.9; color: #2d3748;
+  }
+  .stats-panel .stats-title { font-weight: bold; color: #2b6cb0; font-size: 14px; margin-bottom: 4px; }
+  .stats-panel .stats-row { display: flex; flex-wrap: wrap; gap: 6px 24px; }
+  .stats-panel .risk-high { color: #c53030; font-weight: bold; }
+  .stats-panel .risk-low { color: #22543d; font-weight: bold; }
+  .pct-pos { color: #c53030; }
+  .pct-neg { color: #2f855a; }
+
+  .table-container { overflow-x: auto; max-height: 500px; overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  thead th { background: #2b6cb0; color: white; padding: 7px 5px; position: sticky; top: 0; z-index: 1; text-align: center; white-space: nowrap; }
+  tbody td { padding: 5px; text-align: center; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+  tbody tr:hover { background: #f7fafc; }
+  .risk-3 { background: #fed7d7 !important; }
+  .risk-2 { background: #feebc8 !important; }
+  .risk-1 { background: #fffaf0; }
+  .risk0 { background: #f7fafc; }
+  .risk1 { background: #f0fff4; }
+  .risk2 { background: #c6f6d5 !important; }
+  .risk3 { background: #9ae6b4 !important; }
+  .risk-3 .label-cell, .risk-2 .label-cell { color: #c53030; font-weight: bold; }
+  .risk3 .label-cell, .risk2 .label-cell { color: #22543d; font-weight: bold; }
+
+  .loading { text-align: center; padding: 40px; color: #718096; }
+  .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid #e2e8f0; border-top-color: #2b6cb0; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .toast { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 6px; color: white; font-size: 14px; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+  .toast.show { opacity: 1; }
+  .toast.success { background: #48bb78; }
+  .toast.error { background: #f56565; }
+  .toast.info { background: #4299e1; }
+
+  .footer { text-align: center; margin-top: 14px; color: #718096; font-size: 11px; }
+
+  @media (max-width: 768px) {
+    body { padding: 8px; }
+    .header h1 { font-size: 15px; }
+    .header-info { font-size: 11px; gap: 6px 10px; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .chart-container { height: 260px; }
+    table { font-size: 10px; }
+    thead th, tbody td { padding: 4px 3px; }
+  }
+  @media (max-width: 900px) and (orientation: landscape) {
+    body { padding: 6px; }
+    .header { padding: 10px; }
+    .header h1 { font-size: 14px; margin-bottom: 6px; }
+    .summary { padding: 10px; margin-bottom: 8px; }
+    .summary-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    .detail { padding: 10px; }
+    .chart-container { height: 200px; margin-bottom: 8px; }
+    .table-container { max-height: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 登录页 ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>📈 期权时空容错交易系统</h1>
+    <p class="sub">K线数据 · 风险评级 · 实时监控</p>
+    <label>访问密码</label>
+    <input type="password" id="password" placeholder="请输入密码" autocomplete="off" autofocus>
+    <button id="login-btn" onclick="doLogin()">登 录</button>
+    <div class="login-error" id="login-error">密码错误，请重试</div>
+    <p class="login-tip">请向管理员获取访问密码</p>
+  </div>
+</div>
+
+<!-- ===== 主界面 ===== -->
+<div id="app" style="display:none;">
+  <div class="header">
+    <h1>📈 期权时空容错交易系统 · K线数据与风险评级</h1>
+    <div class="header-info">
+      <span>本地: <span id="server-time">--</span></span>
+      <span>数据: <span id="last-update">--</span></span>
+      <span id="status-badge" class="status-badge status-closed">加载中...</span>
+      <span class="countdown" id="countdown">--</span>
+      <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">🔄 刷新</button>
+      <select class="interval-selector" id="interval-select" onchange="setRefreshInterval(this.value)">
+        <option value="60">1分钟</option>
+        <option value="120">2分钟</option>
+        <option value="180">3分钟</option>
+        <option value="300" selected>5分钟</option>
+      </select>
+      <button class="logout-btn" onclick="doLogout()">退出</button>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h2>📊 标的风险评级总览（点击查看详情）</h2>
+    <div class="summary-grid" id="summary-grid">
+      <div class="loading"><div class="spinner"></div><p>加载中...</p></div>
+    </div>
+  </div>
+
+  <div class="detail" id="detail-section" style="display:none;">
+    <div class="detail-header">
+      <h2 id="detail-title">标的详情</h2>
+      <div class="period-tabs">
+        <div class="tab active" data-period="daily" onclick="switchPeriod('daily')">日K</div>
+        <div class="tab" data-period="weekly" onclick="switchPeriod('weekly')">周K</div>
+        <div class="tab" data-period="monthly" onclick="switchPeriod('monthly')">月K</div>
+      </div>
+    </div>
+    <div class="chart-container" id="kline-chart"></div>
+    <div class="stats-panel" id="stats-panel"></div>
+    <div class="table-container">
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>日期</th><th>开盘</th><th>最高</th><th>最低</th><th>收盘</th>
+            <th>成交量</th><th>评分</th><th>评级</th><th>期中涨幅</th><th>期中跌幅</th><th>收盘涨跌</th>
+          </tr>
+        </thead>
+        <tbody id="data-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">期权时空容错交易系统 · 数据来源: akshare · GitHub Actions 定时更新</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== 配置 ====================
+const UNDERLYINGS = [
+  { code: "510050", name: "上证50ETF",  decimal_places: 3 },
+  { code: "510300", name: "沪深300ETF", decimal_places: 3 },
+  { code: "588000", name: "科创50ETF",  decimal_places: 3 },
+  { code: "159915", name: "创业板ETF",  decimal_places: 3 },
+  { code: "510500", name: "中证500ETF", decimal_places: 3 },
+  { code: "000852", name: "中证1000",   decimal_places: 2 },
+  { code: "I0",     name: "铁矿石主连", decimal_places: 1 },
+];
+// 密码 option2024 的 base64 编码（基础门禁，非安全加密）
+const PASSWORD_ENC = "b3B0aW9uMjAyNA==";
+const PERIODS = ["daily", "weekly", "monthly"];
+
+// ==================== 登录 ====================
+async function doLogin() {
+  const pwd = document.getElementById("password").value;
+  if (!pwd) return;
+  const btn = document.getElementById("login-btn");
+  btn.disabled = true; btn.textContent = "登录中...";
+  const ok = btoa(unescape(encodeURIComponent(pwd))) === PASSWORD_ENC;
+  if (ok) {
+    localStorage.setItem("auth", "1");
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    await initApp();
+  } else {
+    document.getElementById("login-error").style.display = "block";
+    btn.disabled = false; btn.textContent = "登 录";
+  }
+}
+document.getElementById("password").addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
+
+function doLogout() {
+  localStorage.removeItem("auth");
+  location.reload();
+}
+
+// ==================== 交易时间判断（前端） ====================
+function isTradingDay(dt) { dt = dt || new Date(); return dt.getDay() < 5; }
+function isTradingHours(dt) {
+  dt = dt || new Date();
+  if (!isTradingDay(dt)) return false;
+  const h = dt.getHours(), m = dt.getMinutes();
+  const mins = h * 60 + m;
+  return (mins >= 570 && mins <= 690) || (mins >= 780 && mins <= 900); // 9:30-11:30 / 13:00-15:00
+}
+function nextRefreshInfo() {
+  const now = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  if (isTradingHours(now)) return "交易时间内，定时自动刷新";
+  if (isTradingDay(now)) {
+    if (mins < 570) return "非交易时段，9:30后开始自动刷新";
+    if (mins < 780) return "午间休市，13:00后继续自动刷新";
+    return "今日交易已结束";
+  }
+  return "非交易日，数据仅供查看";
+}
+
+// ==================== 数据加载 ====================
+let allData = {};       // {code: {daily:[], weekly:[], monthly:[]}}
+let peData = {};        // {code: [{date, pe_ttm, quantile}]}
+let peLatest = {};      // {code: {pe_ttm, percentile}}
+let currentCode = null;
+let currentPeriod = "daily";
+let chart = null;
+let refreshTimer = null;
+let countdownInterval = null;
+let refreshMs = 300000;
+let nextRefreshAt = 0;
+
+const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"risk-1","2":"risk-2","3":"risk-3"};
+const RISK_BG = {"-3":"#9ae6b4","-2":"#c6f6d5","-1":"#f0fff4","0":"#e2e8f0","1":"#fffaf0","2":"#feebc8","3":"#fed7d7"};
+
+function fmtPct(v) { return (v===null||v===undefined) ? "--" : (v*100).toFixed(2)+"%"; }
+function getDecimals(code) { const u = UNDERLYINGS.find(x=>x.code===code); return u ? (u.decimal_places||3) : 3; }
+function fmtNum(v, d) { if (v===null||v===undefined) return "--"; if (d===undefined) d = currentCode?getDecimals(currentCode):3; return Number(v).toFixed(d); }
+function fmtVol(v) { if (v===null||v===undefined) return "--"; v=Number(v); if(v>=1e8) return (v/1e8).toFixed(2)+"亿"; if(v>=1e4) return (v/1e4).toFixed(0)+"万"; return v.toLocaleString(); }
+function showToast(msg, type) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = `toast show ${type||"info"}`;
+  setTimeout(() => t.className = "toast", 3000);
+}
+
+// 计算 MA 均线
+function calcMA(closes, n) {
+  const result = [];
+  for (let i = 0; i < closes.length; i++) {
+    if (i < n - 1) { result.push(null); continue; }
+    let sum = 0;
+    for (let j = i - n + 1; j <= i; j++) sum += closes[j];
+    result.push(round2(sum / n));
+  }
+  return result;
+}
+function round2(v) { return Math.round(v * 10000) / 10000; }
+
+// 为K线日期匹配PE值和百分位
+function getPEForDates(code, dates) {
+  const records = peData[code];
+  if (!records || !records.length) return { peTtm: null, pePercentile: null };
+  const sorted = [...records].sort((a, b) => a.date.localeCompare(b.date));
+  const peDates = sorted.map(r => r.date);
+  const peValues = sorted.map(r => r.pe_ttm);
+  // 计算每个PE值的历史百分位
+  const sortedVals = [...peValues].sort((a, b) => a - b);
+  const n = sortedVals.length;
+  const pctOf = {};
+  for (const v of peValues) {
+    if (pctOf[v] === undefined) {
+      let rank = 0;
+      for (const sv of sortedVals) if (sv <= v) rank++;
+      pctOf[v] = round1(rank / n * 100);
+    }
+  }
+  const peTtm = [], pePercentile = [];
+  let idx = 0;
+  for (const d of dates) {
+    while (idx < peDates.length && peDates[idx] <= d) idx++;
+    if (idx > 0) {
+      const v = peValues[idx - 1];
+      peTtm.push(v);
+      pePercentile.push(pctOf[v]);
+    } else { peTtm.push(null); pePercentile.push(null); }
+  }
+  return { peTtm, pePercentile };
+}
+function round1(v) { return Math.round(v * 10) / 10; }
+
+// 计算每个标的最新PE及百分位
+function calcPELatest() {
+  peLatest = {};
+  for (const u of UNDERLYINGS) {
+    const records = peData[u.code];
+    if (!records || !records.length) continue;
+    const sorted = [...records].sort((a, b) => a.date.localeCompare(b.date));
+    const latest = sorted[sorted.length - 1];
+    let percentile;
+    if (latest.quantile !== undefined && latest.quantile !== null) {
+      percentile = latest.quantile;
+    } else {
+      const allVals = sorted.map(r => r.pe_ttm).sort((a, b) => a - b);
+      let rank = 0;
+      for (const v of allVals) if (v <= latest.pe_ttm) rank++;
+      percentile = round1(rank / allVals.length * 100);
+    }
+    peLatest[u.code] = { pe_ttm: latest.pe_ttm, percentile: percentile };
+  }
+}
+
+async function loadJSON(url) {
+  const resp = await fetch(url, { cache: "no-store" });
+  if (!resp.ok) throw new Error(`${resp.status}`);
+  return resp.json();
+}
+
+async function loadAllData() {
+  const promises = [];
+  for (const u of UNDERLYINGS) {
+    for (const p of PERIODS) {
+      promises.push(
+        loadJSON(`kline_data/${u.code}_${p}.json`)
+          .then(data => ({ code: u.code, period: p, data }))
+          .catch(() => ({ code: u.code, period: p, data: [] }))
+      );
+    }
+  }
+  const results = await Promise.all(promises);
+  allData = {};
+  for (const u of UNDERLYINGS) allData[u.code] = {};
+  for (const r of results) {
+    allData[r.code][r.period] = r.data;
+  }
+  // 加载PE数据
+  try {
+    peData = await loadJSON("kline_data/pe_data.json");
+  } catch { peData = {}; }
+  calcPELatest();
+
+  // 更新状态
+  document.getElementById("last-update").textContent = new Date().toLocaleString("zh-CN", { hour12: false });
+  const badge = document.getElementById("status-badge");
+  if (isTradingHours()) {
+    badge.textContent = "🟢 交易中";
+    badge.className = "status-badge status-trading";
+  } else {
+    badge.textContent = isTradingDay() ? "⚪ 非交易时段" : "⚪ 非交易日";
+    badge.className = "status-badge status-closed";
+  }
+}
+
+// ==================== 渲染 ====================
+function renderSummary() {
+  const grid = document.getElementById("summary-grid");
+  let html = "";
+  for (const u of UNDERLYINGS) {
+    const code = u.code;
+    const d = allData[code] || {};
+    const daily = d.daily || [], weekly = d.weekly || [], monthly = d.monthly || [];
+    const lastDaily = daily.length ? daily[daily.length-1] : null;
+    const lastWeekly = weekly.length ? weekly[weekly.length-1] : null;
+    const lastMonthly = monthly.length ? monthly[monthly.length-1] : null;
+    const latest = lastDaily;
+    const close = latest ? fmtNum(latest.close, u.decimal_places||3) : "--";
+    const chg = latest && latest.close_change !== null ? fmtPct(latest.close_change) : "--";
+    const chgCls = latest && latest.close_change !== null ? (latest.close_change >= 0 ? "pct-pos" : "pct-neg") : "";
+    function ratingTag(rec) {
+      if (!rec) return '<span class="rating-tag" style="background:#a0aec0">--</span>';
+      const s = rec.risk_score;
+      const bg = RISK_BG[String(s)] || "#a0aec0";
+      const color = s >= 2 ? "#c53030" : s <= -2 ? "#22543d" : "#333";
+      return `<span class="rating-tag" style="background:${bg};color:${color}">${rec.risk_label}</span>`;
+    }
+    function peTag() {
+      const p = peLatest[code];
+      if (!p) return '';
+      const pe = Number(p.pe_ttm).toFixed(1);
+      const pct = Number(p.percentile).toFixed(1);
+      let bg = '#e2e8f0';
+      if (p.percentile > 70) bg = '#fed7d7';
+      else if (p.percentile < 25) bg = '#c6f6d5';
+      return `<span class="rating-right">PE:<span class="pe-tag" style="background:${bg}">${pe} ${pct}%</span></span>`;
+    }
+    html += `
+      <div class="etf-card ${code===currentCode?'active':''}" onclick="selectETF('${code}')">
+        <div class="etf-card-title">
+          <span>${u.name} (${code})</span>
+          <span class="card-right"><span class="${chgCls}">${close} ${chg}</span></span>
+        </div>
+        <div class="etf-card-rating">
+          <span class="rating-left">日:${ratingTag(lastDaily)} 周:${ratingTag(lastWeekly)} 月:${ratingTag(lastMonthly)}</span>
+          ${peTag()}
+        </div>
+      </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function selectETF(code) {
+  currentCode = code;
+  document.getElementById("detail-section").style.display = "block";
+  renderSummary();
+  renderDetail();
+  renderChart();
+}
+
+function switchPeriod(period) {
+  currentPeriod = period;
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.period === period));
+  renderDetail();
+  renderChart();
+}
+
+function renderDetail() {
+  const u = UNDERLYINGS.find(x => x.code === currentCode);
+  if (!u) return;
+  document.getElementById("detail-title").textContent = `${u.name} (${currentCode}) · K线数据`;
+  const records = (allData[currentCode] && allData[currentCode][currentPeriod]) || [];
+  const tbody = document.getElementById("data-tbody");
+  const reversed = [...records].reverse();
+  let html = "";
+  for (const r of reversed) {
+    const cls = RISK_COLORS[String(r.risk_score)] || "risk0";
+    const iuCls = r.intraday_up !== null ? (r.intraday_up >= 0 ? "pct-pos" : "pct-neg") : "";
+    const idCls = r.intraday_down !== null ? (r.intraday_down >= 0 ? "pct-pos" : "pct-neg") : "";
+    const ccCls = r.close_change !== null ? (r.close_change >= 0 ? "pct-pos" : "pct-neg") : "";
+    html += `<tr class="${cls}">
+      <td>${r.date}</td><td>${fmtNum(r.open)}</td><td>${fmtNum(r.high)}</td>
+      <td>${fmtNum(r.low)}</td><td>${fmtNum(r.close)}</td><td>${fmtVol(r.volume)}</td>
+      <td>${r.risk_score}</td><td class="label-cell">${r.risk_label}</td>
+      <td class="${iuCls}">${fmtPct(r.intraday_up)}</td>
+      <td class="${idCls}">${fmtPct(r.intraday_down)}</td>
+      <td class="${ccCls}">${fmtPct(r.close_change)}</td>
+    </tr>`;
+  }
+  tbody.innerHTML = html || `<tr><td colspan="11" class="loading">暂无数据</td></tr>`;
+}
+
+function renderChart() {
+  if (!currentCode) return;
+  const el = document.getElementById("kline-chart");
+  if (!chart) { chart = echarts.init(el); window.addEventListener("resize", () => chart.resize()); }
+  const records = (allData[currentCode] && allData[currentCode][currentPeriod]) || [];
+  const dates = records.map(r => r.date);
+  const values = records.map(r => [r.open, r.close, r.low, r.high]);
+  const riskScores = records.map(r => r.risk_score);
+  const riskLabels = records.map(r => r.risk_label);
+  const closes = records.map(r => r.close);
+  const ma5 = calcMA(closes, 5), ma10 = calcMA(closes, 10), ma20 = calcMA(closes, 20), ma60 = calcMA(closes, 60);
+  const { peTtm, pePercentile } = getPEForDates(currentCode, dates);
+  const hasPE = peTtm !== null;
+  const decimals = getDecimals(currentCode);
+
+  const riskMarkers = [], chanceMarkers = [];
+  for (let i = 0; i < values.length; i++) {
+    const [o, c, l, h] = values[i];
+    if (riskScores[i] === 3) riskMarkers.push([i, h * 1.01]);
+    else if (riskScores[i] === -3) chanceMarkers.push([i, l * 0.99]);
+  }
+
+  const totalBars = dates.length;
+  const visibleBars = Math.min(120, totalBars);
+  const startPercent = totalBars > visibleBars ? (1 - visibleBars / totalBars) * 100 : 0;
+  const lastDate = dates.length ? dates[dates.length - 1] : "";
+
+  const option = {
+    animation: false,
+    legend: { top: 4, data: hasPE ? ["K线","MA5","MA10","MA20","MA60","PE(TTM)","巨大风险","巨大机会"] : ["K线","MA5","MA10","MA20","MA60","巨大风险","巨大机会"], textStyle: { fontSize: 11 } },
+    grid: { left: "8%", right: hasPE ? "9%" : "3%", top: "12%", bottom: 45 },
+    xAxis: { type: "category", data: dates, scale: true, boundaryGap: false, axisLine: { onZero: false }, splitLine: { show: false },
+      axisLabel: { fontSize: 10, interval: function(idx, val) { return idx % 3 === 0 || val === lastDate; } } },
+    yAxis: hasPE ? [
+      { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10 } },
+      { scale: true, position: "right", axisLabel: { fontSize: 10, color: "#f97316" }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
+    ] : { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10 } },
+    tooltip: {
+      trigger: "axis", axisPointer: { type: "cross" }, textStyle: { fontSize: 11 },
+      formatter: function(params) {
+        if (!params || !params.length) return "";
+        const dateStr = params[0].axisValue || params[0].name;
+        const idx = dates.indexOf(dateStr);
+        if (idx < 0) return "";
+        const ohlc = values[idx]; if (!ohlc) return "";
+        const [open, close, low, high] = ohlc;
+        const prevClose = idx > 0 ? values[idx-1][1] : null;
+        function pctHtml(v) {
+          if (prevClose === null || prevClose === 0) return "";
+          const p = (v - prevClose) / prevClose * 100;
+          const sign = p >= 0 ? "+" : "";
+          const color = p >= 0 ? "#ef5350" : "#26a69a";
+          return `<span style="color:${color}">(${sign}${p.toFixed(2)}%)</span>`;
+        }
+        let html = `<b>${dates[idx]}</b><br/>`;
+        if (prevClose !== null) html += `昨收: ${prevClose.toFixed(decimals)}<br/>`;
+        html += `开盘: ${open.toFixed(decimals)} ${pctHtml(open)}<br/>`;
+        html += `收盘: ${close.toFixed(decimals)} ${pctHtml(close)}<br/>`;
+        html += `最高: ${high.toFixed(decimals)} ${pctHtml(high)}<br/>`;
+        html += `最低: ${low.toFixed(decimals)} ${pctHtml(low)}`;
+        const label = riskLabels[idx] || "";
+        if (label) html += `<br/>评级: ${label}`;
+        if (hasPE && peTtm[idx] !== null && peTtm[idx] !== undefined) {
+          html += `<br/>PE(TTM): <b>${peTtm[idx].toFixed(2)}</b> <span style="color:#f97316">${pePercentile[idx]}%</span>`;
+        }
+        params.forEach(p => {
+          if (p.seriesName && p.seriesName.startsWith("MA") && p.value !== null && p.value !== undefined && !isNaN(p.value)) {
+            html += `<br/>${p.marker}${p.seriesName}: ${Number(p.value).toFixed(2)}`;
+          }
+        });
+        return html;
+      }
+    },
+    dataZoom: [
+      { type: "inside", xAxisIndex: 0, start: startPercent, end: 100, zoomOnMouseWheel: true, moveOnMouseMove: true, moveOnMouseWheel: true },
+      { type: "slider", xAxisIndex: 0, start: startPercent, end: 100, height: 16, bottom: 6 }
+    ],
+    series: [
+      { name: "K线", type: "candlestick", data: values, itemStyle: { color: "#ef5350", color0: "#26a69a", borderColor: "#ef5350", borderColor0: "#26a69a" } },
+      { name: "MA5", type: "line", data: ma5, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#f59e0b" } },
+      { name: "MA10", type: "line", data: ma10, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#3b82f6" } },
+      { name: "MA20", type: "line", data: ma20, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#a855f7" } },
+      { name: "MA60", type: "line", data: ma60, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#64748b" } },
+      { name: "巨大风险", type: "scatter", data: riskMarkers, symbol: "triangle", symbolSize: 10, symbolRotate: 180, itemStyle: { color: "#e53e3e" }, z: 10 },
+      { name: "巨大机会", type: "scatter", data: chanceMarkers, symbol: "triangle", symbolSize: 10, itemStyle: { color: "#38a169" }, z: 10 }
+    ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
+  };
+  chart.setOption(option, true);
+  renderStats(dates, values, riskScores);
+}
+
+function renderStats(dates, values, riskScores) {
+  if (!dates.length) return;
+  const highs = values.map(v => v[3]), lows = values.map(v => v[2]), closes = values.map(v => v[1]);
+  const highPrice = Math.max(...highs), lowPrice = Math.min(...lows);
+  const startPrice = closes[0], endPrice = closes[closes.length-1];
+  const change = (endPrice - startPrice) / startPrice;
+  const changeCls = change >= 0 ? "pct-pos" : "pct-neg";
+  const changeSign = change >= 0 ? "+" : "";
+  const total = dates.length;
+  const riskCount = riskScores.filter(s => s === 3).length;
+  const chanceCount = riskScores.filter(s => s === -3).length;
+  const periodName = { daily: "日K", weekly: "周K", monthly: "月K" }[currentPeriod];
+  const decimals = getDecimals(currentCode);
+  document.getElementById("stats-panel").innerHTML = `
+    <div class="stats-title">【${periodName}统计】</div>
+    <div class="stats-row"><span>数据条数: <b>${total}</b>条 (${dates[0]} ~ ${dates[dates.length-1]})</span></div>
+    <div class="stats-row"><span>最高价: <b>${highPrice.toFixed(decimals)}</b></span><span>最低价: <b>${lowPrice.toFixed(decimals)}</b></span></div>
+    <div class="stats-row"><span>期初价: <b>${startPrice.toFixed(decimals)}</b></span><span>期末价: <b>${endPrice.toFixed(decimals)}</b></span><span>涨幅: <b class="${changeCls}">${changeSign}${(change*100).toFixed(2)}%</b></span></div>
+    <div class="stats-row"><span class="risk-high">巨大风险: ${riskCount}天 (${(riskCount/total*100).toFixed(1)}%)</span><span class="risk-low">巨大机会: ${chanceCount}天 (${(chanceCount/total*100).toFixed(1)}%)</span></div>
+  `;
+}
+
+// ==================== 刷新 ====================
+async function manualRefresh() {
+  const btn = document.getElementById("refresh-btn");
+  btn.disabled = true; btn.textContent = "刷新中...";
+  showToast("正在重新加载数据...", "info");
+  try {
+    await loadAllData();
+    renderSummary();
+    if (currentCode) { renderDetail(); renderChart(); }
+    showToast("数据已更新！", "success");
+  } catch (e) {
+    showToast("刷新失败: " + e.message, "error");
+  } finally {
+    btn.disabled = false; btn.textContent = "🔄 刷新";
+  }
+}
+
+function setRefreshInterval(seconds) {
+  seconds = parseInt(seconds);
+  refreshMs = seconds * 1000;
+  localStorage.setItem("refreshInterval", String(seconds));
+  nextRefreshAt = Date.now() + refreshMs;
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(autoRefreshTask, refreshMs);
+  const label = seconds < 60 ? seconds + " 秒" : seconds / 60 + " 分钟";
+  showToast(`自动刷新间隔已设为 ${label}`, "success");
+}
+
+async function autoRefreshTask() {
+  try {
+    if (isTradingHours()) {
+      await loadAllData();
+      renderSummary();
+      if (currentCode) { renderDetail(); renderChart(); }
+    }
+  } catch (e) {}
+  nextRefreshAt = Date.now() + refreshMs;
+}
+
+function startAutoRefresh() {
+  const saved = parseInt(localStorage.getItem("refreshInterval")) || 300;
+  document.getElementById("interval-select").value = String(saved);
+  refreshMs = saved * 1000;
+  nextRefreshAt = Date.now() + refreshMs;
+  if (refreshTimer) clearInterval(refreshTimer);
+  if (countdownInterval) clearInterval(countdownInterval);
+  refreshTimer = setInterval(autoRefreshTask, refreshMs);
+  countdownInterval = setInterval(() => {
+    const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
+    const m = Math.floor(remain / 60), s = remain % 60;
+    document.getElementById("countdown").textContent = `下次刷新: ${m}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+  setInterval(() => {
+    document.getElementById("server-time").textContent = new Date().toLocaleString("zh-CN", { hour12: false });
+  }, 1000);
+}
+
+// ==================== 初始化 ====================
+async function initApp() {
+  try {
+    await loadAllData();
+    renderSummary();
+    startAutoRefresh();
+    const first = UNDERLYINGS[0];
+    if (first) selectETF(first.code);
+  } catch (e) {
+    console.error(e);
+    showToast("数据加载失败: " + e.message, "error");
+  }
+}
+
+// 页面加载时检查登录状态
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("auth") === "1") {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    initApp();
+  }
+});
+</script>
+</body>
+</html>

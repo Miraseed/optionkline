@@ -6,11 +6,9 @@ __pycache__/
 dist/
 build/
 
-# 数据文件（运行时自动获取，不入库）
-kline_data/*.json
-
-# 生成的图表
-kline_charts/*.png
+# 数据文件（GitHub Pages 部署时需入库，由 Actions 定期更新）
+# kline_data/*.json 已不忽略
+# kline_charts/*.png 已不忽略
 
 # Excel文件
 *.xlsx
