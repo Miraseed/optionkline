@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>登录 - 期权时空容错交易系统</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "微软雅黑", -apple-system, sans-serif;
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 50%, #2b6cb0 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .login-box {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .logo {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .logo h1 {
+    font-size: 20px;
+    color: #2c5282;
+    margin-bottom: 6px;
+  }
+  .logo p {
+    font-size: 13px;
+    color: #718096;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: #4a5568;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66,153,225,0.15);
+  }
+  .btn-login {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #2b6cb0, #2c5282);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-login:hover { opacity: 0.9; }
+  .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+  .error {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .tip {
+    text-align: center;
+    font-size: 12px;
+    color: #a0aec0;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="login-box">
+  <div class="logo">
+    <h1>📈 期权时空容错交易系统</h1>
+    <p>K线数据 · 风险评级 · 实时监控</p>
+  </div>
+  <div class="error" id="error-msg">密码错误，请重试</div>
+  <form id="login-form">
+    <div class="form-group">
+      <label>访问密码</label>
+      <input type="password" id="password" placeholder="请输入密码" autocomplete="off" autofocus>
+    </div>
+    <button type="submit" class="btn-login" id="login-btn">登 录</button>
+  </form>
+  <p class="tip">请向管理员获取访问密码</p>
+</div>
+
+<script>
+const form = document.getElementById('login-form');
+const errorMsg = document.getElementById('error-msg');
+const loginBtn = document.getElementById('login-btn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const pwd = document.getElementById('password').value;
+  if (!pwd) return;
+  loginBtn.disabled = true;
+  loginBtn.textContent = '登录中...';
+  errorMsg.style.display = 'none';
+  try {
+    const resp = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pwd })
+    });
+    const res = await resp.json();
+    if (res.success) {
+      window.location.href = '/';
+    } else {
+      errorMsg.style.display = 'block';
+      loginBtn.disabled = false;
+      loginBtn.textContent = '登 录';
+    }
+  } catch (err) {
+    errorMsg.textContent = '网络错误，请重试';
+    errorMsg.style.display = 'block';
+    loginBtn.disabled = false;
+    loginBtn.textContent = '登 录';
+  }
+});
+</script>
+</body>
+</html>

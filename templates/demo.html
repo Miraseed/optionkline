@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K线图样式对比 - 选择您喜欢的风格</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", sans-serif; background: #f0f2f5; padding: 20px; }
+  h1 { text-align: center; color: #2c5282; margin-bottom: 8px; font-size: 22px; }
+  .subtitle { text-align: center; color: #718096; margin-bottom: 24px; font-size: 13px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .card-header h3 { font-size: 16px; color: #2d3748; margin-bottom: 4px; }
+  .card-header p { font-size: 12px; color: #718096; line-height: 1.5; }
+  .chart-box { width: 100%; height: 380px; }
+  .loading { text-align: center; padding: 40px; color: #a0aec0; }
+  .back-btn {
+    display: inline-block;
+    margin: 0 auto 16px;
+    padding: 8px 20px;
+    background: #2b6cb0;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .back-wrap { text-align: center; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<h1>📊 K线图样式对比演示</h1>
+<p class="subtitle">四种主流金融图表风格，数据相同（沪深300ETF 日K），请选择您偏好的风格</p>
+<div class="back-wrap"><a href="/" class="back-btn">← 返回主页</a></div>
+
+<div class="grid">
+  <div class="card">
+    <div class="card-header">
+      <h3>风格一：当前基础风格</h3>
+      <p>浅色背景，红绿蜡烛，简洁明了。适合日常快速查看。</p>
+    </div>
+    <div class="chart-box" id="chart1"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>风格二：东方财富/同花顺风格</h3>
+      <p>深色背景，红涨绿跌，成交量副图，MA5/10/20/60均线。国内主流看盘软件风格。</p>
+    </div>
+    <div class="chart-box" id="chart2"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>风格三：TradingView 专业风格</h3>
+      <p>极简深色，细蜡烛体，半透明均线，专业交易终端感。国际主流交易平台风格。</p>
+    </div>
+    <div class="chart-box" id="chart3"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>风格四：富途/老虎风格</h3>
+      <p>浅色专业版，绿色背景网格，彩色均线，悬浮十字光标，富途牛牛/老虎证券风格。</p>
+    </div>
+    <div class="chart-box" id="chart4"></div>
+  </div>
+</div>
+
+<script>
+async function loadData() {
+  const resp = await fetch("/api/kline/510300/daily");
+  const res = await resp.json();
+  const start = Math.max(0, res.dates.length - 120);
+  return {
+    dates: res.dates.slice(start),
+    values: res.values.slice(start),
+    volumes: res.volumes.slice(start),
+    ma5: res.ma5.slice(start),
+    ma10: res.ma10.slice(start),
+    ma20: res.ma20.slice(start),
+    ma60: res.ma60.slice(start),
+  };
+}
+
+function renderChart1(d) {
+  // 风格一：当前基础风格
+  echarts.init(document.getElementById("chart1")).setOption({
+    animation: false,
+    legend: { top: 4, data: ["K线","MA5","MA10","MA20"], textStyle: { fontSize: 11 } },
+    grid: [
+      { left: "8%", right: "3%", top: "12%", height: "58%" },
+      { left: "8%", right: "3%", top: "74%", height: "18%" }
+    ],
+    xAxis: [
+      { type: "category", data: d.dates, scale: true, boundaryGap: false, axisLine: { onZero: false }, splitLine: { show: false } },
+      { type: "category", gridIndex: 1, data: d.dates, scale: true, boundaryGap: false, axisLabel: { show: false }, axisLine: { onZero: false }, axisTick: { show: false } }
+    ],
+    yAxis: [
+      { scale: true, splitArea: { show: true } },
+      { scale: true, gridIndex: 1, splitNumber: 2, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
+    series: [
+      { name: "K线", type: "candlestick", data: d.values, itemStyle: { color: "#ef5350", color0: "#26a69a", borderColor: "#ef5350", borderColor0: "#26a69a" } },
+      { name: "MA5", type: "line", data: d.ma5, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#f59e0b" } },
+      { name: "MA10", type: "line", data: d.ma10, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#3b82f6" } },
+      { name: "MA20", type: "line", data: d.ma20, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#a855f7" } },
+      { name: "成交量", type: "bar", xAxisIndex: 1, yAxisIndex: 1, data: d.volumes, itemStyle: { color: p => d.values[p.dataIndex][1] >= d.values[p.dataIndex][0] ? "#ef5350" : "#26a69a" } }
+    ]
+  });
+}
+
+function renderChart2(d) {
+  // 风格二：东方财富/同花顺风格 - 深色
+  echarts.init(document.getElementById("chart2"), { theme: "dark" }).setOption({
+    animation: false,
+    backgroundColor: "#1a1a2e",
+    legend: { top: 4, data: ["K线","MA5","MA10","MA20","MA60"], textStyle: { fontSize: 11, color: "#8b8fa3" } },
+    grid: [
+      { left: "8%", right: "4%", top: "12%", height: "56%" },
+      { left: "8%", right: "4%", top: "72%", height: "18%" }
+    ],
+    xAxis: [
+      { type: "category", data: d.dates, scale: true, boundaryGap: false, axisLine: { lineStyle: { color: "#333" } }, axisLabel: { color: "#8b8fa3", fontSize: 10 }, splitLine: { show: false } },
+      { type: "category", gridIndex: 1, data: d.dates, scale: true, boundaryGap: false, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }
+    ],
+    yAxis: [
+      { scale: true, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: "#8b8fa3", fontSize: 10 }, splitLine: { lineStyle: { color: "#2a2a3e" } } },
+      { scale: true, gridIndex: 1, splitNumber: 2, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "cross", crossStyle: { color: "#555" } }, backgroundColor: "rgba(26,26,46,0.95)", borderColor: "#444", textStyle: { color: "#ddd" } },
+    series: [
+      { name: "K线", type: "candlestick", data: d.values, itemStyle: { color: "#ec3e41", color0: "#2aa876", borderColor: "#ec3e41", borderColor0: "#2aa876" } },
+      { name: "MA5", type: "line", data: d.ma5, symbol: "none", lineStyle: { width: 1, color: "#f5a623" } },
+      { name: "MA10", type: "line", data: d.ma10, symbol: "none", lineStyle: { width: 1, color: "#4a90d9" } },
+      { name: "MA20", type: "line", data: d.ma20, symbol: "none", lineStyle: { width: 1, color: "#9b59b6" } },
+      { name: "MA60", type: "line", data: d.ma60, symbol: "none", lineStyle: { width: 1, color: "#e67e22" } },
+      { name: "成交量", type: "bar", xAxisIndex: 1, yAxisIndex: 1, data: d.volumes, itemStyle: { color: p => d.values[p.dataIndex][1] >= d.values[p.dataIndex][0] ? "#ec3e41" : "#2aa876" } }
+    ]
+  });
+}
+
+function renderChart3(d) {
+  // 风格三：TradingView 专业风格 - 极简深色
+  echarts.init(document.getElementById("chart3")).setOption({
+    animation: false,
+    backgroundColor: "#131722",
+    legend: { show: false },
+    grid: [
+      { left: "6%", right: "3%", top: "8%", height: "60%" },
+      { left: "6%", right: "3%", top: "72%", height: "18%" }
+    ],
+    xAxis: [
+      { type: "category", data: d.dates, scale: true, boundaryGap: false, axisLine: { lineStyle: { color: "#363a45" } }, axisLabel: { color: "#787b86", fontSize: 10 }, splitLine: { show: false } },
+      { type: "category", gridIndex: 1, data: d.dates, scale: true, boundaryGap: false, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false } }
+    ],
+    yAxis: [
+      { scale: true, position: "right", axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: "#787b86", fontSize: 10 }, splitLine: { lineStyle: { color: "#1e222d", type: "dashed" } } },
+      { scale: true, gridIndex: 1, position: "right", splitNumber: 2, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "cross", crossStyle: { color: "#758696", width: 1 } }, backgroundColor: "rgba(19,23,34,0.95)", borderColor: "#363a45", textStyle: { color: "#d1d4dc", fontSize: 12 } },
+    series: [
+      { name: "K线", type: "candlestick", data: d.values, itemStyle: { color: "#26a69a", color0: "#ef5350", borderColor: "#26a69a", borderColor0: "#ef5350" }, barWidth: "60%" },
+      { name: "MA20", type: "line", data: d.ma20, symbol: "none", lineStyle: { width: 1.5, color: "#f5a623", opacity: 0.9 } },
+      { name: "MA60", type: "line", data: d.ma60, symbol: "none", lineStyle: { width: 1.5, color: "#2962ff", opacity: 0.9 } },
+      { name: "成交量", type: "bar", xAxisIndex: 1, yAxisIndex: 1, data: d.volumes, itemStyle: { color: p => d.values[p.dataIndex][1] >= d.values[p.dataIndex][0] ? "rgba(239,83,80,0.5)" : "rgba(38,166,154,0.5)" } }
+    ]
+  });
+}
+
+function renderChart4(d) {
+  // 风格四：富途/老虎风格 - 浅色专业
+  echarts.init(document.getElementById("chart4")).setOption({
+    animation: false,
+    backgroundColor: "#fff",
+    legend: { top: 4, data: ["K线","MA5","MA10","MA20"], textStyle: { fontSize: 11, color: "#666" } },
+    grid: [
+      { left: "8%", right: "4%", top: "12%", height: "56%" },
+      { left: "8%", right: "4%", top: "72%", height: "18%" }
+    ],
+    xAxis: [
+      { type: "category", data: d.dates, scale: true, boundaryGap: false, axisLine: { lineStyle: { color: "#e0e0e0" } }, axisLabel: { color: "#999", fontSize: 10 }, splitLine: { show: false } },
+      { type: "category", gridIndex: 1, data: d.dates, scale: true, boundaryGap: false, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false } }
+    ],
+    yAxis: [
+      { scale: true, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: "#999", fontSize: 10 }, splitLine: { lineStyle: { color: "#f0f0f0" } }, splitArea: { show: true, areaStyle: { color: ["#fafbfc", "#fff"] } } },
+      { scale: true, gridIndex: 1, splitNumber: 2, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }
+    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "cross", crossStyle: { color: "#ccc" } }, backgroundColor: "rgba(255,255,255,0.98)", borderColor: "#e0e0e0", textStyle: { color: "#333", fontSize: 12 } },
+    series: [
+      { name: "K线", type: "candlestick", data: d.values, itemStyle: { color: "#f5222d", color0: "#52c41a", borderColor: "#f5222d", borderColor0: "#52c41a" } },
+      { name: "MA5", type: "line", data: d.ma5, symbol: "none", lineStyle: { width: 1.2, color: "#fa8c16" } },
+      { name: "MA10", type: "line", data: d.ma10, symbol: "none", lineStyle: { width: 1.2, color: "#1890ff" } },
+      { name: "MA20", type: "line", data: d.ma20, symbol: "none", lineStyle: { width: 1.2, color: "#722ed1" } },
+      { name: "成交量", type: "bar", xAxisIndex: 1, yAxisIndex: 1, data: d.volumes, itemStyle: { color: p => d.values[p.dataIndex][1] >= d.values[p.dataIndex][0] ? "#f5222d" : "#52c41a" } }
+    ]
+  });
+}
+
+(async function() {
+  try {
+    const d = await loadData();
+    renderChart1(d);
+    renderChart2(d);
+    renderChart3(d);
+    renderChart4(d);
+  } catch (e) {
+    document.body.innerHTML = '<div class="loading">数据加载失败，请先登录</div>';
+  }
+})();
+</script>
+</body>
+</html>

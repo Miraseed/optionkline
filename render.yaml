@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: option-kline
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: APP_PASSWORD
+        value: option2024
+      - key: PYTHON_VERSION
+        value: 3.10.0
