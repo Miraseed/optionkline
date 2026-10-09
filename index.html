@@ -224,7 +224,7 @@
     </div>
   </div>
 
-  <div class="footer">期权时空容错交易系统 · 数据来源: akshare · GitHub Actions 定时更新</div>
+  <div class="footer">期权时空容错交易系统 · 数据来源: akshare + 东方财富实时行情 · GitHub Actions 定时更新</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -232,13 +232,13 @@
 <script>
 // ==================== 配置 ====================
 const UNDERLYINGS = [
-  { code: "510050", name: "上证50ETF",  decimal_places: 3 },
-  { code: "510300", name: "沪深300ETF", decimal_places: 3 },
-  { code: "588000", name: "科创50ETF",  decimal_places: 3 },
-  { code: "159915", name: "创业板ETF",  decimal_places: 3 },
-  { code: "510500", name: "中证500ETF", decimal_places: 3 },
-  { code: "000852", name: "中证1000",   decimal_places: 2 },
-  { code: "I0",     name: "铁矿石主连", decimal_places: 1 },
+  { code: "510050", name: "上证50ETF",  decimal_places: 3, secid: "1.510050" },
+  { code: "510300", name: "沪深300ETF", decimal_places: 3, secid: "1.510300" },
+  { code: "588000", name: "科创50ETF",  decimal_places: 3, secid: "1.588000" },
+  { code: "159915", name: "创业板ETF",  decimal_places: 3, secid: "0.159915" },
+  { code: "510500", name: "中证500ETF", decimal_places: 3, secid: "1.510500" },
+  { code: "000852", name: "中证1000",   decimal_places: 2, secid: "1.000852" },
+  { code: "I0",     name: "铁矿石主连", decimal_places: 1, secid: "113.I0" },
 ];
 // 密码 option2024 的 base64 编码（基础门禁，非安全加密）
 const PASSWORD_ENC = "b3B0aW9uMjAyNA==";
@@ -388,6 +388,86 @@ async function loadJSON(url) {
   });
   if (!resp.ok) throw new Error(`${resp.status}`);
   return resp.json();
+}
+
+// ==================== 实时行情（东方财富JSONP） ====================
+function fetchRealtimeQuote(secid) {
+  return new Promise((resolve) => {
+    const cbName = "_rt_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+    const url = `https://push2.eastmoney.com/api/qt/stock/get?cb=${cbName}&secid=${secid}&fields=f43,f44,f45,f46,f47,f48,f57,f58,f170&ut=fa5fd1943c7b386f172d6893dbfba10b`;
+    const script = document.createElement("script");
+    let done = false;
+    function cleanup() {
+      if (script.parentNode) script.parentNode.removeChild(script);
+      delete window[cbName];
+    }
+    window[cbName] = function(data) {
+      done = true;
+      cleanup();
+      resolve(data);
+    };
+    script.src = url;
+    script.onerror = function() { cleanup(); resolve(null); };
+    document.head.appendChild(script);
+    setTimeout(function() { if (!done) { cleanup(); resolve(null); } }, 5000);
+  });
+}
+
+async function fetchAllRealtime() {
+  const results = {};
+  const promises = UNDERLYINGS.map(async (u) => {
+    if (!u.secid) return;
+    try {
+      const data = await fetchRealtimeQuote(u.secid);
+      if (data && data.data) {
+        const d = data.data;
+        results[u.code] = {
+          price: d.f43,
+          open: d.f46,
+          high: d.f44,
+          low: d.f45,
+          volume: d.f47,
+          change_pct: d.f170,
+        };
+      }
+    } catch (e) {}
+  });
+  await Promise.all(promises);
+  return results;
+}
+
+function applyRealtimeToData(rtData) {
+  let updated = false;
+  for (const u of UNDERLYINGS) {
+    const rt = rtData[u.code];
+    if (!rt || rt.price == null || rt.price <= 0) continue;
+    const d = allData[u.code];
+    if (!d) continue;
+    for (const p of PERIODS) {
+      const arr = d[p];
+      if (!arr || arr.length === 0) continue;
+      const last = arr[arr.length - 1];
+      const today = new Date().toISOString().slice(0, 10);
+      if (last.date === today) {
+        last.close = rt.price;
+        if (rt.high > last.high) last.high = rt.high;
+        if (rt.low < last.low || last.low === last.open) last.low = rt.low;
+        last.volume = rt.volume || last.volume;
+      } else if (last.date < today) {
+        arr.push({
+          date: today,
+          open: rt.open || rt.price,
+          high: rt.high || rt.price,
+          low: rt.low || rt.price,
+          close: rt.price,
+          volume: rt.volume || 0,
+        });
+        if (p === "daily" && arr.length > 1500) arr.shift();
+      }
+    }
+    updated = true;
+  }
+  return updated;
 }
 
 async function loadAllData() {
@@ -632,9 +712,11 @@ async function manualRefresh() {
   showToast("正在重新加载数据...", "info");
   try {
     await loadAllData();
+    const rtData = await fetchAllRealtime();
+    applyRealtimeToData(rtData);
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
-    showToast("数据已更新！", "success");
+    showToast("数据已更新（含实时行情）！", "success");
   } catch (e) {
     showToast("刷新失败: " + e.message, "error");
   } finally {
@@ -669,6 +751,8 @@ async function autoRefreshTask() {
   try {
     const oldHash = dataHash();
     await loadAllData();
+    const rtData = await fetchAllRealtime();
+    applyRealtimeToData(rtData);
     const newHash = dataHash();
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
@@ -705,6 +789,8 @@ function startAutoRefresh() {
 async function initApp() {
   try {
     await loadAllData();
+    const rtData = await fetchAllRealtime();
+    applyRealtimeToData(rtData);
     renderSummary();
     startAutoRefresh();
     const first = UNDERLYINGS[0];
