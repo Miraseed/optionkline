@@ -18553,14 +18553,14 @@
   {
     "date": "2026-10-09",
     "open": 3.029,
-    "high": 3.042,
+    "high": 3.053,
     "low": 2.952,
-    "close": 3.023,
-    "volume": 2366874370,
+    "close": 3.052,
+    "volume": 2423826070,
     "risk_score": -3,
     "risk_label": "巨大机会",
-    "intraday_up": -0.003603013429413731,
+    "intraday_up": 0.0,
     "intraday_down": -0.03308221421552571,
-    "close_change": -0.009826400262037276
+    "close_change": -0.0003275466754012086
   }
 ]
