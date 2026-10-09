@@ -382,7 +382,10 @@ function calcPELatest() {
 
 async function loadJSON(url) {
   const sep = url.includes("?") ? "&" : "?";
-  const resp = await fetch(url + sep + "_t=" + Date.now(), { cache: "no-store" });
+  const resp = await fetch(url + sep + "_t=" + Date.now(), {
+    cache: "no-store",
+    headers: { "Cache-Control": "no-cache", "Pragma": "no-cache", "Expires": "0" }
+  });
   if (!resp.ok) throw new Error(`${resp.status}`);
   return resp.json();
 }
@@ -650,13 +653,30 @@ function setRefreshInterval(seconds) {
   showToast(`自动刷新间隔已设为 ${label}`, "success");
 }
 
+function dataHash() {
+  let h = "";
+  for (const code in allData) {
+    const d = allData[code];
+    for (const p of PERIODS) {
+      const arr = d[p] || [];
+      if (arr.length) h += code + p + arr.length + arr[arr.length-1].date + arr[arr.length-1].close;
+    }
+  }
+  return h;
+}
+
 async function autoRefreshTask() {
   try {
-    showToast("自动刷新中...", "info");
+    const oldHash = dataHash();
     await loadAllData();
+    const newHash = dataHash();
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
-    showToast("数据已自动更新", "success");
+    if (oldHash !== newHash) {
+      showToast("数据有更新！", "success");
+    } else {
+      showToast("数据暂无变化（等待GitHub Actions更新）", "info");
+    }
   } catch (e) {
     showToast("自动刷新失败: " + e.message, "error");
   }
