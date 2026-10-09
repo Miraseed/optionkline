@@ -18568,12 +18568,12 @@
     "open": 2.907,
     "high": 2.922,
     "low": 2.9,
-    "close": 2.908,
-    "volume": 198218600,
+    "close": 2.904,
+    "volume": 234869900,
     "risk_score": -1,
     "risk_label": "一般机会",
     "intraday_up": 0.001370801919122688,
     "intraday_down": -0.006168608636052172,
-    "close_change": -0.003427004797806796
+    "close_change": -0.004797806716929484
   }
 ]
