@@ -266,7 +266,7 @@ function doLogout() {
 }
 
 // ==================== 交易时间判断（前端） ====================
-function isTradingDay(dt) { dt = dt || new Date(); return dt.getDay() < 5; }
+function isTradingDay(dt) { dt = dt || new Date(); const d = dt.getDay(); return d >= 1 && d <= 5; }
 function isTradingHours(dt) {
   dt = dt || new Date();
   if (!isTradingDay(dt)) return false;
