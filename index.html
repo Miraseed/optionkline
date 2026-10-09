@@ -232,13 +232,13 @@
 <script>
 // ==================== 配置 ====================
 const UNDERLYINGS = [
-  { code: "510050", name: "上证50ETF",  decimal_places: 3, secid: "1.510050" },
-  { code: "510300", name: "沪深300ETF", decimal_places: 3, secid: "1.510300" },
-  { code: "588000", name: "科创50ETF",  decimal_places: 3, secid: "1.588000" },
-  { code: "159915", name: "创业板ETF",  decimal_places: 3, secid: "0.159915" },
-  { code: "510500", name: "中证500ETF", decimal_places: 3, secid: "1.510500" },
-  { code: "000852", name: "中证1000",   decimal_places: 2, secid: "1.000852" },
-  { code: "I0",     name: "铁矿石主连", decimal_places: 1, secid: "113.I0" },
+  { code: "510050", name: "上证50ETF",  decimal_places: 3, secid: "1.510050", sina: "sh510050" },
+  { code: "510300", name: "沪深300ETF", decimal_places: 3, secid: "1.510300", sina: "sh510300" },
+  { code: "588000", name: "科创50ETF",  decimal_places: 3, secid: "1.588000", sina: "sh588000" },
+  { code: "159915", name: "创业板ETF",  decimal_places: 3, secid: "0.159915", sina: "sz159915" },
+  { code: "510500", name: "中证500ETF", decimal_places: 3, secid: "1.510500", sina: "sh510500" },
+  { code: "000852", name: "中证1000",   decimal_places: 2, secid: "1.000852", sina: "sh000852" },
+  { code: "I0",     name: "铁矿石主连", decimal_places: 1, secid: "",         sina: "nf_I0" },
 ];
 // 密码 option2024 的 base64 编码（基础门禁，非安全加密）
 const PASSWORD_ENC = "b3B0aW9uMjAyNA==";
@@ -390,7 +390,9 @@ async function loadJSON(url) {
   return resp.json();
 }
 
-// ==================== 实时行情（东方财富JSONP） ====================
+// ==================== 实时行情（东方财富JSONP + 新浪script tag） ====================
+
+// 方式1：东方财富JSONP（ETF/指数）
 function fetchRealtimeQuote(secid) {
   return new Promise((resolve) => {
     const cbName = "_rt_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
@@ -413,22 +415,73 @@ function fetchRealtimeQuote(secid) {
   });
 }
 
+// 方式2：新浪script tag（期货主连等东方财富不支持的标的）
+function fetchSinaQuote(sinaCode) {
+  return new Promise((resolve) => {
+    const varName = "hq_str_" + sinaCode;
+    delete window[varName];
+    const script = document.createElement("script");
+    script.src = `https://hq.sinajs.cn/list=${sinaCode}`;
+    script.charset = "gbk";
+    let done = false;
+    function cleanup() {
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    script.onload = function() {
+      done = true;
+      const raw = window[varName];
+      cleanup();
+      if (raw && raw.length > 10) {
+        const fields = raw.split(",");
+        resolve(fields);
+      } else {
+        resolve(null);
+      }
+    };
+    script.onerror = function() { cleanup(); resolve(null); done = true; };
+    document.head.appendChild(script);
+    setTimeout(function() {
+      if (!done) {
+        const raw = window[varName];
+        cleanup();
+        resolve(raw && raw.length > 10 ? raw.split(",") : null);
+      }
+    }, 5000);
+  });
+}
+
 async function fetchAllRealtime() {
   const results = {};
   const promises = UNDERLYINGS.map(async (u) => {
-    if (!u.secid) return;
     try {
-      const data = await fetchRealtimeQuote(u.secid);
-      if (data && data.data) {
-        const d = data.data;
-        results[u.code] = {
-          price: d.f43,
-          open: d.f46,
-          high: d.f44,
-          low: d.f45,
-          volume: d.f47,
-          change_pct: d.f170,
-        };
+      if (u.secid) {
+        // 东方财富JSONP
+        const data = await fetchRealtimeQuote(u.secid);
+        if (data && data.data) {
+          const d = data.data;
+          results[u.code] = {
+            price: d.f43, open: d.f46, high: d.f44,
+            low: d.f45, volume: d.f47, change_pct: d.f170,
+          };
+        }
+      }
+      if (!results[u.code] && u.sina) {
+        // 新浪script tag备选
+        const fields = await fetchSinaQuote(u.sina);
+        if (fields && fields.length >= 9) {
+          results[u.code] = {
+            price: parseFloat(fields[3]) || 0,
+            open: parseFloat(fields[1]) || 0,
+            high: parseFloat(fields[4]) || 0,
+            low: parseFloat(fields[5]) || 0,
+            volume: parseFloat(fields[8]) || 0,
+            change_pct: 0,
+          };
+          const prevClose = parseFloat(fields[2]);
+          if (prevClose > 0 && results[u.code].price > 0) {
+            results[u.code].change_pct = ((results[u.code].price - prevClose) / prevClose * 100);
+          }
+        }
       }
     } catch (e) {}
   });
