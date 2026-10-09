@@ -18566,14 +18566,14 @@
   {
     "date": "2026-10-09",
     "open": 2.907,
-    "high": 2.922,
+    "high": 2.925,
     "low": 2.883,
-    "close": 2.91,
-    "volume": 538534256,
-    "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.001370801919122688,
+    "close": 2.924,
+    "volume": 589241556,
+    "risk_score": 0,
+    "risk_label": "中性",
+    "intraday_up": 0.0023989033584645896,
     "intraday_down": -0.011994516792323558,
-    "close_change": -0.002741603838245376
+    "close_change": 0.002056202878683956
   }
 ]
