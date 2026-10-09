@@ -178,6 +178,43 @@ def fetch_realtime_quote(symbol):
         return None
 
 
+def fetch_futures_realtime_quote(symbol):
+    """获取期货主连实时行情（新浪格式不同于ETF，字段数少）"""
+    import requests
+    url = f"https://hq.sinajs.cn/list={symbol}"
+    headers = {"Referer": "https://finance.sina.com.cn"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        r.encoding = "gbk"
+        data = r.text.split('"')
+        if len(data) < 2 or not data[1]:
+            return None
+        fields = data[1].split(",")
+        if len(fields) < 5:
+            return None
+        # 期货主连格式: [0]=名称, [2]=昨收, [3]=开盘, [4]=最新价,
+        # [10]=最高, [13]=成交量, [17]=日期
+        close = float(fields[4]) if len(fields) > 4 else 0
+        open_p = float(fields[3]) if len(fields) > 3 else 0
+        high = float(fields[10]) if len(fields) > 10 and float(fields[10]) > 0 else close
+        low = close  # 期货主连格式无明确的最低价字段
+        volume = float(fields[13]) if len(fields) > 13 else 0
+        today = fields[17].strip() if len(fields) > 17 else ""
+        if close <= 0 or open_p <= 0 or not today:
+            return None
+        return {
+            "date": today,
+            "open": open_p,
+            "high": high,
+            "low": low,
+            "close": close,
+            "volume": volume,
+        }
+    except Exception as e:
+        print(f"  [期货实时行情获取失败] {symbol}: {e}")
+        return None
+
+
 def fetch_kline_data(etf):
     """用akshare获取K线历史数据 + 新浪实时接口补充当天数据"""
     import akshare as ak
@@ -218,23 +255,32 @@ def fetch_kline_data(etf):
     start_ts = pd.Timestamp(START_DATE)
     df = df[df["date"] >= start_ts].reset_index(drop=True)
 
-    # ---- 补充当天实时数据 (期货历史数据已含当天，跳过) ----
-    if etf_type != "futures":
+    # ---- 补充当天实时数据 ----
+    if etf_type == "futures":
+        rt = fetch_futures_realtime_quote(symbol)
+    else:
         rt = fetch_realtime_quote(symbol)
-        if rt:
-            today_ts = pd.Timestamp(rt["date"])
-            last_ts = df.iloc[-1]["date"] if len(df) > 0 else None
-            if last_ts is None or today_ts > last_ts:
-                new_row = pd.DataFrame([{
-                    "date": today_ts,
-                    "open": rt["open"],
-                    "high": rt["high"],
-                    "low": rt["low"],
-                    "close": rt["close"],
-                    "volume": rt["volume"],
-                }])
-                df = pd.concat([df, new_row], ignore_index=True)
-                print(f" +实时[{rt['date']}]", end="")
+    if rt:
+        today_ts = pd.Timestamp(rt["date"])
+        last_ts = df.iloc[-1]["date"] if len(df) > 0 else None
+        if last_ts is None or today_ts > last_ts:
+            new_row = pd.DataFrame([{
+                "date": today_ts,
+                "open": rt["open"],
+                "high": rt["high"],
+                "low": rt["low"],
+                "close": rt["close"],
+                "volume": rt["volume"],
+            }])
+            df = pd.concat([df, new_row], ignore_index=True)
+            print(f" +实时[{rt['date']}]", end="")
+        elif last_ts == today_ts:
+            # 同一天，更新最后一行
+            df.loc[df.index[-1], "close"] = rt["close"]
+            df.loc[df.index[-1], "high"] = max(df.loc[df.index[-1], "high"], rt["high"])
+            df.loc[df.index[-1], "low"] = min(df.loc[df.index[-1], "low"], rt["low"])
+            df.loc[df.index[-1], "volume"] = rt["volume"]
+            print(f" =更新[{rt['date']}]", end="")
     print(f" → 最终{len(df)}条")
 
     result = {}
