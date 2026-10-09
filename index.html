@@ -378,7 +378,8 @@ function calcPELatest() {
 }
 
 async function loadJSON(url) {
-  const resp = await fetch(url, { cache: "no-store" });
+  const sep = url.includes("?") ? "&" : "?";
+  const resp = await fetch(url + sep + "_t=" + Date.now(), { cache: "no-store" });
   if (!resp.ok) throw new Error(`${resp.status}`);
   return resp.json();
 }
@@ -648,11 +649,9 @@ function setRefreshInterval(seconds) {
 
 async function autoRefreshTask() {
   try {
-    if (isTradingHours()) {
-      await loadAllData();
-      renderSummary();
-      if (currentCode) { renderDetail(); renderChart(); }
-    }
+    await loadAllData();
+    renderSummary();
+    if (currentCode) { renderDetail(); renderChart(); }
   } catch (e) {}
   nextRefreshAt = Date.now() + refreshMs;
 }
