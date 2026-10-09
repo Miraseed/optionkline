@@ -179,36 +179,23 @@ def fetch_realtime_quote(symbol):
 
 
 def fetch_futures_realtime_quote(symbol):
-    """获取期货主连实时行情（新浪格式不同于ETF，字段数少）"""
-    import requests
-    url = f"https://hq.sinajs.cn/list={symbol}"
-    headers = {"Referer": "https://finance.sina.com.cn"}
+    """获取期货主连实时行情（通过 akshare.futures_zh_realtime，已正确解析新浪 nf_ 格式）"""
+    import akshare as ak
     try:
-        r = requests.get(url, headers=headers, timeout=10)
-        r.encoding = "gbk"
-        data = r.text.split('"')
-        if len(data) < 2 or not data[1]:
-            return None
-        fields = data[1].split(",")
-        if len(fields) < 5:
-            return None
-        # 期货主连格式: [0]=名称, [2]=昨收, [3]=开盘, [4]=最新价,
-        # [10]=最高, [13]=成交量, [17]=日期
-        close = float(fields[4]) if len(fields) > 4 else 0
-        open_p = float(fields[3]) if len(fields) > 3 else 0
-        high = float(fields[10]) if len(fields) > 10 and float(fields[10]) > 0 else close
-        low = close  # 期货主连格式无明确的最低价字段
-        volume = float(fields[13]) if len(fields) > 13 else 0
-        today = fields[17].strip() if len(fields) > 17 else ""
-        if close <= 0 or open_p <= 0 or not today:
-            return None
+        symbol_map = {"nf_I0": "铁矿石", "I0": "铁矿石"}
+        name = symbol_map.get(symbol, "铁矿石")
+        df = ak.futures_zh_realtime(symbol=name)
+        main_contract = df[df["name"].str.contains("连续")]
+        if len(main_contract) == 0:
+            main_contract = df.head(1)
+        row = main_contract.iloc[0]
         return {
-            "date": today,
-            "open": open_p,
-            "high": high,
-            "low": low,
-            "close": close,
-            "volume": volume,
+            "date": str(row["tradedate"]),
+            "open": float(row["open"]),
+            "high": float(row["high"]),
+            "low": float(row["low"]),
+            "close": float(row["close"]),
+            "volume": float(row["volume"]),
         }
     except Exception as e:
         print(f"  [期货实时行情获取失败] {symbol}: {e}")
