@@ -468,18 +468,35 @@ async function fetchAllRealtime() {
       if (!results[u.code] && u.sina) {
         // 新浪script tag备选
         const fields = await fetchSinaQuote(u.sina);
-        if (fields && fields.length >= 9) {
-          results[u.code] = {
-            price: parseFloat(fields[3]) || 0,
-            open: parseFloat(fields[1]) || 0,
-            high: parseFloat(fields[4]) || 0,
-            low: parseFloat(fields[5]) || 0,
-            volume: parseFloat(fields[8]) || 0,
-            change_pct: 0,
-          };
-          const prevClose = parseFloat(fields[2]);
-          if (prevClose > 0 && results[u.code].price > 0) {
-            results[u.code].change_pct = ((results[u.code].price - prevClose) / prevClose * 100);
+        if (fields && fields.length >= 5) {
+          if (u.sina.startsWith("nf_")) {
+            // 期货主连格式: [2]=昨收 [3]=开盘 [4]=最新价 [10]=最高 [13]=成交量 [17]=日期
+            results[u.code] = {
+              price: parseFloat(fields[4]) || 0,
+              open: parseFloat(fields[3]) || 0,
+              high: parseFloat(fields[10]) || parseFloat(fields[4]) || 0,
+              low: parseFloat(fields[4]) || 0,
+              volume: parseFloat(fields[13]) || 0,
+              change_pct: 0,
+            };
+            const prevClose = parseFloat(fields[2]);
+            if (prevClose > 0 && results[u.code].price > 0) {
+              results[u.code].change_pct = ((results[u.code].price - prevClose) / prevClose * 100);
+            }
+          } else {
+            // ETF/指数格式: [1]=开盘 [3]=最新价 [4]=最高 [5]=最低 [2]=昨收 [8]=成交量
+            results[u.code] = {
+              price: parseFloat(fields[3]) || 0,
+              open: parseFloat(fields[1]) || 0,
+              high: parseFloat(fields[4]) || 0,
+              low: parseFloat(fields[5]) || 0,
+              volume: parseFloat(fields[8]) || 0,
+              change_pct: 0,
+            };
+            const prevClose = parseFloat(fields[2]);
+            if (prevClose > 0 && results[u.code].price > 0) {
+              results[u.code].change_pct = ((results[u.code].price - prevClose) / prevClose * 100);
+            }
           }
         }
       }
