@@ -768,20 +768,21 @@ function renderChart() {
         const newSide = cursorX < chartWidth / 2 ? "right" : "left";
         if (newSide !== tooltipSide) {
           tooltipSide = newSide;
-          // 用新函数引用触发横轴标签重绘，避让到对侧
           const side = newSide;
           const total = dates.length;
           const ld = lastDate;
           setTimeout(function() {
             if (!chart) return;
             // Y轴移到悬浮窗对侧（含跟随光标的价格标签），grid 左右边距同步切换
+            // 传完整 yAxis 配置确保轴重布局生效（仅传 position 合并模式不可靠）
             const yAxisLeft = side !== "left";  // 悬浮窗在左→Y轴在右；悬浮窗在右→Y轴在左
+            const yPos = yAxisLeft ? "left" : "right";
             chart.setOption({
-              grid: { left: yAxisLeft ? "3%" : "8%", right: yAxisLeft ? "8%" : "3%" },
+              grid: { left: yAxisLeft ? "8%" : "3%", right: yAxisLeft ? "3%" : "8%" },
               yAxis: hasPE ? [
-                { position: yAxisLeft ? "right" : "left" },
-                { position: yAxisLeft ? "left" : "right" }
-              ] : { position: yAxisLeft ? "right" : "left" },
+                { scale: true, position: yPos, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
+                { scale: true, position: yPos === "left" ? "right" : "left", axisLabel: { fontSize: 10, color: "#f97316", formatter: v => Number(v).toFixed(2) }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
+              ] : { scale: true, position: yPos, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
               xAxis: { axisLabel: { interval: function(idx, val) {
                 if (idx % 5 !== 0 && val !== ld) return false;
                 if (total > 0) {
@@ -866,7 +867,10 @@ function renderChart() {
       const ld = lastDate;
       chart.setOption({
         grid: { left: "8%", right: hasPE ? "9%" : "3%" },
-        yAxis: hasPE ? [{ position: "left" }, { position: "right" }] : { position: "left" },
+        yAxis: hasPE ? [
+          { scale: true, position: "left", axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
+          { scale: true, position: "right", axisLabel: { fontSize: 10, color: "#f97316", formatter: v => Number(v).toFixed(2) }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
+        ] : { scale: true, position: "left", axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
         xAxis: { axisLabel: { interval: function(idx, val) {
           return idx % 5 === 0 || val === ld;
         } } }
