@@ -138,13 +138,22 @@
   .footer { text-align: center; margin-top: 14px; color: #718096; font-size: 11px; }
 
   @media (max-width: 768px) {
-    body { padding: 8px; }
-    .header h1 { font-size: 15px; }
-    .header-info { font-size: 11px; gap: 6px 10px; }
+    body { padding: 6px; }
+    .header { padding: 10px; margin-bottom: 8px; border-radius: 8px; }
+    .header h1 { font-size: 14px; margin-bottom: 6px; }
+    .header-info { font-size: 10px; gap: 4px 8px; }
     .summary-grid { grid-template-columns: 1fr; }
-    .chart-container { height: 320px; }
+    .chart-container { height: 56vh; min-height: 320px; max-height: 480px; }
     table { font-size: 10px; }
     thead th, tbody td { padding: 4px 3px; }
+    .card { padding: 8px; margin-bottom: 8px; }
+    .card-title { font-size: 14px; }
+    .card-content { padding: 0; }
+    .detail-tabs { padding: 4px; gap: 4px; }
+    .period-btn { padding: 4px 10px; font-size: 12px; }
+    .stats-toggle-btn { padding: 4px 8px; font-size: 11px; }
+    .stats-panel { padding: 8px; }
+    .stats-panel table { font-size: 11px; }
   }
   @media (max-width: 900px) and (orientation: landscape) {
     body { padding: 6px; }
@@ -676,11 +685,11 @@ function renderChart() {
       trigger: "axis", axisPointer: { type: "cross", snap: true },
       textStyle: { fontSize: 11 },
       confine: true,
-      padding: [6, 8],
-      backgroundColor: "rgba(255,255,255,0.82)",
-      borderColor: "rgba(120,140,170,0.4)",
+      padding: [5, 7],
+      backgroundColor: "rgba(255,255,255,0.7)",
+      borderColor: "rgba(120,140,170,0.35)",
       borderWidth: 1,
-      extraCssText: "max-width: 60%; max-height: 70%; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.12); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); border-radius: 6px;",
+      extraCssText: "max-width: 55%; max-height: 65%; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); border-radius: 5px;",
       formatter: function(params) {
         if (!params || !params.length) return "";
         const dateStr = params[0].axisValue || params[0].name;
@@ -696,15 +705,14 @@ function renderChart() {
           const color = p >= 0 ? "#ef5350" : "#26a69a";
           return ` <span style="color:${color};font-size:10px">${sign}${p.toFixed(2)}%</span>`;
         }
-        // 紧凑版：OHLC 压成一行，节省垂直空间
-        let html = `<div style="font-size:11px;line-height:1.45"><b>${dates[idx]}</b>`;
         const label = riskLabels[idx] || "";
+        // 去掉日期行（轴标签已显示），第一行直接是 OHLC，评级并入第二行尾部
+        let html = `<div style="font-size:11px;line-height:1.4">`;
+        html += `<span style="color:#666">开</span> <b>${open.toFixed(decimals)}</b>${pctStr(open)}`;
+        html += ` <span style="color:#666">收</span> <b>${close.toFixed(decimals)}</b>${pctStr(close)}`;
         if (label) html += ` <span style="color:#2b6cb0;font-size:10px">[${label}]</span>`;
-        html += `<br/><span style="color:#666">开</span> <b>${open.toFixed(decimals)}</b>${pctStr(open)}`;
-        html += ` <span style="color:#666">收</span> <b>${close.toFixed(decimals)}</b>${pctStr(close)}<br/>`;
-        html += `<span style="color:#666">高</span> ${high.toFixed(decimals)}${pctStr(high)}`;
+        html += `<br/><span style="color:#666">高</span> ${high.toFixed(decimals)}${pctStr(high)}`;
         html += ` <span style="color:#666">低</span> ${low.toFixed(decimals)}${pctStr(low)}`;
-        // MA 值压缩到一行
         const maVals = [];
         params.forEach(p => {
           if (p.seriesName && p.seriesName.startsWith("MA") && p.value !== null && p.value !== undefined && !isNaN(p.value)) {
