@@ -225,7 +225,7 @@
     </div>
   </div>
 
-  <div class="footer">期权时空容错交易系统 · 数据来源: akshare + 东方财富实时行情 · GitHub Actions 定时更新</div>
+  <div class="footer">期权时空容错交易系统 · 数据来源: akshare + 腾讯财经实时行情 · GitHub Actions 定时更新</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -233,13 +233,13 @@
 <script>
 // ==================== 配置 ====================
 const UNDERLYINGS = [
-  { code: "510050", name: "上证50ETF",  decimal_places: 3, secid: "1.510050", sina: "sh510050" },
-  { code: "510300", name: "沪深300ETF", decimal_places: 3, secid: "1.510300", sina: "sh510300" },
-  { code: "588000", name: "科创50ETF",  decimal_places: 3, secid: "1.588000", sina: "sh588000" },
-  { code: "159915", name: "创业板ETF",  decimal_places: 3, secid: "0.159915", sina: "sz159915" },
-  { code: "510500", name: "中证500ETF", decimal_places: 3, secid: "1.510500", sina: "sh510500" },
-  { code: "000852", name: "中证1000",   decimal_places: 2, secid: "1.000852", sina: "sh000852" },
-  { code: "I0",     name: "铁矿石主连", decimal_places: 1, secid: "",         sina: "nf_I0" },
+  { code: "510050", name: "上证50ETF",  decimal_places: 3, tencent: "sh510050" },
+  { code: "510300", name: "沪深300ETF", decimal_places: 3, tencent: "sh510300" },
+  { code: "588000", name: "科创50ETF",  decimal_places: 3, tencent: "sh588000" },
+  { code: "159915", name: "创业板ETF",  decimal_places: 3, tencent: "sz159915" },
+  { code: "510500", name: "中证500ETF", decimal_places: 3, tencent: "sh510500" },
+  { code: "000852", name: "中证1000",   decimal_places: 2, tencent: "sh000852" },
+  { code: "I0",     name: "铁矿石主连", decimal_places: 1, tencent: "" },
 ];
 // 密码 option2024 的 base64 编码（基础门禁，非安全加密）
 const PASSWORD_ENC = "b3B0aW9uMjAyNA==";
@@ -391,120 +391,73 @@ async function loadJSON(url) {
   return resp.json();
 }
 
-// ==================== 实时行情（东方财富JSONP + 新浪script tag） ====================
-
-// 方式1：东方财富JSONP（ETF/指数）
-function fetchRealtimeQuote(secid) {
-  return new Promise((resolve) => {
-    const cbName = "_rt_cb_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
-    const url = `https://push2.eastmoney.com/api/qt/stock/get?cb=${cbName}&secid=${secid}&fields=f43,f44,f45,f46,f47,f48,f57,f58,f170&ut=fa5fd1943c7b386f172d6893dbfba10b`;
-    const script = document.createElement("script");
-    let done = false;
-    function cleanup() {
-      if (script.parentNode) script.parentNode.removeChild(script);
-      delete window[cbName];
-    }
-    window[cbName] = function(data) {
-      done = true;
-      cleanup();
-      resolve(data);
-    };
-    script.src = url;
-    script.onerror = function() { cleanup(); resolve(null); };
-    document.head.appendChild(script);
-    setTimeout(function() { if (!done) { cleanup(); resolve(null); } }, 5000);
-  });
-}
-
-// 方式2：新浪script tag（期货主连等东方财富不支持的标的）
-function fetchSinaQuote(sinaCode) {
-  return new Promise((resolve) => {
-    const varName = "hq_str_" + sinaCode;
-    delete window[varName];
-    const script = document.createElement("script");
-    script.src = `https://hq.sinajs.cn/list=${sinaCode}`;
-    script.charset = "gbk";
-    let done = false;
-    function cleanup() {
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-    script.onload = function() {
-      done = true;
-      const raw = window[varName];
-      cleanup();
-      if (raw && raw.length > 10) {
-        const fields = raw.split(",");
-        resolve(fields);
-      } else {
-        resolve(null);
-      }
-    };
-    script.onerror = function() { cleanup(); resolve(null); done = true; };
-    document.head.appendChild(script);
-    setTimeout(function() {
-      if (!done) {
-        const raw = window[varName];
-        cleanup();
-        resolve(raw && raw.length > 10 ? raw.split(",") : null);
-      }
-    }, 5000);
-  });
-}
+// ==================== 实时行情（腾讯财经API） ====================
+// 腾讯API不检查Referer，可通过script tag在GitHub Pages上跨域加载（无403/CORS问题）
+// 格式: v_sh510050="1~上证50ETF华夏~510050~2.926~2.918~2.907~7396780~..."
+// 字段(以~分隔): [3]=最新价 [4]=昨收 [5]=今开 [6]=成交量 [32]=涨跌 [33]=涨跌幅 [34]=最高 [35]=最低
 
 async function fetchAllRealtime() {
   const results = {};
-  const promises = UNDERLYINGS.map(async (u) => {
-    try {
-      if (u.secid) {
-        // 东方财富JSONP
-        const data = await fetchRealtimeQuote(u.secid);
-        if (data && data.data) {
-          const d = data.data;
-          results[u.code] = {
-            price: d.f43, open: d.f46, high: d.f44,
-            low: d.f45, volume: d.f47, change_pct: d.f170,
-          };
-        }
-      }
-      if (!results[u.code] && u.sina) {
-        // 新浪script tag备选
-        const fields = await fetchSinaQuote(u.sina);
-        if (fields && fields.length >= 5) {
-          if (u.sina.startsWith("nf_")) {
-            // 期货主连格式: [2]=昨收 [3]=开盘 [4]=最新价 [10]=最高 [13]=成交量 [17]=日期
-            results[u.code] = {
-              price: parseFloat(fields[4]) || 0,
-              open: parseFloat(fields[3]) || 0,
-              high: parseFloat(fields[10]) || parseFloat(fields[4]) || 0,
-              low: parseFloat(fields[4]) || 0,
-              volume: parseFloat(fields[13]) || 0,
-              change_pct: 0,
-            };
-            const prevClose = parseFloat(fields[2]);
-            if (prevClose > 0 && results[u.code].price > 0) {
-              results[u.code].change_pct = ((results[u.code].price - prevClose) / prevClose * 100);
-            }
-          } else {
-            // ETF/指数格式: [1]=开盘 [3]=最新价 [4]=最高 [5]=最低 [2]=昨收 [8]=成交量
-            results[u.code] = {
-              price: parseFloat(fields[3]) || 0,
-              open: parseFloat(fields[1]) || 0,
-              high: parseFloat(fields[4]) || 0,
-              low: parseFloat(fields[5]) || 0,
-              volume: parseFloat(fields[8]) || 0,
-              change_pct: 0,
-            };
-            const prevClose = parseFloat(fields[2]);
-            if (prevClose > 0 && results[u.code].price > 0) {
-              results[u.code].change_pct = ((results[u.code].price - prevClose) / prevClose * 100);
+  const tencentCodes = UNDERLYINGS.filter(u => u.tencent).map(u => u.tencent);
+  if (tencentCodes.length === 0) return results;
+
+  return new Promise((resolve) => {
+    const url = `https://qt.gtimg.cn/q=${tencentCodes.join(",")}`;
+    const script = document.createElement("script");
+    script.charset = "gbk";
+    let done = false;
+
+    function cleanup() {
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    function parseAndStore() {
+      for (const u of UNDERLYINGS) {
+        if (!u.tencent) continue;
+        const varName = "v_" + u.tencent;
+        const raw = window[varName];
+        if (raw && raw.length > 20 && raw !== '1') {
+          const fields = raw.split("~");
+          if (fields.length > 35) {
+            const price = parseFloat(fields[3]);
+            const prevClose = parseFloat(fields[4]);
+            const open = parseFloat(fields[5]);
+            const volume = parseFloat(fields[6]);
+            const high = parseFloat(fields[34]);
+            const low = parseFloat(fields[35]);
+            const changePct = parseFloat(fields[33]);
+            if (price > 0) {
+              results[u.code] = {
+                price: price,
+                open: open || price,
+                high: high > 0 ? high : price,
+                low: low > 0 ? low : price,
+                volume: volume || 0,
+                change_pct: changePct || (prevClose > 0 ? ((price - prevClose) / prevClose * 100) : 0),
+              };
             }
           }
         }
       }
-    } catch (e) {}
+    }
+
+    script.onload = function() {
+      done = true;
+      parseAndStore();
+      cleanup();
+      resolve(results);
+    };
+
+    script.onerror = function() { cleanup(); done = true; resolve(results); };
+    document.head.appendChild(script);
+    setTimeout(function() {
+      if (!done) {
+        cleanup();
+        parseAndStore();
+        resolve(results);
+      }
+    }, 5000);
   });
-  await Promise.all(promises);
-  return results;
 }
 
 function applyRealtimeToData(rtData) {
