@@ -714,6 +714,14 @@ function renderChart() {
       borderColor: "rgba(120,140,170,0.3)",
       borderWidth: 1,
       extraCssText: "max-width: 65%; max-height: 70%; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); border-radius: 5px;",
+      // 固定位置：右上角（学同花顺期货通，不跟随光标，避免遮挡K线）
+      position: function(pos, params, dom, rect, size) {
+        // 右上角，留 5px 边距
+        const tooltipWidth = dom.offsetWidth || 140;
+        const chartWidth = size.viewSize[0];
+        const right = Math.max(5, chartWidth - tooltipWidth - 5);
+        return [right, 5];
+      },
       formatter: function(params) {
         if (!params || !params.length) return "";
         const dateStr = params[0].axisValue || params[0].name;
