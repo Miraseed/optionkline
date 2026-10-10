@@ -156,14 +156,30 @@
     .stats-panel table { font-size: 11px; }
   }
   @media (max-width: 900px) and (orientation: landscape) {
-    body { padding: 6px; }
-    .header { padding: 10px; }
-    .header h1 { font-size: 14px; margin-bottom: 6px; }
-    .summary { padding: 10px; margin-bottom: 8px; }
-    .summary-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-    .detail { padding: 10px; }
-    .chart-container { height: 200px; margin-bottom: 8px; }
-    .table-container { max-height: 280px; }
+    body { padding: 4px; }
+    .header { padding: 6px 10px; margin-bottom: 4px; border-radius: 6px; }
+    .header h1 { font-size: 13px; margin-bottom: 3px; }
+    .header-info { font-size: 10px; gap: 4px 10px; }
+    .status-badge { padding: 2px 6px; font-size: 10px; }
+    .refresh-btn, .interval-selector, .logout-btn { padding: 4px 8px; font-size: 10px; }
+    .summary { padding: 6px 10px; margin-bottom: 4px; border-radius: 6px; }
+    .summary h2 { font-size: 12px; margin-bottom: 4px; }
+    .summary-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 4px; }
+    .summary-grid .stat-box { padding: 4px 6px; border-radius: 4px; }
+    .summary-grid .stat-box .stat-name { font-size: 10px; }
+    .summary-grid .stat-box .stat-value { font-size: 13px; }
+    .detail { padding: 6px 8px; margin-bottom: 4px; border-radius: 6px; }
+    .detail-header { padding: 4px 0; margin-bottom: 4px; }
+    .detail-title { font-size: 13px; }
+    .detail-tabs { padding: 2px; gap: 3px; }
+    .period-btn { padding: 3px 8px; font-size: 11px; }
+    .stats-toggle-btn { padding: 3px 6px; font-size: 10px; }
+    .chart-container { height: 70vh; min-height: 240px; max-height: 480px; margin-bottom: 4px; }
+    .stats-panel { padding: 6px; max-height: 28vh; }
+    .stats-panel table { font-size: 10px; }
+    .stats-panel thead th, .stats-panel tbody td { padding: 2px 3px; }
+    .table-container { max-height: 180px; }
+    thead th, tbody td { padding: 3px 4px; font-size: 10px; }
   }
 </style>
 </head>
