@@ -693,12 +693,22 @@ function renderChart() {
     animation: false,
     legend: {
       top: 2,
-      itemWidth: 8,
+      itemWidth: 10,
       itemHeight: 8,
-      itemGap: 4,
-      data: hasPE ? ["K线","MA5","MA10","MA20","MA60","PE(TTM)","巨大风险","巨大机会"] : ["K线","MA5","MA10","MA20","MA60","巨大风险","巨大机会"],
-      textStyle: { fontSize: 9 },
-      icon: "circle"
+      itemGap: 6,
+      data: hasPE ? [
+        { name: "K线", icon: "roundRect" },
+        { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
+        { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
+        { name: "PE(TTM)", icon: "circle" },
+        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
+      ] : [
+        { name: "K线", icon: "roundRect" },
+        { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
+        { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
+        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
+      ],
+      textStyle: { fontSize: 9 }
     },
     grid: { left: "8%", right: hasPE ? "9%" : "3%", top: "8%", bottom: 45 },
     xAxis: { type: "category", data: dates, scale: true, boundaryGap: false, axisLine: { onZero: false }, splitLine: { show: false },
@@ -761,16 +771,26 @@ function renderChart() {
           // 用新函数引用触发横轴标签重绘，避让到对侧
           const side = newSide;
           const total = dates.length;
+          const ld = lastDate;
           setTimeout(function() {
             if (!chart) return;
-            chart.setOption({ xAxis: { axisLabel: { interval: function(idx, val) {
-              if (idx % 5 !== 0 && val !== lastDate) return false;
-              if (total > 0) {
-                if (side === "left" && idx < total / 2) return false;
-                if (side === "right" && idx >= total / 2) return false;
-              }
-              return true;
-            } } } });
+            // Y轴移到悬浮窗对侧（含跟随光标的价格标签），grid 左右边距同步切换
+            const yAxisLeft = side !== "left";  // 悬浮窗在左→Y轴在右；悬浮窗在右→Y轴在左
+            chart.setOption({
+              grid: { left: yAxisLeft ? "3%" : "8%", right: yAxisLeft ? "8%" : "3%" },
+              yAxis: hasPE ? [
+                { position: yAxisLeft ? "right" : "left" },
+                { position: yAxisLeft ? "left" : "right" }
+              ] : { position: yAxisLeft ? "right" : "left" },
+              xAxis: { axisLabel: { interval: function(idx, val) {
+                if (idx % 5 !== 0 && val !== ld) return false;
+                if (total > 0) {
+                  if (side === "left" && idx < total / 2) return false;
+                  if (side === "right" && idx >= total / 2) return false;
+                }
+                return true;
+              } } }
+            });
           }, 0);
         }
         return newSide === "right"
@@ -838,15 +858,19 @@ function renderChart() {
     ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
   };
   chart.setOption(option, true);
-  // 光标离开图表时恢复横轴标签全部显示（避让复位）
+  // 光标离开图表时恢复横轴标签全部显示 + Y轴回到左侧（避让复位）
   chart.off("globalout");
   chart.on("globalout", function() {
     if (tooltipSide !== "none") {
       tooltipSide = "none";
       const ld = lastDate;
-      chart.setOption({ xAxis: { axisLabel: { interval: function(idx, val) {
-        return idx % 5 === 0 || val === ld;
-      } } } });
+      chart.setOption({
+        grid: { left: "8%", right: hasPE ? "9%" : "3%" },
+        yAxis: hasPE ? [{ position: "left" }, { position: "right" }] : { position: "left" },
+        xAxis: { axisLabel: { interval: function(idx, val) {
+          return idx % 5 === 0 || val === ld;
+        } } }
+      });
     }
   });
   renderStats(dates, values, riskScores);
