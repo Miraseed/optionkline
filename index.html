@@ -207,10 +207,11 @@
         <div class="tab active" data-period="daily" onclick="switchPeriod('daily')">日K</div>
         <div class="tab" data-period="weekly" onclick="switchPeriod('weekly')">周K</div>
         <div class="tab" data-period="monthly" onclick="switchPeriod('monthly')">月K</div>
+        <button class="tab" id="stats-toggle-btn" onclick="toggleStats()" title="显示/隐藏统计面板">📊 统计</button>
       </div>
     </div>
     <div class="chart-container" id="kline-chart"></div>
-    <div class="stats-panel" id="stats-panel"></div>
+    <div class="stats-panel" id="stats-panel" style="display:none;"></div>
     <div class="table-container">
       <table id="data-table">
         <thead>
@@ -598,14 +599,8 @@ function renderSummary() {
       return `<span class="rating-tag" style="background:${bg};color:${color}">${rec.risk_label}</span>`;
     }
     function peTag() {
-      const p = peLatest[code];
-      if (!p) return '';
-      const pe = Number(p.pe_ttm).toFixed(1);
-      const pct = Number(p.percentile).toFixed(1);
-      let bg = '#e2e8f0';
-      if (p.percentile > 70) bg = '#fed7d7';
-      else if (p.percentile < 25) bg = '#c6f6d5';
-      return `<span class="rating-right">PE:<span class="pe-tag" style="background:${bg}">${pe} ${pct}%</span></span>`;
+      // PE 数据源不稳定（legulegu 反爬、csindex 仅近 20 天且缺创业板指），暂屏蔽显示
+      return '';
     }
     html += `
       <div class="etf-card ${code===currentCode?'active':''}" onclick="selectETF('${code}')">
@@ -628,13 +623,37 @@ function selectETF(code) {
   renderSummary();
   renderDetail();
   renderChart();
+  applyStatsVisibility();
+}
+
+// 切换统计面板显示/隐藏（手机端节省屏幕空间）
+function toggleStats() {
+  const panel = document.getElementById("stats-panel");
+  const btn = document.getElementById("stats-toggle-btn");
+  if (!panel || !btn) return;
+  const willShow = panel.style.display === "none";
+  panel.style.display = willShow ? "block" : "none";
+  btn.classList.toggle("active", willShow);
+  localStorage.setItem("statsExpanded", willShow ? "1" : "0");
+}
+
+// 根据 localStorage 应用统计面板的可见性
+function applyStatsVisibility() {
+  const panel = document.getElementById("stats-panel");
+  const btn = document.getElementById("stats-toggle-btn");
+  if (!panel || !btn) return;
+  const expanded = localStorage.getItem("statsExpanded") === "1";
+  panel.style.display = expanded ? "block" : "none";
+  btn.classList.toggle("active", expanded);
 }
 
 function switchPeriod(period) {
   currentPeriod = period;
-  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.period === period));
+  // 用 [data-period] 过滤掉统计按钮，避免误改其 active 状态
+  document.querySelectorAll(".tab[data-period]").forEach(t => t.classList.toggle("active", t.dataset.period === period));
   renderDetail();
   renderChart();
+  applyStatsVisibility();
 }
 
 function renderDetail() {
@@ -674,7 +693,8 @@ function renderChart() {
   const closes = records.map(r => r.close);
   const ma5 = calcMA(closes, 5), ma10 = calcMA(closes, 10), ma20 = calcMA(closes, 20), ma60 = calcMA(closes, 60);
   const { peTtm, pePercentile } = getPEForDates(currentCode, dates);
-  const hasPE = peTtm !== null;
+  // PE 数据源不稳定，暂关闭 K线 PE 副图（保留代码方便将来恢复）
+  const hasPE = false;
   const decimals = getDecimals(currentCode);
 
   const riskMarkers = [], chanceMarkers = [];
@@ -700,7 +720,8 @@ function renderChart() {
       { scale: true, position: "right", axisLabel: { fontSize: 10, color: "#f97316" }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
     ] : { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10 } },
     tooltip: {
-      trigger: "axis", axisPointer: { type: "cross" }, textStyle: { fontSize: 11 },
+      trigger: "axis", axisPointer: { type: "cross", snap: true }, textStyle: { fontSize: 11 },
+      confine: true,
       formatter: function(params) {
         if (!params || !params.length) return "";
         const dateStr = params[0].axisValue || params[0].name;
