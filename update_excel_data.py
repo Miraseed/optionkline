@@ -179,7 +179,10 @@ def fetch_realtime_quote(symbol):
 
 
 def fetch_futures_realtime_quote(symbol):
-    """获取期货主连实时行情（通过 akshare.futures_zh_realtime，已正确解析新浪 nf_ 格式）"""
+    """获取期货主连实时行情（通过 akshare.futures_zh_realtime）
+    注意：futures_zh_realtime 返回的 close 字段在盘中为 0（结算后才填），
+    实时价格应使用 trade 字段（最新成交价）。
+    """
     import akshare as ak
     try:
         symbol_map = {"nf_I0": "铁矿石", "I0": "铁矿石"}
@@ -189,13 +192,27 @@ def fetch_futures_realtime_quote(symbol):
         if len(main_contract) == 0:
             main_contract = df.head(1)
         row = main_contract.iloc[0]
+        # 用 trade 作为最新价（盘中 close=0），如果 trade 也无效则回退到 close
+        latest_price = float(row["trade"]) if float(row.get("trade", 0) or 0) > 0 else float(row["close"])
+        # 如果 trade 和 close 都为 0，说明数据完全无效，返回 None
+        if latest_price <= 0:
+            print(f"  [期货实时行情获取失败] {symbol}: 价格数据无效 trade={row.get('trade')} close={row.get('close')}")
+            return None
+        # open/high/low 用 trade 兜底（防止某些时段字段为 0）
+        open_p = float(row["open"]) if float(row.get("open", 0) or 0) > 0 else latest_price
+        high = float(row["high"]) if float(row.get("high", 0) or 0) > 0 else latest_price
+        low = float(row["low"]) if float(row.get("low", 0) or 0) > 0 else latest_price
+        # 确保 high >= latest_price >= low
+        high = max(high, latest_price)
+        low = min(low, latest_price)
+        volume = float(row.get("volume", 0) or 0)
         return {
             "date": str(row["tradedate"]),
-            "open": float(row["open"]),
-            "high": float(row["high"]),
-            "low": float(row["low"]),
-            "close": float(row["close"]),
-            "volume": float(row["volume"]),
+            "open": open_p,
+            "high": high,
+            "low": low,
+            "close": latest_price,
+            "volume": volume,
         }
     except Exception as e:
         print(f"  [期货实时行情获取失败] {symbol}: {e}")
