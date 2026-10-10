@@ -673,8 +673,16 @@ function renderChart() {
 
   const option = {
     animation: false,
-    legend: { top: 4, data: hasPE ? ["K线","MA5","MA10","MA20","MA60","PE(TTM)","巨大风险","巨大机会"] : ["K线","MA5","MA10","MA20","MA60","巨大风险","巨大机会"], textStyle: { fontSize: 11 } },
-    grid: { left: "8%", right: hasPE ? "9%" : "3%", top: "12%", bottom: 45 },
+    legend: {
+      top: 2,
+      itemWidth: 8,
+      itemHeight: 8,
+      itemGap: 4,
+      data: hasPE ? ["K线","MA5","MA10","MA20","MA60","PE(TTM)","巨大风险","巨大机会"] : ["K线","MA5","MA10","MA20","MA60","巨大风险","巨大机会"],
+      textStyle: { fontSize: 9 },
+      icon: "circle"
+    },
+    grid: { left: "8%", right: hasPE ? "9%" : "3%", top: "8%", bottom: 45 },
     xAxis: { type: "category", data: dates, scale: true, boundaryGap: false, axisLine: { onZero: false }, splitLine: { show: false },
       axisLabel: { fontSize: 10, interval: function(idx, val) { return idx % 3 === 0 || val === lastDate; } } },
     yAxis: hasPE ? [
