@@ -714,13 +714,20 @@ function renderChart() {
       borderColor: "rgba(120,140,170,0.3)",
       borderWidth: 1,
       extraCssText: "max-width: 65%; max-height: 70%; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); border-radius: 5px;",
-      // 固定位置：右上角（学同花顺期货通，不跟随光标，避免遮挡K线）
+      // 智能位置：光标在左半边→悬浮窗右上角；光标在右半边→悬浮窗左上角（学同花顺期货通，永不遮挡当前K线）
       position: function(pos, params, dom, rect, size) {
-        // 右上角，留 5px 边距
         const tooltipWidth = dom.offsetWidth || 140;
         const chartWidth = size.viewSize[0];
-        const right = Math.max(5, chartWidth - tooltipWidth - 5);
-        return [right, 5];
+        const cursorX = pos[0] || 0;
+        // 判断光标位置：在左半边时，悬浮窗放右上；在右半边时，放左上
+        if (cursorX < chartWidth / 2) {
+          // 光标在左 → 悬浮窗右上角
+          const right = Math.max(5, chartWidth - tooltipWidth - 5);
+          return [right, 5];
+        } else {
+          // 光标在右 → 悬浮窗左上角
+          return [5, 5];
+        }
       },
       formatter: function(params) {
         if (!params || !params.length) return "";
@@ -738,19 +745,18 @@ function renderChart() {
           return ` <span style="color:${color};font-size:10px">${sign}${p.toFixed(2)}%</span>`;
         }
         const label = riskLabels[idx] || "";
-        // 评级独占一行（不再挤在 OHLC 行尾，避免横向截断）
-        // 评级颜色按风险方向区分：机会=绿，风险=红，中性=蓝
+        // 评级颜色按风险方向区分
         let labelColor = "#2b6cb0";
         if (label) {
           if (label.indexOf("机会") >= 0) labelColor = "#2f855a";
           else if (label.indexOf("风险") >= 0) labelColor = "#c53030";
         }
-        let html = `<div style="font-size:11px;line-height:1.4">`;
-        html += `<span style="color:#666">开</span> <b>${open.toFixed(decimals)}</b>${pctStr(open)}`;
-        html += ` <span style="color:#666">收</span> <b>${close.toFixed(decimals)}</b>${pctStr(close)}`;
-        html += `<br/><span style="color:#666">高</span> ${high.toFixed(decimals)}${pctStr(high)}`;
-        html += ` <span style="color:#666">低</span> ${low.toFixed(decimals)}${pctStr(low)}`;
-        // 评级单独一行（避免横向挤压被截断）
+        // 垂直堆叠：开/收/高/低 各占一行（学同花顺期货通）
+        let html = `<div style="font-size:11px;line-height:1.55">`;
+        html += `<span style="color:#666">开</span> <b>${open.toFixed(decimals)}</b>${pctStr(open)}<br/>`;
+        html += `<span style="color:#666">收</span> <b>${close.toFixed(decimals)}</b>${pctStr(close)}<br/>`;
+        html += `<span style="color:#666">高</span> <b>${high.toFixed(decimals)}</b>${pctStr(high)}<br/>`;
+        html += `<span style="color:#666">低</span> <b>${low.toFixed(decimals)}</b>${pctStr(low)}`;
         if (label) html += `<br/><span style="color:${labelColor};font-size:10px;font-weight:bold">[${label}]</span>`;
         const maVals = [];
         params.forEach(p => {
@@ -758,7 +764,6 @@ function renderChart() {
             maVals.push(`${p.seriesName}:${Number(p.value).toFixed(2)}`);
           }
         });
-        // MA 分两行显示（防止 MA5/MA10/MA20/MA60 4个值一行太长被截断）
         if (maVals.length >= 3) {
           const half = Math.ceil(maVals.length / 2);
           html += `<br/><span style="font-size:10px;color:#888">${maVals.slice(0, half).join(" ")}</span>`;
