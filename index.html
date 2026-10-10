@@ -142,7 +142,7 @@
     .header h1 { font-size: 15px; }
     .header-info { font-size: 11px; gap: 6px 10px; }
     .summary-grid { grid-template-columns: 1fr; }
-    .chart-container { height: 260px; }
+    .chart-container { height: 320px; }
     table { font-size: 10px; }
     thead th, tbody td { padding: 4px 3px; }
   }
@@ -673,8 +673,14 @@ function renderChart() {
       { scale: true, position: "right", axisLabel: { fontSize: 10, color: "#f97316" }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
     ] : { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10 } },
     tooltip: {
-      trigger: "axis", axisPointer: { type: "cross", snap: true }, textStyle: { fontSize: 11 },
+      trigger: "axis", axisPointer: { type: "cross", snap: true },
+      textStyle: { fontSize: 11 },
       confine: true,
+      padding: [6, 8],
+      backgroundColor: "rgba(255,255,255,0.82)",
+      borderColor: "rgba(120,140,170,0.4)",
+      borderWidth: 1,
+      extraCssText: "max-width: 60%; max-height: 70%; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.12); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); border-radius: 6px;",
       formatter: function(params) {
         if (!params || !params.length) return "";
         const dateStr = params[0].axisValue || params[0].name;
@@ -683,29 +689,30 @@ function renderChart() {
         const ohlc = values[idx]; if (!ohlc) return "";
         const [open, close, low, high] = ohlc;
         const prevClose = idx > 0 ? values[idx-1][1] : null;
-        function pctHtml(v) {
+        function pctStr(v) {
           if (prevClose === null || prevClose === 0) return "";
           const p = (v - prevClose) / prevClose * 100;
           const sign = p >= 0 ? "+" : "";
           const color = p >= 0 ? "#ef5350" : "#26a69a";
-          return `<span style="color:${color}">(${sign}${p.toFixed(2)}%)</span>`;
+          return ` <span style="color:${color};font-size:10px">${sign}${p.toFixed(2)}%</span>`;
         }
-        let html = `<b>${dates[idx]}</b><br/>`;
-        if (prevClose !== null) html += `昨收: ${prevClose.toFixed(decimals)}<br/>`;
-        html += `开盘: ${open.toFixed(decimals)} ${pctHtml(open)}<br/>`;
-        html += `收盘: ${close.toFixed(decimals)} ${pctHtml(close)}<br/>`;
-        html += `最高: ${high.toFixed(decimals)} ${pctHtml(high)}<br/>`;
-        html += `最低: ${low.toFixed(decimals)} ${pctHtml(low)}`;
+        // 紧凑版：OHLC 压成一行，节省垂直空间
+        let html = `<div style="font-size:11px;line-height:1.45"><b>${dates[idx]}</b>`;
         const label = riskLabels[idx] || "";
-        if (label) html += `<br/>评级: ${label}`;
-        if (hasPE && peTtm[idx] !== null && peTtm[idx] !== undefined) {
-          html += `<br/>PE(TTM): <b>${peTtm[idx].toFixed(2)}</b> <span style="color:#f97316">${pePercentile[idx]}%</span>`;
-        }
+        if (label) html += ` <span style="color:#2b6cb0;font-size:10px">[${label}]</span>`;
+        html += `<br/><span style="color:#666">开</span> <b>${open.toFixed(decimals)}</b>${pctStr(open)}`;
+        html += ` <span style="color:#666">收</span> <b>${close.toFixed(decimals)}</b>${pctStr(close)}<br/>`;
+        html += `<span style="color:#666">高</span> ${high.toFixed(decimals)}${pctStr(high)}`;
+        html += ` <span style="color:#666">低</span> ${low.toFixed(decimals)}${pctStr(low)}`;
+        // MA 值压缩到一行
+        const maVals = [];
         params.forEach(p => {
           if (p.seriesName && p.seriesName.startsWith("MA") && p.value !== null && p.value !== undefined && !isNaN(p.value)) {
-            html += `<br/>${p.marker}${p.seriesName}: ${Number(p.value).toFixed(2)}`;
+            maVals.push(`${p.seriesName}:${Number(p.value).toFixed(2)}`);
           }
         });
+        if (maVals.length) html += `<br/><span style="font-size:10px;color:#888">${maVals.join(" ")}</span>`;
+        html += `</div>`;
         return html;
       }
     },
