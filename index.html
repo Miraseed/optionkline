@@ -700,20 +700,36 @@ function renderChart() {
     },
     grid: { left: "8%", right: hasPE ? "9%" : "3%", top: "8%", bottom: 45 },
     xAxis: { type: "category", data: dates, scale: true, boundaryGap: false, axisLine: { onZero: false }, splitLine: { show: false },
-      axisLabel: { fontSize: 10, interval: function(idx, val) { return idx % 3 === 0 || val === lastDate; } } },
+      // 横轴标签更稀疏（每隔5个显示一次+最后一个日期），减少与悬浮窗重叠
+      axisLabel: { fontSize: 10, interval: function(idx, val) { return idx % 5 === 0 || val === lastDate; } } },
     yAxis: hasPE ? [
       { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10 } },
       { scale: true, position: "right", axisLabel: { fontSize: 10, color: "#f97316" }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
     ] : { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10 } },
     tooltip: {
-      trigger: "axis", axisPointer: { type: "cross", snap: true },
+      trigger: "axis",
+      axisPointer: {
+        type: "cross",
+        snap: true,
+        // 十字光标的横轴标签：跟随光标，但位置随光标在左/右动态切换
+        label: {
+          show: true,
+          fontSize: 10,
+          backgroundColor: "#2b6cb0",
+          padding: [3, 6],
+          formatter: function(params) {
+            // 显示完整日期
+            return params.value;
+          }
+        }
+      },
       textStyle: { fontSize: 11 },
       confine: true,
       padding: [5, 7],
       backgroundColor: "rgba(255,255,255,0.5)",
       borderColor: "rgba(120,140,170,0.3)",
       borderWidth: 1,
-      extraCssText: "max-width: 65%; max-height: 70%; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); border-radius: 5px;",
+      extraCssText: "max-width: 65%; max-height: 55%; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); border-radius: 5px;",
       // 智能位置：光标在左半边→悬浮窗右上角；光标在右半边→悬浮窗左上角（学同花顺期货通，永不遮挡当前K线）
       position: function(pos, params, dom, rect, size) {
         const tooltipWidth = dom.offsetWidth || 140;
