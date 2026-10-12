@@ -18567,13 +18567,13 @@
     "date": "2026-10-12",
     "open": 3.039,
     "high": 3.069,
-    "low": 3.024,
-    "close": 3.027,
-    "volume": 543054012,
-    "risk_score": -3,
-    "risk_label": "巨大机会",
+    "low": 3.014,
+    "close": 3.05,
+    "volume": 757557687,
+    "risk_score": -2,
+    "risk_label": "较大机会",
     "intraday_up": 0.0016318537859007485,
-    "intraday_down": -0.013054830287206278,
-    "close_change": -0.01207571801566577
+    "intraday_down": -0.016318537859007918,
+    "close_change": -0.00456919060052227
   }
 ]
