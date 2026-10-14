@@ -927,12 +927,12 @@
     "open": 692.0,
     "high": 698.0,
     "low": 671.0,
-    "close": 672.0,
-    "volume": 1287927,
+    "close": 675.5,
+    "volume": 1322137,
     "risk_score": -3,
     "risk_label": "巨大机会",
     "intraday_up": -0.006405693950177936,
     "intraday_down": -0.044839857651245554,
-    "close_change": -0.04341637010676157
+    "close_change": -0.038434163701067614
   }
 ]
