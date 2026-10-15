@@ -18620,12 +18620,12 @@
     "open": 6.88,
     "high": 6.911,
     "low": 6.825,
-    "close": 6.848,
-    "volume": 143035618,
+    "close": 6.838,
+    "volume": 180341639,
     "risk_score": -3,
     "risk_label": "巨大机会",
     "intraday_up": -0.016227758007117545,
     "intraday_down": -0.028469750889679738,
-    "close_change": -0.025195729537366617
+    "close_change": -0.026619217081850572
   }
 ]
