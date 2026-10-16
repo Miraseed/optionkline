@@ -3930,12 +3930,12 @@
     "open": 7.265,
     "high": 7.284,
     "low": 6.755,
-    "close": 6.923,
-    "volume": 1893476651,
+    "close": 6.877,
+    "volume": 1926334746,
     "risk_score": -3,
     "risk_label": "巨大机会",
     "intraday_up": 0.0002746498214775858,
     "intraday_down": -0.07237022795935184,
-    "close_change": -0.04929964295523208
+    "close_change": -0.05561658884921728
   }
 ]
