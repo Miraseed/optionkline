@@ -310,9 +310,9 @@ function nextRefreshInfo() {
   if (isTradingDay(now)) {
     if (mins < 570) return "非交易时段，9:30后开始自动刷新";
     if (mins < 780) return "午间休市，13:00后继续自动刷新";
-    return "今日交易已结束";
+    return "今日交易已结束，已暂停自动刷新";
   }
-  return "非交易日，数据仅供查看";
+  return "非交易日，已暂停自动刷新";
 }
 
 // ==================== 数据加载 ====================
@@ -945,6 +945,12 @@ function dataHash() {
 }
 
 async function autoRefreshTask() {
+  // 仅在交易时段自动刷新：非交易时段跳过网络请求与重渲染，避免干扰复盘
+  if (!isTradingHours()) {
+    nextRefreshAt = Date.now() + refreshMs;
+    updateStatusUI();
+    return;
+  }
   try {
     const oldHash = dataHash();
     await loadAllData();
@@ -962,6 +968,30 @@ async function autoRefreshTask() {
     showToast("自动刷新失败: " + e.message, "error");
   }
   nextRefreshAt = Date.now() + refreshMs;
+  updateStatusUI();
+}
+
+// 每秒更新头部状态：本地时间、交易时段徽标、下次刷新倒计时
+function updateStatusUI() {
+  const now = new Date();
+  const timeEl = document.getElementById("server-time");
+  if (timeEl) timeEl.textContent = now.toLocaleString("zh-CN", { hour12: false });
+  const badge = document.getElementById("status-badge");
+  const cd = document.getElementById("countdown");
+  if (isTradingHours(now)) {
+    if (badge) { badge.textContent = "🟢 交易中"; badge.className = "status-badge status-trading"; }
+    if (cd) {
+      const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
+      const m = Math.floor(remain / 60), s = remain % 60;
+      cd.textContent = `实时 · 交易时段每${Math.round(refreshMs/1000/60) || Math.round(refreshMs/1000)}${refreshMs>=60000?'分钟':'秒'}刷新 (下次 ${m}:${String(s).padStart(2,'0')})`;
+    }
+  } else {
+    if (badge) {
+      badge.textContent = isTradingDay(now) ? "⚪ 非交易时段" : "⚪ 非交易日";
+      badge.className = "status-badge status-closed";
+    }
+    if (cd) cd.textContent = "已暂停自动刷新（仅交易时段刷新）";
+  }
 }
 
 function startAutoRefresh() {
@@ -972,14 +1002,8 @@ function startAutoRefresh() {
   if (refreshTimer) clearInterval(refreshTimer);
   if (countdownInterval) clearInterval(countdownInterval);
   refreshTimer = setInterval(autoRefreshTask, refreshMs);
-  countdownInterval = setInterval(() => {
-    const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
-    const m = Math.floor(remain / 60), s = remain % 60;
-    document.getElementById("countdown").textContent = `下次刷新: ${m}:${String(s).padStart(2,'0')}`;
-  }, 1000);
-  setInterval(() => {
-    document.getElementById("server-time").textContent = new Date().toLocaleString("zh-CN", { hour12: false });
-  }, 1000);
+  countdownInterval = setInterval(updateStatusUI, 1000);
+  updateStatusUI();
 }
 
 // ==================== 初始化 ====================
