@@ -18,7 +18,7 @@
     "low": 6.218,
     "close": 6.292,
     "volume": 223778742,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.011083,
     "intraday_down": -0.001285,
     "close_change": 0.010601
@@ -42,7 +42,7 @@
     "low": 6.257,
     "close": 6.363,
     "volume": 207037047,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.01563,
     "intraday_down": -0.002073,
     "close_change": 0.014833
@@ -54,7 +54,7 @@
     "low": 6.339,
     "close": 6.365,
     "volume": 317569211,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.0022,
     "intraday_down": -0.003772,
     "close_change": 0.000314
@@ -66,7 +66,7 @@
     "low": 6.336,
     "close": 6.391,
     "volume": 201757214,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.00597,
     "intraday_down": -0.004556,
     "close_change": 0.004085
@@ -174,7 +174,7 @@
     "low": 6.375,
     "close": 6.397,
     "volume": 103603518,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.002185,
     "intraday_down": -0.00515,
     "close_change": -0.001717
@@ -234,7 +234,7 @@
     "low": 6.494,
     "close": 6.658,
     "volume": 229116702,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.022874,
     "intraday_down": -0.00307,
     "close_change": 0.022106
@@ -246,7 +246,7 @@
     "low": 6.658,
     "close": 6.748,
     "volume": 418683346,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.021478,
     "intraday_down": 0.0,
     "close_change": 0.013518
@@ -258,7 +258,7 @@
     "low": 6.711,
     "close": 6.733,
     "volume": 314765492,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.005631,
     "intraday_down": -0.005483,
     "close_change": -0.002223
@@ -270,7 +270,7 @@
     "low": 6.667,
     "close": 6.824,
     "volume": 337660021,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.013813,
     "intraday_down": -0.009802,
     "close_change": 0.013516
@@ -294,7 +294,7 @@
     "low": 6.785,
     "close": 6.915,
     "volume": 843778501,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.019894,
     "intraday_down": -0.000147,
     "close_change": 0.01901
@@ -354,7 +354,7 @@
     "low": 7.069,
     "close": 7.141,
     "volume": 349461915,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.010698,
     "intraday_down": -0.004927,
     "close_change": 0.005208
@@ -390,7 +390,7 @@
     "low": 6.915,
     "close": 6.94,
     "volume": 240995450,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.004111,
     "intraday_down": -0.019844,
     "close_change": -0.0163
@@ -402,7 +402,7 @@
     "low": 6.689,
     "close": 6.779,
     "volume": 326897388,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.007781,
     "intraday_down": -0.036167,
     "close_change": -0.023199
@@ -462,7 +462,7 @@
     "low": 6.957,
     "close": 7.224,
     "volume": 471718308,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.032272,
     "intraday_down": -0.006569,
     "close_change": 0.031558
@@ -510,7 +510,7 @@
     "low": 7.243,
     "close": 7.357,
     "volume": 158683618,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.011123,
     "intraday_down": -0.005356,
     "close_change": 0.010299
@@ -522,7 +522,7 @@
     "low": 7.2,
     "close": 7.292,
     "volume": 338418181,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.012369,
     "intraday_down": -0.02134,
     "close_change": -0.008835
@@ -534,7 +534,7 @@
     "low": 7.23,
     "close": 7.261,
     "volume": 285552255,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.004663,
     "intraday_down": -0.008502,
     "close_change": -0.004251
@@ -558,7 +558,7 @@
     "low": 7.14,
     "close": 7.277,
     "volume": 262962112,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.002323,
     "intraday_down": -0.024324,
     "close_change": -0.005603
@@ -618,7 +618,7 @@
     "low": 7.463,
     "close": 7.519,
     "volume": 269331858,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.009515,
     "intraday_down": 0.000134,
     "close_change": 0.007639
@@ -630,7 +630,7 @@
     "low": 7.54,
     "close": 7.649,
     "volume": 247330432,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.021146,
     "intraday_down": 0.002793,
     "close_change": 0.01729
@@ -642,7 +642,7 @@
     "low": 7.479,
     "close": 7.505,
     "volume": 291527723,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": -0.003922,
     "intraday_down": -0.022225,
     "close_change": -0.018826
@@ -690,7 +690,7 @@
     "low": 7.296,
     "close": 7.336,
     "volume": 275073811,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.000812,
     "intraday_down": -0.013121,
     "close_change": -0.00771
@@ -786,7 +786,7 @@
     "low": 7.41,
     "close": 7.441,
     "volume": 170449440,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.004814,
     "intraday_down": -0.009093,
     "close_change": -0.004948
@@ -906,7 +906,7 @@
     "low": 7.381,
     "close": 7.394,
     "volume": 158667471,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.00631,
     "intraday_down": -0.008996,
     "close_change": -0.00725
@@ -990,7 +990,7 @@
     "low": 7.163,
     "close": 7.17,
     "volume": 303240774,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.009132,
     "intraday_down": -0.008856,
     "close_change": -0.007887
@@ -1026,7 +1026,7 @@
     "low": 7.014,
     "close": 7.054,
     "volume": 604358456,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.022382,
     "intraday_down": 0.006313,
     "close_change": 0.012052
@@ -1038,7 +1038,7 @@
     "low": 7.038,
     "close": 7.065,
     "volume": 413929415,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.009923,
     "intraday_down": -0.002268,
     "close_change": 0.001559
@@ -1050,7 +1050,7 @@
     "low": 7.04,
     "close": 7.05,
     "volume": 188542552,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.012597,
     "intraday_down": -0.003539,
     "close_change": -0.002123
@@ -1086,7 +1086,7 @@
     "low": 7.123,
     "close": 7.141,
     "volume": 150369654,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": -0.001944,
     "intraday_down": -0.010969,
     "close_change": -0.00847
@@ -1110,7 +1110,7 @@
     "low": 7.06,
     "close": 7.125,
     "volume": 122371097,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.006617,
     "intraday_down": -0.006054,
     "close_change": 0.003097
@@ -1122,7 +1122,7 @@
     "low": 7.067,
     "close": 7.216,
     "volume": 308526062,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.013193,
     "intraday_down": -0.00814,
     "close_change": 0.012772
@@ -1134,7 +1134,7 @@
     "low": 7.229,
     "close": 7.278,
     "volume": 282808073,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.012334,
     "intraday_down": 0.001802,
     "close_change": 0.008592
@@ -1146,7 +1146,7 @@
     "low": 7.211,
     "close": 7.224,
     "volume": 192435582,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.001649,
     "intraday_down": -0.009206,
     "close_change": -0.00742
@@ -1158,7 +1158,7 @@
     "low": 7.172,
     "close": 7.263,
     "volume": 259557832,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.007752,
     "intraday_down": -0.007198,
     "close_change": 0.005399
@@ -1170,7 +1170,7 @@
     "low": 7.196,
     "close": 7.201,
     "volume": 186138398,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.002891,
     "intraday_down": -0.009225,
     "close_change": -0.008536
@@ -1182,7 +1182,7 @@
     "low": 7.184,
     "close": 7.285,
     "volume": 375528482,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.014304,
     "intraday_down": -0.002361,
     "close_change": 0.011665
@@ -1290,7 +1290,7 @@
     "low": 7.452,
     "close": 7.534,
     "volume": 286961619,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.011379,
     "intraday_down": -0.00241,
     "close_change": 0.008568
@@ -1302,7 +1302,7 @@
     "low": 7.527,
     "close": 7.58,
     "volume": 514730074,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.010884,
     "intraday_down": -0.000929,
     "close_change": 0.006106
@@ -1350,7 +1350,7 @@
     "low": 7.64,
     "close": 7.792,
     "volume": 276371421,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.027148,
     "intraday_down": 0.006853,
     "close_change": 0.026885
@@ -1446,7 +1446,7 @@
     "low": 8.265,
     "close": 8.339,
     "volume": 3167300455,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.002989,
     "intraday_down": -0.011955,
     "close_change": -0.003108
@@ -1530,7 +1530,7 @@
     "low": 8.517,
     "close": 8.564,
     "volume": 1666726482,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.007799,
     "intraday_down": -0.023168,
     "close_change": -0.017777
@@ -1542,7 +1542,7 @@
     "low": 8.437,
     "close": 8.619,
     "volume": 1474651264,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.012377,
     "intraday_down": -0.01483,
     "close_change": 0.006422
@@ -1554,7 +1554,7 @@
     "low": 8.595,
     "close": 8.691,
     "volume": 2517446639,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.011718,
     "intraday_down": -0.002785,
     "close_change": 0.008354
@@ -1638,7 +1638,7 @@
     "low": 8.075,
     "close": 8.213,
     "volume": 939936597,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.013752,
     "intraday_down": -0.017281,
     "close_change": -0.000487
@@ -1698,7 +1698,7 @@
     "low": 8.361,
     "close": 8.373,
     "volume": 1017396628,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": -0.002114,
     "intraday_down": -0.01797,
     "close_change": -0.016561
@@ -1758,7 +1758,7 @@
     "low": 8.62,
     "close": 8.733,
     "volume": 772395741,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.00412,
     "intraday_down": -0.013391,
     "close_change": -0.000458
@@ -1818,7 +1818,7 @@
     "low": 8.124,
     "close": 8.356,
     "volume": 469439650,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": -0.004869,
     "intraday_down": -0.035269,
     "close_change": -0.007719
@@ -1830,7 +1830,7 @@
     "low": 8.391,
     "close": 8.481,
     "volume": 435573866,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.016276,
     "intraday_down": 0.004189,
     "close_change": 0.014959
@@ -1842,7 +1842,7 @@
     "low": 8.441,
     "close": 8.468,
     "volume": 385228347,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.004481,
     "intraday_down": -0.004716,
     "close_change": -0.001533
@@ -1902,7 +1902,7 @@
     "low": 8.023,
     "close": 8.156,
     "volume": 492148046,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.011141,
     "intraday_down": -0.006809,
     "close_change": 0.009656
@@ -1998,7 +1998,7 @@
     "low": 7.665,
     "close": 7.818,
     "volume": 478242199,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.004229,
     "intraday_down": -0.017686,
     "close_change": 0.001922
@@ -2010,7 +2010,7 @@
     "low": 7.68,
     "close": 7.683,
     "volume": 368399919,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.005372,
     "intraday_down": -0.017652,
     "close_change": -0.017268
@@ -2058,7 +2058,7 @@
     "low": 7.6,
     "close": 7.629,
     "volume": 328131755,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.01289,
     "intraday_down": -0.000395,
     "close_change": 0.00342
@@ -2082,7 +2082,7 @@
     "low": 7.908,
     "close": 7.964,
     "volume": 642825820,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": -0.002118,
     "intraday_down": -0.014702,
     "close_change": -0.007725
@@ -2166,7 +2166,7 @@
     "low": 8.278,
     "close": 8.355,
     "volume": 912541634,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.012545,
     "intraday_down": -0.001448,
     "close_change": 0.007841
@@ -2238,7 +2238,7 @@
     "low": 8.247,
     "close": 8.273,
     "volume": 636938696,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": -0.001434,
     "intraday_down": -0.01446,
     "close_change": -0.011353
@@ -2262,7 +2262,7 @@
     "low": 8.37,
     "close": 8.43,
     "volume": 779361939,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.003325,
     "intraday_down": -0.006174,
     "close_change": 0.00095
@@ -2346,7 +2346,7 @@
     "low": 8.76,
     "close": 8.772,
     "volume": 890258803,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.00444,
     "intraday_down": -0.027639,
     "close_change": -0.026307
@@ -2466,7 +2466,7 @@
     "low": 8.506,
     "close": 8.649,
     "volume": 332221554,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.009287,
     "intraday_down": -0.012538,
     "close_change": 0.004063
@@ -2502,7 +2502,7 @@
     "low": 8.238,
     "close": 8.406,
     "volume": 458809424,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.013142,
     "intraday_down": -0.015771,
     "close_change": 0.004301
@@ -2646,7 +2646,7 @@
     "low": 8.722,
     "close": 8.828,
     "volume": 252960922,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.011412,
     "intraday_down": -0.004679,
     "close_change": 0.007418
@@ -2658,7 +2658,7 @@
     "low": 8.748,
     "close": 9.007,
     "volume": 370108740,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.020616,
     "intraday_down": -0.009062,
     "close_change": 0.020276
@@ -2682,7 +2682,7 @@
     "low": 8.756,
     "close": 8.985,
     "volume": 282708434,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.02042,
     "intraday_down": -0.006693,
     "close_change": 0.019285
@@ -2706,7 +2706,7 @@
     "low": 8.795,
     "close": 8.861,
     "volume": 335195688,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": -0.002091,
     "intraday_down": -0.031921,
     "close_change": -0.024656
@@ -2766,7 +2766,7 @@
     "low": 8.79,
     "close": 8.901,
     "volume": 280135216,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.018646,
     "intraday_down": -0.006667,
     "close_change": 0.005876
@@ -2790,7 +2790,7 @@
     "low": 8.613,
     "close": 8.657,
     "volume": 277314854,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.000795,
     "intraday_down": -0.022361,
     "close_change": -0.017367
@@ -2946,7 +2946,7 @@
     "low": 7.541,
     "close": 7.545,
     "volume": 340683039,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": -0.003231,
     "intraday_down": -0.025333,
     "close_change": -0.024816
@@ -2958,7 +2958,7 @@
     "low": 7.484,
     "close": 7.726,
     "volume": 590866128,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.025712,
     "intraday_down": -0.008085,
     "close_change": 0.023989
@@ -3126,7 +3126,7 @@
     "low": 7.91,
     "close": 7.998,
     "volume": 254678534,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.005514,
     "intraday_down": -0.008772,
     "close_change": 0.002256
@@ -3198,7 +3198,7 @@
     "low": 7.63,
     "close": 7.74,
     "volume": 352454470,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.001144,
     "intraday_down": -0.030003,
     "close_change": -0.016018
@@ -3210,7 +3210,7 @@
     "low": 7.594,
     "close": 7.726,
     "volume": 378296058,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.00478,
     "intraday_down": -0.018863,
     "close_change": -0.001809
@@ -3234,7 +3234,7 @@
     "low": 7.782,
     "close": 7.973,
     "volume": 417021452,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.024393,
     "intraday_down": -0.000899,
     "close_change": 0.023623
@@ -3270,7 +3270,7 @@
     "low": 7.87,
     "close": 7.881,
     "volume": 386885873,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.0,
     "intraday_down": -0.012175,
     "close_change": -0.010795
@@ -3390,7 +3390,7 @@
     "low": 7.563,
     "close": 7.588,
     "volume": 417551140,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.009476,
     "intraday_down": -0.004606,
     "close_change": -0.001316
@@ -3462,7 +3462,7 @@
     "low": 7.809,
     "close": 7.818,
     "volume": 332707404,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.003185,
     "intraday_down": -0.005223,
     "close_change": -0.004076

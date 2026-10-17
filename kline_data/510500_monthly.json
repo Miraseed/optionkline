@@ -126,7 +126,7 @@
     "low": 7.865,
     "close": 7.969,
     "volume": 3419631546,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.06227,
     "intraday_down": -0.034021,
     "close_change": -0.021248
@@ -162,7 +162,7 @@
     "low": 8.05,
     "close": 8.258,
     "volume": 3606376439,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.017807,
     "intraday_down": -0.011421,
     "close_change": 0.014123
@@ -234,7 +234,7 @@
     "low": 6.736,
     "close": 7.346,
     "volume": 3925075686,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.090054,
     "intraday_down": -0.01043,
     "close_change": 0.079183
@@ -246,7 +246,7 @@
     "low": 7.068,
     "close": 7.194,
     "volume": 3000663319,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.015246,
     "intraday_down": -0.037844,
     "close_change": -0.020692
@@ -330,7 +330,7 @@
     "low": 6.235,
     "close": 6.372,
     "volume": 6676558216,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.023005,
     "intraday_down": -0.010789,
     "close_change": 0.010947
@@ -378,7 +378,7 @@
     "low": 5.936,
     "close": 6.095,
     "volume": 3873228159,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.022817,
     "intraday_down": -0.025607,
     "close_change": 0.000492
@@ -390,7 +390,7 @@
     "low": 6.0,
     "close": 6.196,
     "volume": 3318004652,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.025923,
     "intraday_down": -0.015587,
     "close_change": 0.016571
@@ -450,7 +450,7 @@
     "low": 5.321,
     "close": 5.519,
     "volume": 5336641563,
-    "risk_score": -2,
+    "risk_score": -1,
     "intraday_up": 0.009047,
     "intraday_down": -0.056058,
     "close_change": -0.020933
@@ -558,7 +558,7 @@
     "low": 4.463,
     "close": 5.995,
     "volume": 8923210570,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.282258,
     "intraday_down": -0.052844,
     "close_change": 0.272284
@@ -570,7 +570,7 @@
     "low": 5.485,
     "close": 6.0,
     "volume": 14130240089,
-    "risk_score": 2,
+    "risk_score": 3,
     "intraday_up": 0.100083,
     "intraday_down": -0.085071,
     "close_change": 0.000834
@@ -618,7 +618,7 @@
     "low": 5.582,
     "close": 5.867,
     "volume": 6110759426,
-    "risk_score": 0,
+    "risk_score": 1,
     "intraday_up": 0.08684,
     "intraday_down": -0.000537,
     "close_change": 0.050492
