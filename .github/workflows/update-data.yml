@@ -4,12 +4,15 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '*/5 1-3 * * 1-5'
-    - cron: '*/5 5-7 * * 1-5'
+    # cron 仅作兜底 (GitHub 高负载时会降频甚至跳过)
+    # 交易时段: UTC 1:30-3:30 (北京9:30-11:30) + UTC 5:00-7:00 (北京13:00-15:00)
+    - cron: '*/10 1-3 * * 1-5'
+    - cron: '*/10 5-7 * * 1-5'
   workflow_dispatch:
 
 permissions:
   contents: write
+  actions: write   # 自续跑需要触发 workflow_dispatch
 
 jobs:
   update:
@@ -41,4 +44,46 @@ jobs:
           else
             git commit -m "自动更新K线数据 $(date '+%Y-%m-%d %H:%M:%S')"
             git push
+          fi
+
+      # ============ 自续跑: 绕过 schedule 降频 ============
+      # 原理: workflow 跑完后在交易时段 dispatch 自己, 形成连续链条
+      # cron 只作兜底 (链条断裂时恢复), 降频到 */10 减少冗余触发
+      - name: Self-dispatch during trading hours
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 当前 UTC 时间
+          CURRENT_TIME=$(date -u +"%H%M")
+          CURRENT_DOW=$(date -u +"%u")   # 1=周一 ... 5=周五
+
+          echo "当前 UTC 时间: $(date -u '+%Y-%m-%d %H:%M:%S') (周$CURRENT_DOW)"
+          echo "当前 UTC HHMM: $CURRENT_TIME"
+
+          # 非交易日不自续跑
+          if [ "$CURRENT_DOW" -gt 5 ]; then
+            echo "周末, 不自续跑, 等待周一 cron 兜底"
+            exit 0
+          fi
+
+          # 交易时段判断 (留3分钟给当前job完成 + dispatch延迟):
+          #   北京 9:30-11:25 = UTC 1:30-3:25  -> 续跑区间 1:30~3:25
+          #   北京 13:00-14:55 = UTC 5:00-6:55 -> 续跑区间 5:00~6:55
+          # 不在收盘前5分钟续跑, 避免跑到收盘后产生空跑
+          IN_TRADING=false
+          if [ "$CURRENT_TIME" -ge 130 ] && [ "$CURRENT_TIME" -le 325 ]; then
+            IN_TRADING=true
+          elif [ "$CURRENT_TIME" -ge 500 ] && [ "$CURRENT_TIME" -le 655 ]; then
+            IN_TRADING=true
+          fi
+
+          if [ "$IN_TRADING" = "true" ]; then
+            echo "在交易时段内, 安排自续跑..."
+            # 等待3分钟, 让数据源更新后再续跑
+            sleep 180
+            echo "触发 workflow_dispatch 自续跑..."
+            gh workflow run update-data.yml
+            echo "自续跑已触发, 链条继续"
+          else
+            echo "不在交易时段 (UTC $CURRENT_TIME), 不自续跑, 等待 cron 兜底"
           fi

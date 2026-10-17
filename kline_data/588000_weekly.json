@@ -7,7 +7,6 @@
     "close": 1.435,
     "volume": 4675593673,
     "risk_score": 0,
-    "risk_label": "中性",
     "intraday_up": null,
     "intraday_down": null,
     "close_change": null
@@ -20,10 +19,9 @@
     "close": 1.392,
     "volume": 3220725596,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": -0.0006968641114983358,
-    "intraday_down": -0.035540069686411255,
-    "close_change": -0.02996515679442519
+    "intraday_up": -0.000697,
+    "intraday_down": -0.03554,
+    "close_change": -0.029965
   },
   {
     "date": "2020-12-04",
@@ -33,10 +31,9 @@
     "close": 1.411,
     "volume": 2560754813,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.021551724137931057,
-    "intraday_down": -0.005028735632183833,
-    "close_change": 0.013649425287356414
+    "intraday_up": 0.021552,
+    "intraday_down": -0.005029,
+    "close_change": 0.013649
   },
   {
     "date": "2020-12-11",
@@ -46,10 +43,9 @@
     "close": 1.396,
     "volume": 2616061784,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.007795889440113323,
-    "intraday_down": -0.02834868887313964,
-    "close_change": -0.010630758327427445
+    "intraday_up": 0.007796,
+    "intraday_down": -0.028349,
+    "close_change": -0.010631
   },
   {
     "date": "2020-12-18",
@@ -59,10 +55,9 @@
     "close": 1.403,
     "volume": 2263483847,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.017191977077363915,
-    "intraday_down": -0.009312320916905373,
-    "close_change": 0.0050143266475645544
+    "intraday_up": 0.017192,
+    "intraday_down": -0.009312,
+    "close_change": 0.005014
   },
   {
     "date": "2020-12-25",
@@ -72,10 +67,9 @@
     "close": 1.394,
     "volume": 2839221366,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.02066999287241619,
-    "intraday_down": -0.014255167498218117,
-    "close_change": -0.006414825374198231
+    "intraday_up": 0.02067,
+    "intraday_down": -0.014255,
+    "close_change": -0.006415
   },
   {
     "date": "2021-01-01",
@@ -85,10 +79,9 @@
     "close": 1.434,
     "volume": 2576207842,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.02941176470588246,
-    "intraday_down": -0.012195121951219445,
-    "close_change": 0.028694404591104762
+    "intraday_up": 0.029412,
+    "intraday_down": -0.012195,
+    "close_change": 0.028694
   },
   {
     "date": "2021-01-08",
@@ -98,10 +91,9 @@
     "close": 1.423,
     "volume": 3545730521,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.028591352859135388,
-    "intraday_down": -0.016736401673640183,
-    "close_change": -0.0076708507670850065
+    "intraday_up": 0.028591,
+    "intraday_down": -0.016736,
+    "close_change": -0.007671
   },
   {
     "date": "2021-01-15",
@@ -111,10 +103,9 @@
     "close": 1.492,
     "volume": 4324089048,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.07097680955727335,
-    "intraday_down": -0.0021082220660577048,
-    "close_change": 0.04848910751932533
+    "intraday_up": 0.070977,
+    "intraday_down": -0.002108,
+    "close_change": 0.048489
   },
   {
     "date": "2021-01-22",
@@ -124,10 +115,9 @@
     "close": 1.536,
     "volume": 3995564467,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03418230563002676,
-    "intraday_down": -0.008042895442359256,
-    "close_change": 0.02949061662198394
+    "intraday_up": 0.034182,
+    "intraday_down": -0.008043,
+    "close_change": 0.029491
   },
   {
     "date": "2021-01-29",
@@ -137,10 +127,9 @@
     "close": 1.467,
     "volume": 3539188559,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.01367187499999994,
-    "intraday_down": -0.059244791666666644,
-    "close_change": -0.044921874999999965
+    "intraday_up": 0.013672,
+    "intraday_down": -0.059245,
+    "close_change": -0.044922
   },
   {
     "date": "2021-02-05",
@@ -150,10 +139,9 @@
     "close": 1.414,
     "volume": 3092412628,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.01226993865030676,
-    "intraday_down": -0.03885480572597148,
-    "close_change": -0.03612815269256998
+    "intraday_up": 0.01227,
+    "intraday_down": -0.038855,
+    "close_change": -0.036128
   },
   {
     "date": "2021-02-12",
@@ -163,10 +151,9 @@
     "close": 1.478,
     "volume": 1623894214,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.048090523338048134,
-    "intraday_down": -0.003536067892503461,
-    "close_change": 0.045261669024045305
+    "intraday_up": 0.048091,
+    "intraday_down": -0.003536,
+    "close_change": 0.045262
   },
   {
     "date": "2021-02-19",
@@ -176,10 +163,9 @@
     "close": 1.472,
     "volume": 1182341257,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.01826792963464135,
-    "intraday_down": -0.02097428958051415,
-    "close_change": -0.004059539918809205
+    "intraday_up": 0.018268,
+    "intraday_down": -0.020974,
+    "close_change": -0.00406
   },
   {
     "date": "2021-02-26",
@@ -189,10 +175,9 @@
     "close": 1.368,
     "volume": 4440713789,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.004755434782608776,
-    "intraday_down": -0.07201086956521731,
-    "close_change": -0.07065217391304339
+    "intraday_up": 0.004755,
+    "intraday_down": -0.072011,
+    "close_change": -0.070652
   },
   {
     "date": "2021-03-05",
@@ -202,10 +187,9 @@
     "close": 1.37,
     "volume": 3375486678,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.03362573099415191,
-    "intraday_down": -0.012426900584795413,
-    "close_change": 0.0014619883040935685
+    "intraday_up": 0.033626,
+    "intraday_down": -0.012427,
+    "close_change": 0.001462
   },
   {
     "date": "2021-03-12",
@@ -215,10 +199,9 @@
     "close": 1.298,
     "volume": 3970381110,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.005839416058394003,
-    "intraday_down": -0.0766423357664235,
-    "close_change": -0.05255474452554749
+    "intraday_up": 0.005839,
+    "intraday_down": -0.076642,
+    "close_change": -0.052555
   },
   {
     "date": "2021-03-19",
@@ -228,10 +211,9 @@
     "close": 1.266,
     "volume": 2515191879,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.003852080123266653,
-    "intraday_down": -0.03852080123266567,
-    "close_change": -0.02465331278890603
+    "intraday_up": -0.003852,
+    "intraday_down": -0.038521,
+    "close_change": -0.024653
   },
   {
     "date": "2021-03-26",
@@ -241,10 +223,9 @@
     "close": 1.293,
     "volume": 2204289584,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.02211690363349133,
-    "intraday_down": -0.012638230647709331,
-    "close_change": 0.02132701421800941
+    "intraday_up": 0.022117,
+    "intraday_down": -0.012638,
+    "close_change": 0.021327
   },
   {
     "date": "2021-04-02",
@@ -254,10 +235,9 @@
     "close": 1.338,
     "volume": 2201802533,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.036349574632637396,
-    "intraday_down": -0.0154679040989946,
-    "close_change": 0.034802784222737936
+    "intraday_up": 0.03635,
+    "intraday_down": -0.015468,
+    "close_change": 0.034803
   },
   {
     "date": "2021-04-09",
@@ -267,10 +247,9 @@
     "close": 1.309,
     "volume": 1286726511,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.006726457399103061,
-    "intraday_down": -0.023916292974588957,
-    "close_change": -0.021674140508221328
+    "intraday_up": 0.006726,
+    "intraday_down": -0.023916,
+    "close_change": -0.021674
   },
   {
     "date": "2021-04-16",
@@ -280,10 +259,9 @@
     "close": 1.315,
     "volume": 1756739246,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.006111535523300235,
-    "intraday_down": -0.02444614209320094,
-    "close_change": 0.004583651642475177
+    "intraday_up": 0.006112,
+    "intraday_down": -0.024446,
+    "close_change": 0.004584
   },
   {
     "date": "2021-04-23",
@@ -293,10 +271,9 @@
     "close": 1.352,
     "volume": 2080428975,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.031178707224334714,
-    "intraday_down": -0.00532319391634973,
-    "close_change": 0.028136882129277677
+    "intraday_up": 0.031179,
+    "intraday_down": -0.005323,
+    "close_change": 0.028137
   },
   {
     "date": "2021-04-30",
@@ -306,10 +283,9 @@
     "close": 1.364,
     "volume": 1825585658,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.01775147928994068,
-    "intraday_down": -0.012573964497041512,
-    "close_change": 0.008875739644970421
+    "intraday_up": 0.017751,
+    "intraday_down": -0.012574,
+    "close_change": 0.008876
   },
   {
     "date": "2021-05-07",
@@ -319,10 +295,9 @@
     "close": 1.304,
     "volume": 783180916,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": -0.0014662756598240482,
-    "intraday_down": -0.04472140762463355,
-    "close_change": -0.043988269794721445
+    "intraday_up": -0.001466,
+    "intraday_down": -0.044721,
+    "close_change": -0.043988
   },
   {
     "date": "2021-05-14",
@@ -332,10 +307,9 @@
     "close": 1.341,
     "volume": 1847508410,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.029141104294478554,
-    "intraday_down": -0.019938650306748483,
-    "close_change": 0.028374233128834296
+    "intraday_up": 0.029141,
+    "intraday_down": -0.019939,
+    "close_change": 0.028374
   },
   {
     "date": "2021-05-21",
@@ -345,10 +319,9 @@
     "close": 1.354,
     "volume": 1956376452,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.028337061894108898,
-    "intraday_down": -0.0007457121551080461,
-    "close_change": 0.00969425801640576
+    "intraday_up": 0.028337,
+    "intraday_down": -0.000746,
+    "close_change": 0.009694
   },
   {
     "date": "2021-05-28",
@@ -358,10 +331,9 @@
     "close": 1.43,
     "volume": 2723110362,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.07533234859675027,
-    "intraday_down": -0.008862629246676522,
-    "close_change": 0.056129985228951136
+    "intraday_up": 0.075332,
+    "intraday_down": -0.008863,
+    "close_change": 0.05613
   },
   {
     "date": "2021-06-04",
@@ -371,10 +343,9 @@
     "close": 1.475,
     "volume": 3545151235,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.055944055944056,
-    "intraday_down": 0.006993006993007,
-    "close_change": 0.031468531468531576
+    "intraday_up": 0.055944,
+    "intraday_down": 0.006993,
+    "close_change": 0.031469
   },
   {
     "date": "2021-06-11",
@@ -384,10 +355,9 @@
     "close": 1.493,
     "volume": 2413148029,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.01898305084745749,
-    "intraday_down": -0.014237288135593308,
-    "close_change": 0.012203389830508485
+    "intraday_up": 0.018983,
+    "intraday_down": -0.014237,
+    "close_change": 0.012203
   },
   {
     "date": "2021-06-18",
@@ -397,10 +367,9 @@
     "close": 1.55,
     "volume": 3074420893,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.040187541862022655,
-    "intraday_down": -0.028801071667783087,
-    "close_change": 0.038178164768921594
+    "intraday_up": 0.040188,
+    "intraday_down": -0.028801,
+    "close_change": 0.038178
   },
   {
     "date": "2021-06-25",
@@ -410,10 +379,9 @@
     "close": 1.595,
     "volume": 3256027949,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.03741935483870971,
-    "intraday_down": -0.010967741935483952,
-    "close_change": 0.029032258064516082
+    "intraday_up": 0.037419,
+    "intraday_down": -0.010968,
+    "close_change": 0.029032
   },
   {
     "date": "2021-07-02",
@@ -423,10 +391,9 @@
     "close": 1.594,
     "volume": 3160752449,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.043260188087774265,
-    "intraday_down": -0.00940438871473348,
-    "close_change": -0.0006269592476488338
+    "intraday_up": 0.04326,
+    "intraday_down": -0.009404,
+    "close_change": -0.000627
   },
   {
     "date": "2021-07-09",
@@ -436,10 +403,9 @@
     "close": 1.644,
     "volume": 3652333728,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.05018820577164357,
-    "intraday_down": -0.01693851944792982,
-    "close_change": 0.031367628607277175
+    "intraday_up": 0.050188,
+    "intraday_down": -0.016939,
+    "close_change": 0.031368
   },
   {
     "date": "2021-07-16",
@@ -449,10 +415,9 @@
     "close": 1.584,
     "volume": 2876167211,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.021289537712895466,
-    "intraday_down": -0.038321167883211646,
-    "close_change": -0.036496350364963404
+    "intraday_up": 0.02129,
+    "intraday_down": -0.038321,
+    "close_change": -0.036496
   },
   {
     "date": "2021-07-23",
@@ -462,10 +427,9 @@
     "close": 1.627,
     "volume": 2693515259,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.04166666666666656,
-    "intraday_down": -0.01704545454545463,
-    "close_change": 0.0271464646464646
+    "intraday_up": 0.041667,
+    "intraday_down": -0.017045,
+    "close_change": 0.027146
   },
   {
     "date": "2021-07-30",
@@ -475,10 +439,9 @@
     "close": 1.651,
     "volume": 3822941798,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03687768899815615,
-    "intraday_down": -0.05716041794714196,
-    "close_change": 0.01475107559926246
+    "intraday_up": 0.036878,
+    "intraday_down": -0.05716,
+    "close_change": 0.014751
   },
   {
     "date": "2021-08-06",
@@ -488,10 +451,9 @@
     "close": 1.65,
     "volume": 2678703920,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.02725620835857052,
-    "intraday_down": -0.02180496668685647,
-    "close_change": -0.0006056935190794136
+    "intraday_up": 0.027256,
+    "intraday_down": -0.021805,
+    "close_change": -0.000606
   },
   {
     "date": "2021-08-13",
@@ -501,10 +463,9 @@
     "close": 1.611,
     "volume": 1749391445,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.008484848484848493,
-    "intraday_down": -0.025454545454545344,
-    "close_change": -0.02363636363636359
+    "intraday_up": 0.008485,
+    "intraday_down": -0.025455,
+    "close_change": -0.023636
   },
   {
     "date": "2021-08-20",
@@ -514,10 +475,9 @@
     "close": 1.59,
     "volume": 2112629559,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.008690254500310374,
-    "intraday_down": -0.03227808814400996,
-    "close_change": -0.013035381750465492
+    "intraday_up": 0.00869,
+    "intraday_down": -0.032278,
+    "close_change": -0.013035
   },
   {
     "date": "2021-08-27",
@@ -527,10 +487,9 @@
     "close": 1.538,
     "volume": 2547296264,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.033962264150943285,
-    "intraday_down": -0.03647798742138368,
-    "close_change": -0.0327044025157233
+    "intraday_up": 0.033962,
+    "intraday_down": -0.036478,
+    "close_change": -0.032704
   },
   {
     "date": "2021-09-03",
@@ -540,10 +499,9 @@
     "close": 1.457,
     "volume": 3084569199,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.01690507152145645,
-    "intraday_down": -0.06566970091027306,
-    "close_change": -0.05266579973992195
+    "intraday_up": 0.016905,
+    "intraday_down": -0.06567,
+    "close_change": -0.052666
   },
   {
     "date": "2021-09-10",
@@ -553,10 +511,9 @@
     "close": 1.482,
     "volume": 2784806380,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.026767330130404887,
-    "intraday_down": -0.008236101578586143,
-    "close_change": 0.01715854495538772
+    "intraday_up": 0.026767,
+    "intraday_down": -0.008236,
+    "close_change": 0.017159
   },
   {
     "date": "2021-09-17",
@@ -566,10 +523,9 @@
     "close": 1.413,
     "volume": 3405467768,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": -0.0033738191632927757,
-    "intraday_down": -0.06545209176788122,
-    "close_change": -0.04655870445344126
+    "intraday_up": -0.003374,
+    "intraday_down": -0.065452,
+    "close_change": -0.046559
   },
   {
     "date": "2021-09-24",
@@ -579,10 +535,9 @@
     "close": 1.428,
     "volume": 1534602927,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.020523708421797533,
-    "intraday_down": -0.016277423920736115,
-    "close_change": 0.010615711252653858
+    "intraday_up": 0.020524,
+    "intraday_down": -0.016277,
+    "close_change": 0.010616
   },
   {
     "date": "2021-10-01",
@@ -592,10 +547,9 @@
     "close": 1.423,
     "volume": 2081668508,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.014005602240896371,
-    "intraday_down": -0.027310924369747847,
-    "close_change": -0.003501400560224015
+    "intraday_up": 0.014006,
+    "intraday_down": -0.027311,
+    "close_change": -0.003501
   },
   {
     "date": "2021-10-08",
@@ -605,10 +559,9 @@
     "close": 1.417,
     "volume": 442395066,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.011946591707659805,
-    "intraday_down": -0.0056219255094870045,
-    "close_change": -0.004216444132115253
+    "intraday_up": 0.011947,
+    "intraday_down": -0.005622,
+    "close_change": -0.004216
   },
   {
     "date": "2021-10-15",
@@ -618,10 +571,9 @@
     "close": 1.418,
     "volume": 2969050249,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.009174311926605434,
-    "intraday_down": -0.03740296400846855,
-    "close_change": 0.0007057163020464996
+    "intraday_up": 0.009174,
+    "intraday_down": -0.037403,
+    "close_change": 0.000706
   },
   {
     "date": "2021-10-22",
@@ -631,10 +583,9 @@
     "close": 1.423,
     "volume": 2098020787,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.011283497884344157,
-    "intraday_down": -0.019040902679830687,
-    "close_change": 0.0035260930888576275
+    "intraday_up": 0.011283,
+    "intraday_down": -0.019041,
+    "close_change": 0.003526
   },
   {
     "date": "2021-10-29",
@@ -644,10 +595,9 @@
     "close": 1.45,
     "volume": 2306433464,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.02037947997189031,
-    "intraday_down": -0.013352073085031713,
-    "close_change": 0.01897399859451856
+    "intraday_up": 0.020379,
+    "intraday_down": -0.013352,
+    "close_change": 0.018974
   },
   {
     "date": "2021-11-05",
@@ -657,10 +607,9 @@
     "close": 1.453,
     "volume": 2514444897,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.019310344827586225,
-    "intraday_down": -0.006896551724137937,
-    "close_change": 0.002068965517241458
+    "intraday_up": 0.01931,
+    "intraday_down": -0.006897,
+    "close_change": 0.002069
   },
   {
     "date": "2021-11-12",
@@ -670,10 +619,9 @@
     "close": 1.497,
     "volume": 2080032565,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03097040605643491,
-    "intraday_down": -0.012388162422573996,
-    "close_change": 0.03028217481073643
+    "intraday_up": 0.03097,
+    "intraday_down": -0.012388,
+    "close_change": 0.030282
   },
   {
     "date": "2021-11-19",
@@ -683,10 +631,9 @@
     "close": 1.501,
     "volume": 1732901393,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.004676018704074746,
-    "intraday_down": -0.018036072144288665,
-    "close_change": 0.0026720106880426062
+    "intraday_up": 0.004676,
+    "intraday_down": -0.018036,
+    "close_change": 0.002672
   },
   {
     "date": "2021-11-26",
@@ -696,10 +643,9 @@
     "close": 1.515,
     "volume": 1732114641,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.029313790806129274,
-    "intraday_down": -0.000666222518321046,
-    "close_change": 0.00932711525649568
+    "intraday_up": 0.029314,
+    "intraday_down": -0.000666,
+    "close_change": 0.009327
   },
   {
     "date": "2021-12-03",
@@ -709,10 +655,9 @@
     "close": 1.499,
     "volume": 1736296320,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.013201320132013214,
-    "intraday_down": -0.02178217821782173,
-    "close_change": -0.010561056105610424
+    "intraday_up": 0.013201,
+    "intraday_down": -0.021782,
+    "close_change": -0.010561
   },
   {
     "date": "2021-12-10",
@@ -722,9 +667,8 @@
     "close": 1.499,
     "volume": 2374844237,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.001334222815209993,
-    "intraday_down": -0.04269513008672452,
+    "intraday_up": 0.001334,
+    "intraday_down": -0.042695,
     "close_change": 0.0
   },
   {
@@ -735,10 +679,9 @@
     "close": 1.452,
     "volume": 1448558815,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.003335557038025279,
-    "intraday_down": -0.03402268178785867,
-    "close_change": -0.03135423615743839
+    "intraday_up": 0.003336,
+    "intraday_down": -0.034023,
+    "close_change": -0.031354
   },
   {
     "date": "2021-12-24",
@@ -748,10 +691,9 @@
     "close": 1.415,
     "volume": 1513592458,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0020661157024794174,
-    "intraday_down": -0.03030303030303033,
-    "close_change": -0.02548209366391179
+    "intraday_up": 0.002066,
+    "intraday_down": -0.030303,
+    "close_change": -0.025482
   },
   {
     "date": "2021-12-31",
@@ -761,10 +703,9 @@
     "close": 1.452,
     "volume": 1381078264,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.027561837455830334,
-    "intraday_down": -0.0077738515901060925,
-    "close_change": 0.026148409893992877
+    "intraday_up": 0.027562,
+    "intraday_down": -0.007774,
+    "close_change": 0.026148
   },
   {
     "date": "2022-01-07",
@@ -774,10 +715,9 @@
     "close": 1.358,
     "volume": 2205082827,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0034435261707989775,
-    "intraday_down": -0.06473829201101919,
-    "close_change": -0.06473829201101919
+    "intraday_up": 0.003444,
+    "intraday_down": -0.064738,
+    "close_change": -0.064738
   },
   {
     "date": "2022-01-14",
@@ -787,10 +727,9 @@
     "close": 1.366,
     "volume": 2241256071,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.011782032400589112,
-    "intraday_down": -0.014727540500736389,
-    "close_change": 0.005891016200294556
+    "intraday_up": 0.011782,
+    "intraday_down": -0.014728,
+    "close_change": 0.005891
   },
   {
     "date": "2022-01-21",
@@ -800,10 +739,9 @@
     "close": 1.344,
     "volume": 2545820988,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.03806734992679343,
-    "intraday_down": -0.01830161054172777,
-    "close_change": -0.016105417276720366
+    "intraday_up": 0.038067,
+    "intraday_down": -0.018302,
+    "close_change": -0.016105
   },
   {
     "date": "2022-01-28",
@@ -813,10 +751,9 @@
     "close": 1.283,
     "volume": 2589493921,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.013392857142857154,
-    "intraday_down": -0.04761904761904766,
-    "close_change": -0.045386904761904885
+    "intraday_up": 0.013393,
+    "intraday_down": -0.047619,
+    "close_change": -0.045387
   },
   {
     "date": "2022-02-11",
@@ -826,10 +763,9 @@
     "close": 1.217,
     "volume": 3706559159,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.021823850350740474,
-    "intraday_down": -0.05144193296960237,
-    "close_change": -0.05144193296960237
+    "intraday_up": 0.021824,
+    "intraday_down": -0.051442,
+    "close_change": -0.051442
   },
   {
     "date": "2022-02-18",
@@ -839,10 +775,9 @@
     "close": 1.252,
     "volume": 2550604460,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.039441248972883994,
-    "intraday_down": -0.01643385373870174,
-    "close_change": 0.028759244042727953
+    "intraday_up": 0.039441,
+    "intraday_down": -0.016434,
+    "close_change": 0.028759
   },
   {
     "date": "2022-02-25",
@@ -852,10 +787,9 @@
     "close": 1.29,
     "volume": 3270546521,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.040734824281150106,
-    "intraday_down": -0.02875399361022367,
-    "close_change": 0.030351437699680538
+    "intraday_up": 0.040735,
+    "intraday_down": -0.028754,
+    "close_change": 0.030351
   },
   {
     "date": "2022-03-04",
@@ -865,10 +799,9 @@
     "close": 1.254,
     "volume": 2352409893,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.013178294573643336,
-    "intraday_down": -0.03255813953488375,
-    "close_change": -0.02790697674418607
+    "intraday_up": 0.013178,
+    "intraday_down": -0.032558,
+    "close_change": -0.027907
   },
   {
     "date": "2022-03-11",
@@ -878,10 +811,9 @@
     "close": 1.212,
     "volume": 4316992184,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.003987240829346007,
-    "intraday_down": -0.0869218500797448,
-    "close_change": -0.033492822966507206
+    "intraday_up": -0.003987,
+    "intraday_down": -0.086922,
+    "close_change": -0.033493
   },
   {
     "date": "2022-03-18",
@@ -891,10 +823,9 @@
     "close": 1.19,
     "volume": 3794165721,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": -0.0008250825082507342,
-    "intraday_down": -0.07838283828382836,
-    "close_change": -0.018151815181518167
+    "intraday_up": -0.000825,
+    "intraday_down": -0.078383,
+    "close_change": -0.018152
   },
   {
     "date": "2022-03-25",
@@ -904,10 +835,9 @@
     "close": 1.153,
     "volume": 2475879517,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.015126050420168081,
-    "intraday_down": -0.03193277310924373,
-    "close_change": -0.03109243697478985
+    "intraday_up": 0.015126,
+    "intraday_down": -0.031933,
+    "close_change": -0.031092
   },
   {
     "date": "2022-04-01",
@@ -917,10 +847,9 @@
     "close": 1.135,
     "volume": 2666421699,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.005203816131830013,
-    "intraday_down": -0.027753686036426736,
-    "close_change": -0.01561144839549004
+    "intraday_up": 0.005204,
+    "intraday_down": -0.027754,
+    "close_change": -0.015611
   },
   {
     "date": "2022-04-08",
@@ -930,10 +859,9 @@
     "close": 1.072,
     "volume": 2417576873,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": -0.0017621145374449355,
-    "intraday_down": -0.06607929515418498,
-    "close_change": -0.05550660792951537
+    "intraday_up": -0.001762,
+    "intraday_down": -0.066079,
+    "close_change": -0.055507
   },
   {
     "date": "2022-04-15",
@@ -943,10 +871,9 @@
     "close": 1.017,
     "volume": 4228526370,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": -0.006529850746268766,
-    "intraday_down": -0.07089552238805975,
-    "close_change": -0.05130597014925388
+    "intraday_up": -0.00653,
+    "intraday_down": -0.070896,
+    "close_change": -0.051306
   },
   {
     "date": "2022-04-22",
@@ -956,10 +883,9 @@
     "close": 0.983,
     "volume": 4347880978,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.03343166175024585,
-    "intraday_down": -0.03638151425762038,
-    "close_change": -0.03343166175024574
+    "intraday_up": 0.033432,
+    "intraday_down": -0.036382,
+    "close_change": -0.033432
   },
   {
     "date": "2022-04-29",
@@ -969,10 +895,9 @@
     "close": 0.986,
     "volume": 6137319649,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.006103763987792478,
-    "intraday_down": -0.09460834181078329,
-    "close_change": 0.003051881993896239
+    "intraday_up": 0.006104,
+    "intraday_down": -0.094608,
+    "close_change": 0.003052
   },
   {
     "date": "2022-05-06",
@@ -982,10 +907,9 @@
     "close": 0.984,
     "volume": 1839996251,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.02231237322515215,
-    "intraday_down": -0.019269776876267766,
-    "close_change": -0.0020283975659229226
+    "intraday_up": 0.022312,
+    "intraday_down": -0.01927,
+    "close_change": -0.002028
   },
   {
     "date": "2022-05-13",
@@ -995,10 +919,9 @@
     "close": 1.055,
     "volume": 4494138938,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.08638211382113818,
-    "intraday_down": -0.01321138211382115,
-    "close_change": 0.0721544715447154
+    "intraday_up": 0.086382,
+    "intraday_down": -0.013211,
+    "close_change": 0.072154
   },
   {
     "date": "2022-05-20",
@@ -1008,10 +931,9 @@
     "close": 1.089,
     "volume": 4303275500,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.035071090047393505,
-    "intraday_down": -0.019905213270142094,
-    "close_change": 0.032227488151658795
+    "intraday_up": 0.035071,
+    "intraday_down": -0.019905,
+    "close_change": 0.032227
   },
   {
     "date": "2022-05-27",
@@ -1021,10 +943,9 @@
     "close": 1.036,
     "volume": 3910949628,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.005509641873278242,
-    "intraday_down": -0.05509641873278242,
-    "close_change": -0.0486685032139577
+    "intraday_up": 0.00551,
+    "intraday_down": -0.055096,
+    "close_change": -0.048669
   },
   {
     "date": "2022-06-03",
@@ -1034,10 +955,9 @@
     "close": 1.126,
     "volume": 5171198089,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.08880308880308867,
-    "intraday_down": -0.007722007722007728,
-    "close_change": 0.08687258687258673
+    "intraday_up": 0.088803,
+    "intraday_down": -0.007722,
+    "close_change": 0.086873
   },
   {
     "date": "2022-06-10",
@@ -1047,10 +967,9 @@
     "close": 1.149,
     "volume": 9258666867,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.04706927175843709,
-    "intraday_down": -0.006216696269982146,
-    "close_change": 0.020426287744227473
+    "intraday_up": 0.047069,
+    "intraday_down": -0.006217,
+    "close_change": 0.020426
   },
   {
     "date": "2022-06-17",
@@ -1060,10 +979,9 @@
     "close": 1.143,
     "volume": 7441824341,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": -0.0043516100957355225,
-    "intraday_down": -0.05570060922541345,
-    "close_change": -0.005221932114882511
+    "intraday_up": -0.004352,
+    "intraday_down": -0.055701,
+    "close_change": -0.005222
   },
   {
     "date": "2022-06-24",
@@ -1073,10 +991,9 @@
     "close": 1.152,
     "volume": 6488765649,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.013998250218722672,
-    "intraday_down": -0.03762029746281708,
-    "close_change": 0.007874015748031406
+    "intraday_up": 0.013998,
+    "intraday_down": -0.03762,
+    "close_change": 0.007874
   },
   {
     "date": "2022-07-01",
@@ -1086,10 +1003,9 @@
     "close": 1.142,
     "volume": 5344351989,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.016493055555555667,
-    "intraday_down": -0.015625000000000014,
-    "close_change": -0.008680555555555565
+    "intraday_up": 0.016493,
+    "intraday_down": -0.015625,
+    "close_change": -0.008681
   },
   {
     "date": "2022-07-08",
@@ -1099,10 +1015,9 @@
     "close": 1.153,
     "volume": 4421519359,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.0236427320490369,
-    "intraday_down": -0.017513134851138177,
-    "close_change": 0.0096322241681262
+    "intraday_up": 0.023643,
+    "intraday_down": -0.017513,
+    "close_change": 0.009632
   },
   {
     "date": "2022-07-15",
@@ -1112,10 +1027,9 @@
     "close": 1.121,
     "volume": 4454685871,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": -0.004336513443191774,
-    "intraday_down": -0.056374674761491717,
-    "close_change": -0.027753686036426736
+    "intraday_up": -0.004337,
+    "intraday_down": -0.056375,
+    "close_change": -0.027754
   },
   {
     "date": "2022-07-22",
@@ -1125,10 +1039,9 @@
     "close": 1.133,
     "volume": 4067556005,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.03389830508474579,
-    "intraday_down": -0.017841213202497784,
-    "close_change": 0.010704727921498671
+    "intraday_up": 0.033898,
+    "intraday_down": -0.017841,
+    "close_change": 0.010705
   },
   {
     "date": "2022-07-29",
@@ -1138,10 +1051,9 @@
     "close": 1.139,
     "volume": 3806980241,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.030008826125331005,
-    "intraday_down": -0.015004413062665405,
-    "close_change": 0.005295675198587825
+    "intraday_up": 0.030009,
+    "intraday_down": -0.015004,
+    "close_change": 0.005296
   },
   {
     "date": "2022-08-05",
@@ -1151,10 +1063,9 @@
     "close": 1.216,
     "volume": 6681173401,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.06848112379280076,
-    "intraday_down": -0.018437225636523186,
-    "close_change": 0.06760316066725194
+    "intraday_up": 0.068481,
+    "intraday_down": -0.018437,
+    "close_change": 0.067603
   },
   {
     "date": "2022-08-12",
@@ -1164,10 +1075,9 @@
     "close": 1.201,
     "volume": 5335389146,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.011513157894736852,
-    "intraday_down": -0.018914473684210453,
-    "close_change": -0.012335526315789394
+    "intraday_up": 0.011513,
+    "intraday_down": -0.018914,
+    "close_change": -0.012336
   },
   {
     "date": "2022-08-19",
@@ -1177,10 +1087,9 @@
     "close": 1.161,
     "volume": 4859012714,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.006661115736885934,
-    "intraday_down": -0.03413821815154051,
-    "close_change": -0.03330557868442967
+    "intraday_up": 0.006661,
+    "intraday_down": -0.034138,
+    "close_change": -0.033306
   },
   {
     "date": "2022-08-26",
@@ -1190,10 +1099,9 @@
     "close": 1.095,
     "volume": 4633139449,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0068906115417743385,
-    "intraday_down": -0.05857019810508188,
-    "close_change": -0.05684754521963829
+    "intraday_up": 0.006891,
+    "intraday_down": -0.05857,
+    "close_change": -0.056848
   },
   {
     "date": "2022-09-02",
@@ -1203,10 +1111,9 @@
     "close": 1.079,
     "volume": 3591576318,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0173515981735161,
-    "intraday_down": -0.02283105022831042,
-    "close_change": -0.014611872146118735
+    "intraday_up": 0.017352,
+    "intraday_down": -0.022831,
+    "close_change": -0.014612
   },
   {
     "date": "2022-09-09",
@@ -1216,10 +1123,9 @@
     "close": 1.083,
     "volume": 3765694795,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.034291010194624785,
-    "intraday_down": -0.012048192771084246,
-    "close_change": 0.0037071362372567227
+    "intraday_up": 0.034291,
+    "intraday_down": -0.012048,
+    "close_change": 0.003707
   },
   {
     "date": "2022-09-16",
@@ -1229,10 +1135,9 @@
     "close": 1.045,
     "volume": 3691378256,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.010156971375808052,
-    "intraday_down": -0.04247460757156052,
-    "close_change": -0.03508771929824565
+    "intraday_up": 0.010157,
+    "intraday_down": -0.042475,
+    "close_change": -0.035088
   },
   {
     "date": "2022-09-23",
@@ -1242,10 +1147,9 @@
     "close": 1.006,
     "volume": 4385169688,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0038277511961722524,
-    "intraday_down": -0.04306220095693773,
-    "close_change": -0.03732057416267936
+    "intraday_up": 0.003828,
+    "intraday_down": -0.043062,
+    "close_change": -0.037321
   },
   {
     "date": "2022-09-30",
@@ -1255,10 +1159,9 @@
     "close": 0.981,
     "volume": 4357055690,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.014910536779323958,
-    "intraday_down": -0.02584493041749505,
-    "close_change": -0.024850894632206782
+    "intraday_up": 0.014911,
+    "intraday_down": -0.025845,
+    "close_change": -0.024851
   },
   {
     "date": "2022-10-14",
@@ -1268,10 +1171,9 @@
     "close": 0.998,
     "volume": 5578118975,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.024464831804281256,
-    "intraday_down": -0.07237512742099893,
-    "close_change": 0.01732925586136597
+    "intraday_up": 0.024465,
+    "intraday_down": -0.072375,
+    "close_change": 0.017329
   },
   {
     "date": "2022-10-21",
@@ -1281,10 +1183,9 @@
     "close": 1.012,
     "volume": 5182248697,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.02104208416833658,
-    "intraday_down": -0.01803607214428859,
-    "close_change": 0.014028056112224461
+    "intraday_up": 0.021042,
+    "intraday_down": -0.018036,
+    "close_change": 0.014028
   },
   {
     "date": "2022-10-28",
@@ -1294,10 +1195,9 @@
     "close": 1.038,
     "volume": 8430734584,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.05434782608695646,
-    "intraday_down": -0.013833992094861672,
-    "close_change": 0.025691699604743105
+    "intraday_up": 0.054348,
+    "intraday_down": -0.013834,
+    "close_change": 0.025692
   },
   {
     "date": "2022-11-04",
@@ -1307,10 +1207,9 @@
     "close": 1.121,
     "volume": 10260272438,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.0847784200385355,
-    "intraday_down": -0.0067437379576109025,
-    "close_change": 0.0799614643545279
+    "intraday_up": 0.084778,
+    "intraday_down": -0.006744,
+    "close_change": 0.079961
   },
   {
     "date": "2022-11-11",
@@ -1320,10 +1219,9 @@
     "close": 1.069,
     "volume": 10792626496,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.007136485280999114,
-    "intraday_down": -0.049063336306868814,
-    "close_change": -0.04638715432649424
+    "intraday_up": 0.007136,
+    "intraday_down": -0.049063,
+    "close_change": -0.046387
   },
   {
     "date": "2022-11-18",
@@ -1333,10 +1231,9 @@
     "close": 1.076,
     "volume": 10636773158,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03086997193638928,
-    "intraday_down": -0.010289990645462955,
-    "close_change": 0.0065481758652947775
+    "intraday_up": 0.03087,
+    "intraday_down": -0.01029,
+    "close_change": 0.006548
   },
   {
     "date": "2022-11-25",
@@ -1346,10 +1243,9 @@
     "close": 1.045,
     "volume": 7498329503,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0037174721189591107,
-    "intraday_down": -0.03438661710037188,
-    "close_change": -0.028810408921933213
+    "intraday_up": 0.003717,
+    "intraday_down": -0.034387,
+    "close_change": -0.02881
   },
   {
     "date": "2022-12-02",
@@ -1359,10 +1255,9 @@
     "close": 1.054,
     "volume": 9028454034,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.02009569377990443,
-    "intraday_down": -0.017224880382775136,
-    "close_change": 0.008612440191387674
+    "intraday_up": 0.020096,
+    "intraday_down": -0.017225,
+    "close_change": 0.008612
   },
   {
     "date": "2022-12-09",
@@ -1372,10 +1267,9 @@
     "close": 1.044,
     "volume": 9727749504,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.006641366223908819,
-    "intraday_down": -0.014231499051233514,
-    "close_change": -0.009487666034155606
+    "intraday_up": 0.006641,
+    "intraday_down": -0.014231,
+    "close_change": -0.009488
   },
   {
     "date": "2022-12-16",
@@ -1385,10 +1279,9 @@
     "close": 1.02,
     "volume": 9706553675,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.010536398467432853,
-    "intraday_down": -0.02681992337164753,
-    "close_change": -0.022988505747126457
+    "intraday_up": 0.010536,
+    "intraday_down": -0.02682,
+    "close_change": -0.022989
   },
   {
     "date": "2022-12-23",
@@ -1398,10 +1291,9 @@
     "close": 0.962,
     "volume": 8032543479,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.001960784313725492,
-    "intraday_down": -0.06470588235294124,
-    "close_change": -0.05686274509803926
+    "intraday_up": 0.001961,
+    "intraday_down": -0.064706,
+    "close_change": -0.056863
   },
   {
     "date": "2022-12-30",
@@ -1411,10 +1303,9 @@
     "close": 1.003,
     "volume": 7656478823,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.05093555093555087,
-    "intraday_down": -0.002079002079002081,
-    "close_change": 0.042619542619542546
+    "intraday_up": 0.050936,
+    "intraday_down": -0.002079,
+    "close_change": 0.04262
   },
   {
     "date": "2023-01-06",
@@ -1424,10 +1315,9 @@
     "close": 1.032,
     "volume": 7912053242,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.04187437686939187,
-    "intraday_down": -0.004985044865403683,
-    "close_change": 0.028913260219342114
+    "intraday_up": 0.041874,
+    "intraday_down": -0.004985,
+    "close_change": 0.028913
   },
   {
     "date": "2023-01-13",
@@ -1437,10 +1327,9 @@
     "close": 1.017,
     "volume": 6780899062,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.008720930232558039,
-    "intraday_down": -0.023255813953488393,
-    "close_change": -0.014534883720930352
+    "intraday_up": 0.008721,
+    "intraday_down": -0.023256,
+    "close_change": -0.014535
   },
   {
     "date": "2023-01-20",
@@ -1450,10 +1339,9 @@
     "close": 1.073,
     "volume": 9245208464,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.05998033431661767,
-    "intraday_down": -0.001966568338249756,
-    "close_change": 0.055063913470993174
+    "intraday_up": 0.05998,
+    "intraday_down": -0.001967,
+    "close_change": 0.055064
   },
   {
     "date": "2023-02-03",
@@ -1463,10 +1351,9 @@
     "close": 1.078,
     "volume": 9855013501,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.018639328984156586,
-    "intraday_down": -0.019571295433364312,
-    "close_change": 0.004659832246039251
+    "intraday_up": 0.018639,
+    "intraday_down": -0.019571,
+    "close_change": 0.00466
   },
   {
     "date": "2023-02-10",
@@ -1476,10 +1363,9 @@
     "close": 1.068,
     "volume": 8835700050,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.00463821892393311,
-    "intraday_down": -0.02782931354359928,
-    "close_change": -0.009276437847866427
+    "intraday_up": 0.004638,
+    "intraday_down": -0.027829,
+    "close_change": -0.009276
   },
   {
     "date": "2023-02-17",
@@ -1489,10 +1375,9 @@
     "close": 1.029,
     "volume": 8991648499,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.007490636704119856,
-    "intraday_down": -0.03838951310861437,
-    "close_change": -0.03651685393258441
+    "intraday_up": 0.007491,
+    "intraday_down": -0.03839,
+    "close_change": -0.036517
   },
   {
     "date": "2023-02-24",
@@ -1502,10 +1387,9 @@
     "close": 1.033,
     "volume": 6387493461,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.015549076773566584,
-    "intraday_down": -0.006802721088435273,
-    "close_change": 0.003887269193391646
+    "intraday_up": 0.015549,
+    "intraday_down": -0.006803,
+    "close_change": 0.003887
   },
   {
     "date": "2023-03-03",
@@ -1515,10 +1399,9 @@
     "close": 1.043,
     "volume": 7243124560,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.010648596321394116,
-    "intraday_down": -0.00968054211035819,
-    "close_change": 0.00968054211035819
+    "intraday_up": 0.010649,
+    "intraday_down": -0.009681,
+    "close_change": 0.009681
   },
   {
     "date": "2023-03-10",
@@ -1528,10 +1411,9 @@
     "close": 1.037,
     "volume": 8187937589,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.011505273250239704,
-    "intraday_down": -0.013422818791946322,
-    "close_change": -0.005752636625119852
+    "intraday_up": 0.011505,
+    "intraday_down": -0.013423,
+    "close_change": -0.005753
   },
   {
     "date": "2023-03-17",
@@ -1541,10 +1423,9 @@
     "close": 1.056,
     "volume": 11618099552,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.02892960462873677,
-    "intraday_down": -0.007714561234329805,
-    "close_change": 0.018322082931533392
+    "intraday_up": 0.02893,
+    "intraday_down": -0.007715,
+    "close_change": 0.018322
   },
   {
     "date": "2023-03-24",
@@ -1554,10 +1435,9 @@
     "close": 1.104,
     "volume": 12145697440,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.04640151515151508,
-    "intraday_down": -0.0028409090909091985,
-    "close_change": 0.04545454545454549
+    "intraday_up": 0.046402,
+    "intraday_down": -0.002841,
+    "close_change": 0.045455
   },
   {
     "date": "2023-03-31",
@@ -1567,10 +1447,9 @@
     "close": 1.124,
     "volume": 12114090910,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.019021739130434697,
-    "intraday_down": -0.024456521739130554,
-    "close_change": 0.018115942028985522
+    "intraday_up": 0.019022,
+    "intraday_down": -0.024457,
+    "close_change": 0.018116
   },
   {
     "date": "2023-04-07",
@@ -1580,10 +1459,9 @@
     "close": 1.207,
     "volume": 12884712763,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.0765124555160141,
-    "intraday_down": 0.005338078291814753,
-    "close_change": 0.07384341637010672
+    "intraday_up": 0.076512,
+    "intraday_down": 0.005338,
+    "close_change": 0.073843
   },
   {
     "date": "2023-04-14",
@@ -1593,10 +1471,9 @@
     "close": 1.182,
     "volume": 12649992047,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.007456503728251778,
-    "intraday_down": -0.056338028169014134,
-    "close_change": -0.020712510356255286
+    "intraday_up": 0.007457,
+    "intraday_down": -0.056338,
+    "close_change": -0.020713
   },
   {
     "date": "2023-04-21",
@@ -1606,10 +1483,9 @@
     "close": 1.164,
     "volume": 11556386031,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.02707275803722507,
-    "intraday_down": -0.0203045685279188,
-    "close_change": -0.0152284263959391
+    "intraday_up": 0.027073,
+    "intraday_down": -0.020305,
+    "close_change": -0.015228
   },
   {
     "date": "2023-04-28",
@@ -1619,10 +1495,9 @@
     "close": 1.133,
     "volume": 12465615976,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.0017182130584192457,
-    "intraday_down": -0.05154639175257718,
-    "close_change": -0.02663230240549821
+    "intraday_up": -0.001718,
+    "intraday_down": -0.051546,
+    "close_change": -0.026632
   },
   {
     "date": "2023-05-05",
@@ -1632,10 +1507,9 @@
     "close": 1.093,
     "volume": 5770204689,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.003530450132391883,
-    "intraday_down": -0.03795233892321265,
-    "close_change": -0.03530450132391883
+    "intraday_up": -0.00353,
+    "intraday_down": -0.037952,
+    "close_change": -0.035305
   },
   {
     "date": "2023-05-12",
@@ -1645,10 +1519,9 @@
     "close": 1.056,
     "volume": 13170690068,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.01280878316559928,
-    "intraday_down": -0.03385178408051228,
-    "close_change": -0.03385178408051228
+    "intraday_up": 0.012809,
+    "intraday_down": -0.033852,
+    "close_change": -0.033852
   },
   {
     "date": "2023-05-19",
@@ -1658,10 +1531,9 @@
     "close": 1.084,
     "volume": 9931375764,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.034090909090909116,
-    "intraday_down": -0.007575757575757582,
-    "close_change": 0.026515151515151537
+    "intraday_up": 0.034091,
+    "intraday_down": -0.007576,
+    "close_change": 0.026515
   },
   {
     "date": "2023-05-26",
@@ -1671,10 +1543,9 @@
     "close": 1.082,
     "volume": 11568177675,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.00553505535055351,
-    "intraday_down": -0.03136531365313656,
-    "close_change": -0.0018450184501845033
+    "intraday_up": 0.005535,
+    "intraday_down": -0.031365,
+    "close_change": -0.001845
   },
   {
     "date": "2023-06-02",
@@ -1684,10 +1555,9 @@
     "close": 1.1,
     "volume": 11947823128,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.028650646950092343,
-    "intraday_down": -0.014787430683918681,
-    "close_change": 0.016635859519408516
+    "intraday_up": 0.028651,
+    "intraday_down": -0.014787,
+    "close_change": 0.016636
   },
   {
     "date": "2023-06-09",
@@ -1697,10 +1567,9 @@
     "close": 1.077,
     "volume": 12251811804,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.010909090909090919,
-    "intraday_down": -0.04727272727272731,
-    "close_change": -0.020909090909091026
+    "intraday_up": 0.010909,
+    "intraday_down": -0.047273,
+    "close_change": -0.020909
   },
   {
     "date": "2023-06-16",
@@ -1710,10 +1579,9 @@
     "close": 1.098,
     "volume": 11737701821,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.022284122562674116,
-    "intraday_down": -0.011142061281337058,
-    "close_change": 0.019498607242339955
+    "intraday_up": 0.022284,
+    "intraday_down": -0.011142,
+    "close_change": 0.019499
   },
   {
     "date": "2023-06-23",
@@ -1723,10 +1591,9 @@
     "close": 1.066,
     "volume": 7992032275,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.007285974499089259,
-    "intraday_down": -0.03187613843351561,
-    "close_change": -0.029143897996357037
+    "intraday_up": 0.007286,
+    "intraday_down": -0.031876,
+    "close_change": -0.029144
   },
   {
     "date": "2023-06-30",
@@ -1736,10 +1603,9 @@
     "close": 1.052,
     "volume": 12677144583,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.009380863039399633,
-    "intraday_down": -0.023452157598499185,
-    "close_change": -0.013133208255159486
+    "intraday_up": 0.009381,
+    "intraday_down": -0.023452,
+    "close_change": -0.013133
   },
   {
     "date": "2023-07-07",
@@ -1749,10 +1615,9 @@
     "close": 1.037,
     "volume": 11201578324,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.014258555133079755,
-    "intraday_down": -0.017110266159695832,
-    "close_change": -0.014258555133079966
+    "intraday_up": 0.014259,
+    "intraday_down": -0.01711,
+    "close_change": -0.014259
   },
   {
     "date": "2023-07-14",
@@ -1762,10 +1627,9 @@
     "close": 1.036,
     "volume": 9752585329,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.009643201542912256,
-    "intraday_down": -0.008678881388620923,
-    "close_change": -0.0009643201542911186
+    "intraday_up": 0.009643,
+    "intraday_down": -0.008679,
+    "close_change": -0.000964
   },
   {
     "date": "2023-07-21",
@@ -1775,10 +1639,9 @@
     "close": 1.0,
     "volume": 10921707287,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.0009652509652510733,
-    "intraday_down": -0.03667953667953671,
-    "close_change": -0.03474903474903478
+    "intraday_up": -0.000965,
+    "intraday_down": -0.03668,
+    "close_change": -0.034749
   },
   {
     "date": "2023-07-28",
@@ -1788,10 +1651,9 @@
     "close": 1.007,
     "volume": 12076542226,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.01200000000000001,
-    "intraday_down": -0.009000000000000008,
-    "close_change": 0.006999999999999895
+    "intraday_up": 0.012,
+    "intraday_down": -0.009,
+    "close_change": 0.007
   },
   {
     "date": "2023-08-04",
@@ -1801,10 +1663,9 @@
     "close": 1.021,
     "volume": 12674211670,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.014895729890764773,
+    "intraday_up": 0.014896,
     "intraday_down": 0.0,
-    "close_change": 0.01390268123138035
+    "close_change": 0.013903
   },
   {
     "date": "2023-08-11",
@@ -1814,10 +1675,9 @@
     "close": 0.983,
     "volume": 10966744143,
     "risk_score": -2,
-    "risk_label": "较大机会",
     "intraday_up": 0.0,
-    "intraday_down": -0.03819784524975507,
-    "close_change": -0.03721841332027417
+    "intraday_down": -0.038198,
+    "close_change": -0.037218
   },
   {
     "date": "2023-08-18",
@@ -1827,10 +1687,9 @@
     "close": 0.95,
     "volume": 16285335159,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": -0.006103763987792478,
-    "intraday_down": -0.04577822990844358,
-    "close_change": -0.033570701932858625
+    "intraday_up": -0.006104,
+    "intraday_down": -0.045778,
+    "close_change": -0.033571
   },
   {
     "date": "2023-08-25",
@@ -1840,10 +1699,9 @@
     "close": 0.912,
     "volume": 19395617051,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.0010526315789473695,
-    "intraday_down": -0.04631578947368414,
-    "close_change": -0.03999999999999992
+    "intraday_up": 0.001053,
+    "intraday_down": -0.046316,
+    "close_change": -0.04
   },
   {
     "date": "2023-09-01",
@@ -1853,10 +1711,9 @@
     "close": 0.98,
     "volume": 34484358226,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.08991228070175435,
-    "intraday_down": 0.008771929824561412,
-    "close_change": 0.07456140350877187
+    "intraday_up": 0.089912,
+    "intraday_down": 0.008772,
+    "close_change": 0.074561
   },
   {
     "date": "2023-09-08",
@@ -1866,10 +1723,9 @@
     "close": 0.944,
     "volume": 22048905996,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.013265306122448991,
-    "intraday_down": -0.0448979591836734,
-    "close_change": -0.03673469387755105
+    "intraday_up": 0.013265,
+    "intraday_down": -0.044898,
+    "close_change": -0.036735
   },
   {
     "date": "2023-09-15",
@@ -1879,10 +1735,9 @@
     "close": 0.929,
     "volume": 15733206355,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.0169491525423729,
-    "intraday_down": -0.02542372881355923,
-    "close_change": -0.015889830508474475
+    "intraday_up": 0.016949,
+    "intraday_down": -0.025424,
+    "close_change": -0.01589
   },
   {
     "date": "2023-09-22",
@@ -1892,10 +1747,9 @@
     "close": 0.927,
     "volume": 16134097400,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.003229278794402586,
-    "intraday_down": -0.029063509149623277,
-    "close_change": -0.0021528525296017243
+    "intraday_up": 0.003229,
+    "intraday_down": -0.029064,
+    "close_change": -0.002153
   },
   {
     "date": "2023-09-29",
@@ -1905,10 +1759,9 @@
     "close": 0.932,
     "volume": 10806981721,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.007551240560949305,
-    "intraday_down": -0.010787486515641865,
-    "close_change": 0.0053937432578209325
+    "intraday_up": 0.007551,
+    "intraday_down": -0.010787,
+    "close_change": 0.005394
   },
   {
     "date": "2023-10-13",
@@ -1918,10 +1771,9 @@
     "close": 0.934,
     "volume": 12352593333,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.012875536480686588,
-    "intraday_down": -0.00965665236051503,
-    "close_change": 0.0021459227467811176
+    "intraday_up": 0.012876,
+    "intraday_down": -0.009657,
+    "close_change": 0.002146
   },
   {
     "date": "2023-10-20",
@@ -1931,10 +1783,9 @@
     "close": 0.904,
     "volume": 13601640973,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.00107066381156317,
-    "intraday_down": -0.0321199143468951,
-    "close_change": -0.0321199143468951
+    "intraday_up": 0.001071,
+    "intraday_down": -0.03212,
+    "close_change": -0.03212
   },
   {
     "date": "2023-10-27",
@@ -1944,10 +1795,9 @@
     "close": 0.906,
     "volume": 17707984775,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.005530973451327439,
-    "intraday_down": -0.02765486725663719,
-    "close_change": 0.002212389380530975
+    "intraday_up": 0.005531,
+    "intraday_down": -0.027655,
+    "close_change": 0.002212
   },
   {
     "date": "2023-11-03",
@@ -1957,10 +1807,9 @@
     "close": 0.918,
     "volume": 14633855766,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.020971302428256088,
-    "intraday_down": -0.005518763796909497,
-    "close_change": 0.013245033112582794
+    "intraday_up": 0.020971,
+    "intraday_down": -0.005519,
+    "close_change": 0.013245
   },
   {
     "date": "2023-11-10",
@@ -1970,10 +1819,9 @@
     "close": 0.931,
     "volume": 16279806229,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.034858387799564176,
-    "intraday_down": 0.005446623093681922,
-    "close_change": 0.014161220043572996
+    "intraday_up": 0.034858,
+    "intraday_down": 0.005447,
+    "close_change": 0.014161
   },
   {
     "date": "2023-11-17",
@@ -1983,10 +1831,9 @@
     "close": 0.932,
     "volume": 12784652334,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.026852846401718485,
-    "intraday_down": -0.0075187969924812095,
-    "close_change": 0.0010741138560687441
+    "intraday_up": 0.026853,
+    "intraday_down": -0.007519,
+    "close_change": 0.001074
   },
   {
     "date": "2023-11-24",
@@ -1996,10 +1843,9 @@
     "close": 0.906,
     "volume": 12759768114,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.006437768240343234,
-    "intraday_down": -0.030042918454935646,
-    "close_change": -0.02789699570815453
+    "intraday_up": 0.006438,
+    "intraday_down": -0.030043,
+    "close_change": -0.027897
   },
   {
     "date": "2023-12-01",
@@ -2009,10 +1855,9 @@
     "close": 0.91,
     "volume": 11682523547,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.009933774834437095,
-    "intraday_down": -0.008830022075055195,
-    "close_change": 0.004415011037527597
+    "intraday_up": 0.009934,
+    "intraday_down": -0.00883,
+    "close_change": 0.004415
   },
   {
     "date": "2023-12-08",
@@ -2022,9 +1867,8 @@
     "close": 0.91,
     "volume": 13361889458,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.007692307692307699,
-    "intraday_down": -0.028571428571428595,
+    "intraday_up": 0.007692,
+    "intraday_down": -0.028571,
     "close_change": 0.0
   },
   {
@@ -2035,10 +1879,9 @@
     "close": 0.895,
     "volume": 13442448216,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.015384615384615398,
-    "intraday_down": -0.018681318681318698,
-    "close_change": -0.016483516483516498
+    "intraday_up": 0.015385,
+    "intraday_down": -0.018681,
+    "close_change": -0.016484
   },
   {
     "date": "2023-12-22",
@@ -2048,10 +1891,9 @@
     "close": 0.888,
     "volume": 13179469374,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.001117318435754191,
-    "intraday_down": -0.020111731843575436,
-    "close_change": -0.007821229050279337
+    "intraday_up": 0.001117,
+    "intraday_down": -0.020112,
+    "close_change": -0.007821
   },
   {
     "date": "2023-12-29",
@@ -2061,10 +1903,9 @@
     "close": 0.897,
     "volume": 14142550421,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.012387387387387398,
-    "intraday_down": -0.024774774774774796,
-    "close_change": 0.010135135135135144
+    "intraday_up": 0.012387,
+    "intraday_down": -0.024775,
+    "close_change": 0.010135
   },
   {
     "date": "2024-01-05",
@@ -2074,10 +1915,9 @@
     "close": 0.849,
     "volume": 11264112127,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.0011148272017837246,
-    "intraday_down": -0.05797101449275367,
-    "close_change": -0.05351170568561878
+    "intraday_up": 0.001115,
+    "intraday_down": -0.057971,
+    "close_change": -0.053512
   },
   {
     "date": "2024-01-12",
@@ -2087,10 +1927,9 @@
     "close": 0.818,
     "volume": 14636980894,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": -0.0023557126030624284,
-    "intraday_down": -0.045936395759717225,
-    "close_change": -0.03651354534746764
+    "intraday_up": -0.002356,
+    "intraday_down": -0.045936,
+    "close_change": -0.036514
   },
   {
     "date": "2024-01-19",
@@ -2100,10 +1939,9 @@
     "close": 0.803,
     "volume": 15294624411,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.007334963325183381,
-    "intraday_down": -0.04889975550122241,
-    "close_change": -0.01833740831295832
+    "intraday_up": 0.007335,
+    "intraday_down": -0.0489,
+    "close_change": -0.018337
   },
   {
     "date": "2024-01-26",
@@ -2113,10 +1951,9 @@
     "close": 0.785,
     "volume": 17761877767,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.0037359900373599036,
-    "intraday_down": -0.049813200498132044,
-    "close_change": -0.022415940224159422
+    "intraday_up": 0.003736,
+    "intraday_down": -0.049813,
+    "close_change": -0.022416
   },
   {
     "date": "2024-02-02",
@@ -2126,10 +1963,9 @@
     "close": 0.707,
     "volume": 21786282871,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.011464968152866252,
-    "intraday_down": -0.12611464968152863,
-    "close_change": -0.09936305732484085
+    "intraday_up": 0.011465,
+    "intraday_down": -0.126115,
+    "close_change": -0.099363
   },
   {
     "date": "2024-02-09",
@@ -2139,10 +1975,9 @@
     "close": 0.786,
     "volume": 21119596897,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.13719943422913733,
-    "intraday_down": -0.05799151343705789,
-    "close_change": 0.11173974540311185
+    "intraday_up": 0.137199,
+    "intraday_down": -0.057992,
+    "close_change": 0.11174
   },
   {
     "date": "2024-02-23",
@@ -2152,10 +1987,9 @@
     "close": 0.801,
     "volume": 14013911370,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.025445292620865163,
-    "intraday_down": -0.008905852417302806,
-    "close_change": 0.019083969465648873
+    "intraday_up": 0.025445,
+    "intraday_down": -0.008906,
+    "close_change": 0.019084
   },
   {
     "date": "2024-03-01",
@@ -2165,10 +1999,9 @@
     "close": 0.855,
     "volume": 20154221454,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.06991260923845186,
-    "intraday_down": -0.003745318352059928,
-    "close_change": 0.06741573033707857
+    "intraday_up": 0.069913,
+    "intraday_down": -0.003745,
+    "close_change": 0.067416
   },
   {
     "date": "2024-03-08",
@@ -2178,10 +2011,9 @@
     "close": 0.841,
     "volume": 14123264924,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.00935672514619884,
-    "intraday_down": -0.030409356725146226,
-    "close_change": -0.01637426900584797
+    "intraday_up": 0.009357,
+    "intraday_down": -0.030409,
+    "close_change": -0.016374
   },
   {
     "date": "2024-03-15",
@@ -2191,10 +2023,9 @@
     "close": 0.847,
     "volume": 12009331658,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.030915576694411445,
-    "intraday_down": -0.009512485136741983,
-    "close_change": 0.007134363852556487
+    "intraday_up": 0.030916,
+    "intraday_down": -0.009512,
+    "close_change": 0.007134
   },
   {
     "date": "2024-03-22",
@@ -2204,10 +2035,9 @@
     "close": 0.832,
     "volume": 13024587617,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.02125147579693036,
-    "intraday_down": -0.018890200708382543,
-    "close_change": -0.017709563164108634
+    "intraday_up": 0.021251,
+    "intraday_down": -0.01889,
+    "close_change": -0.01771
   },
   {
     "date": "2024-03-29",
@@ -2217,10 +2047,9 @@
     "close": 0.8,
     "volume": 12517839222,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.004807692307692312,
-    "intraday_down": -0.0528846153846153,
-    "close_change": -0.038461538461538367
+    "intraday_up": 0.004808,
+    "intraday_down": -0.052885,
+    "close_change": -0.038462
   },
   {
     "date": "2024-04-05",
@@ -2230,10 +2059,9 @@
     "close": 0.794,
     "volume": 6245254208,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.018749999999999878,
-    "intraday_down": -0.010000000000000009,
-    "close_change": -0.007500000000000007
+    "intraday_up": 0.01875,
+    "intraday_down": -0.01,
+    "close_change": -0.0075
   },
   {
     "date": "2024-04-12",
@@ -2243,10 +2071,9 @@
     "close": 0.773,
     "volume": 10776660833,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.0012594458438287164,
-    "intraday_down": -0.032745591939546626,
-    "close_change": -0.026448362720403046
+    "intraday_up": -0.001259,
+    "intraday_down": -0.032746,
+    "close_change": -0.026448
   },
   {
     "date": "2024-04-19",
@@ -2256,10 +2083,9 @@
     "close": 0.765,
     "volume": 12514244632,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.02587322121604142,
-    "intraday_down": -0.011642949547218638,
-    "close_change": -0.010349288486416568
+    "intraday_up": 0.025873,
+    "intraday_down": -0.011643,
+    "close_change": -0.010349
   },
   {
     "date": "2024-04-26",
@@ -2269,10 +2095,9 @@
     "close": 0.787,
     "volume": 10396882276,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.03137254901960787,
-    "intraday_down": -0.015686274509803935,
-    "close_change": 0.02875816993464055
+    "intraday_up": 0.031373,
+    "intraday_down": -0.015686,
+    "close_change": 0.028758
   },
   {
     "date": "2024-05-03",
@@ -2282,10 +2107,9 @@
     "close": 0.804,
     "volume": 5953274403,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03684879288437092,
-    "intraday_down": 0.0012706480304955539,
-    "close_change": 0.021601016518424415
+    "intraday_up": 0.036849,
+    "intraday_down": 0.001271,
+    "close_change": 0.021601
   },
   {
     "date": "2024-05-10",
@@ -2295,9 +2119,8 @@
     "close": 0.804,
     "volume": 12433135815,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.021144278606965054,
-    "intraday_down": -0.009950248756218914,
+    "intraday_up": 0.021144,
+    "intraday_down": -0.00995,
     "close_change": 0.0
   },
   {
@@ -2308,10 +2131,9 @@
     "close": 0.79,
     "volume": 10274848885,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.0012437810945273642,
-    "intraday_down": -0.0348258706467662,
-    "close_change": -0.0174129353233831
+    "intraday_up": 0.001244,
+    "intraday_down": -0.034826,
+    "close_change": -0.017413
   },
   {
     "date": "2024-05-24",
@@ -2321,10 +2143,9 @@
     "close": 0.761,
     "volume": 11292572580,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.007594936708860766,
-    "intraday_down": -0.037974683544303826,
-    "close_change": -0.0367088607594937
+    "intraday_up": 0.007595,
+    "intraday_down": -0.037975,
+    "close_change": -0.036709
   },
   {
     "date": "2024-05-31",
@@ -2334,10 +2155,9 @@
     "close": 0.778,
     "volume": 11201416088,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.032851511169513826,
-    "intraday_down": -0.010512483574244424,
-    "close_change": 0.0223390275952694
+    "intraday_up": 0.032852,
+    "intraday_down": -0.010512,
+    "close_change": 0.022339
   },
   {
     "date": "2024-06-07",
@@ -2347,10 +2167,9 @@
     "close": 0.775,
     "volume": 12401160679,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.02570694087403601,
-    "intraday_down": -0.012853470437018006,
-    "close_change": -0.003856041131105402
+    "intraday_up": 0.025707,
+    "intraday_down": -0.012853,
+    "close_change": -0.003856
   },
   {
     "date": "2024-06-14",
@@ -2360,10 +2179,9 @@
     "close": 0.791,
     "volume": 12571352604,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.03741935483870971,
-    "intraday_down": -0.0038709677419354873,
-    "close_change": 0.020645161290322598
+    "intraday_up": 0.037419,
+    "intraday_down": -0.003871,
+    "close_change": 0.020645
   },
   {
     "date": "2024-06-21",
@@ -2373,10 +2191,9 @@
     "close": 0.795,
     "volume": 14242880539,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.015170670037926689,
-    "intraday_down": -0.013906447534766131,
-    "close_change": 0.005056890012642229
+    "intraday_up": 0.015171,
+    "intraday_down": -0.013906,
+    "close_change": 0.005057
   },
   {
     "date": "2024-06-28",
@@ -2386,10 +2203,9 @@
     "close": 0.745,
     "volume": 15284949021,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.005031446540880507,
-    "intraday_down": -0.0654088050314466,
-    "close_change": -0.06289308176100634
+    "intraday_up": 0.005031,
+    "intraday_down": -0.065409,
+    "close_change": -0.062893
   },
   {
     "date": "2024-07-05",
@@ -2399,10 +2215,9 @@
     "close": 0.731,
     "volume": 11423051272,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0040268456375838965,
-    "intraday_down": -0.040268456375838965,
-    "close_change": -0.018791946308724848
+    "intraday_up": 0.004027,
+    "intraday_down": -0.040268,
+    "close_change": -0.018792
   },
   {
     "date": "2024-07-12",
@@ -2412,10 +2227,9 @@
     "close": 0.752,
     "volume": 11221849737,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.03693570451436392,
-    "intraday_down": -0.013679890560875525,
-    "close_change": 0.028727770177838605
+    "intraday_up": 0.036936,
+    "intraday_down": -0.01368,
+    "close_change": 0.028728
   },
   {
     "date": "2024-07-19",
@@ -2425,10 +2239,9 @@
     "close": 0.784,
     "volume": 12560291426,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.04388297872340429,
-    "intraday_down": -0.011968085106382989,
-    "close_change": 0.04255319148936174
+    "intraday_up": 0.043883,
+    "intraday_down": -0.011968,
+    "close_change": 0.042553
   },
   {
     "date": "2024-07-26",
@@ -2438,10 +2251,9 @@
     "close": 0.753,
     "volume": 10481371879,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.010204081632653069,
-    "intraday_down": -0.05357142857142862,
-    "close_change": -0.03954081632653065
+    "intraday_up": 0.010204,
+    "intraday_down": -0.053571,
+    "close_change": -0.039541
   },
   {
     "date": "2024-08-02",
@@ -2451,10 +2263,9 @@
     "close": 0.762,
     "volume": 12724411330,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.041168658698539216,
-    "intraday_down": -0.026560424966799494,
-    "close_change": 0.011952191235059771
+    "intraday_up": 0.041169,
+    "intraday_down": -0.02656,
+    "close_change": 0.011952
   },
   {
     "date": "2024-08-09",
@@ -2464,10 +2275,9 @@
     "close": 0.742,
     "volume": 11185506974,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0039370078740157514,
-    "intraday_down": -0.036745406824147016,
-    "close_change": -0.02624671916010501
+    "intraday_up": 0.003937,
+    "intraday_down": -0.036745,
+    "close_change": -0.026247
   },
   {
     "date": "2024-08-16",
@@ -2477,10 +2287,9 @@
     "close": 0.74,
     "volume": 8516776264,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.010781671159029659,
-    "intraday_down": -0.013477088948787075,
-    "close_change": -0.0026954177897574147
+    "intraday_up": 0.010782,
+    "intraday_down": -0.013477,
+    "close_change": -0.002695
   },
   {
     "date": "2024-08-23",
@@ -2490,10 +2299,9 @@
     "close": 0.72,
     "volume": 9324233224,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.009459459459459469,
-    "intraday_down": -0.04189189189189193,
-    "close_change": -0.027027027027027053
+    "intraday_up": 0.009459,
+    "intraday_down": -0.041892,
+    "close_change": -0.027027
   },
   {
     "date": "2024-08-30",
@@ -2503,10 +2311,9 @@
     "close": 0.728,
     "volume": 10106440334,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.020833333333333353,
-    "intraday_down": -0.029166666666666695,
-    "close_change": 0.011111111111111122
+    "intraday_up": 0.020833,
+    "intraday_down": -0.029167,
+    "close_change": 0.011111
   },
   {
     "date": "2024-09-06",
@@ -2516,10 +2323,9 @@
     "close": 0.696,
     "volume": 9862105474,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0013736263736263748,
-    "intraday_down": -0.046703296703296746,
-    "close_change": -0.043956043956043994
+    "intraday_up": 0.001374,
+    "intraday_down": -0.046703,
+    "close_change": -0.043956
   },
   {
     "date": "2024-09-13",
@@ -2529,10 +2335,9 @@
     "close": 0.683,
     "volume": 9000630223,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.011494252873563229,
-    "intraday_down": -0.022988505747126298,
-    "close_change": -0.01867816091954009
+    "intraday_up": 0.011494,
+    "intraday_down": -0.022989,
+    "close_change": -0.018678
   },
   {
     "date": "2024-09-20",
@@ -2542,10 +2347,9 @@
     "close": 0.678,
     "volume": 6329770679,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.010248901903367342,
-    "intraday_down": -0.01756954612005858,
-    "close_change": -0.007320644216691075
+    "intraday_up": 0.010249,
+    "intraday_down": -0.01757,
+    "close_change": -0.007321
   },
   {
     "date": "2024-09-27",
@@ -2555,10 +2359,9 @@
     "close": 0.792,
     "volume": 22708853213,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.17551622418879054,
-    "intraday_down": -0.010324483775811218,
-    "close_change": 0.16814159292035397
+    "intraday_up": 0.175516,
+    "intraday_down": -0.010324,
+    "close_change": 0.168142
   },
   {
     "date": "2024-10-04",
@@ -2568,10 +2371,9 @@
     "close": 0.95,
     "volume": 16179648142,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.1994949494949494,
-    "intraday_down": 0.026515151515151398,
-    "close_change": 0.1994949494949494
+    "intraday_up": 0.199495,
+    "intraday_down": 0.026515,
+    "close_change": 0.199495
   },
   {
     "date": "2024-10-11",
@@ -2581,10 +2383,9 @@
     "close": 0.951,
     "volume": 79737789993,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.26526315789473687,
-    "intraday_down": -0.013684210526315686,
-    "close_change": 0.0010526315789473695
+    "intraday_up": 0.265263,
+    "intraday_down": -0.013684,
+    "close_change": 0.001053
   },
   {
     "date": "2024-10-18",
@@ -2594,10 +2395,9 @@
     "close": 1.041,
     "volume": 55446324603,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.1503680336487909,
-    "intraday_down": -0.03785488958990528,
-    "close_change": 0.09463722397476337
+    "intraday_up": 0.150368,
+    "intraday_down": -0.037855,
+    "close_change": 0.094637
   },
   {
     "date": "2024-10-25",
@@ -2607,10 +2407,9 @@
     "close": 1.045,
     "volume": 56610359411,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.07396733909702227,
-    "intraday_down": -0.02017291066282412,
-    "close_change": 0.0038424591738712814
+    "intraday_up": 0.073967,
+    "intraday_down": -0.020173,
+    "close_change": 0.003842
   },
   {
     "date": "2024-11-01",
@@ -2620,10 +2419,9 @@
     "close": 0.99,
     "volume": 37000955987,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.014354066985646053,
-    "intraday_down": -0.05358851674641143,
-    "close_change": -0.05263157894736836
+    "intraday_up": 0.014354,
+    "intraday_down": -0.053589,
+    "close_change": -0.052632
   },
   {
     "date": "2024-11-08",
@@ -2633,10 +2431,9 @@
     "close": 1.081,
     "volume": 43427660053,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.14040404040404042,
-    "intraday_down": -0.005050505050505055,
-    "close_change": 0.09191919191919189
+    "intraday_up": 0.140404,
+    "intraday_down": -0.005051,
+    "close_change": 0.091919
   },
   {
     "date": "2024-11-15",
@@ -2646,10 +2443,9 @@
     "close": 1.04,
     "volume": 37247138408,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.05087881591119328,
-    "intraday_down": -0.03977798334875109,
-    "close_change": -0.037927844588344056
+    "intraday_up": 0.050879,
+    "intraday_down": -0.039778,
+    "close_change": -0.037928
   },
   {
     "date": "2024-11-22",
@@ -2659,10 +2455,9 @@
     "close": 1.022,
     "volume": 28780580450,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03173076923076915,
-    "intraday_down": -0.028846153846153872,
-    "close_change": -0.017307692307692323
+    "intraday_up": 0.031731,
+    "intraday_down": -0.028846,
+    "close_change": -0.017308
   },
   {
     "date": "2024-11-29",
@@ -2672,10 +2467,9 @@
     "close": 1.06,
     "volume": 26898819259,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.05479452054794525,
-    "intraday_down": -0.03131115459882586,
-    "close_change": 0.03718199608610571
+    "intraday_up": 0.054795,
+    "intraday_down": -0.031311,
+    "close_change": 0.037182
   },
   {
     "date": "2024-12-06",
@@ -2685,10 +2479,9 @@
     "close": 1.067,
     "volume": 22039221660,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.016037735849056513,
-    "intraday_down": -0.01603773584905672,
-    "close_change": 0.006603773584905561
+    "intraday_up": 0.016038,
+    "intraday_down": -0.016038,
+    "close_change": 0.006604
   },
   {
     "date": "2024-12-13",
@@ -2698,10 +2491,9 @@
     "close": 1.042,
     "volume": 24335759785,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.0468603561387067,
-    "intraday_down": -0.02624179943767575,
-    "close_change": -0.023430178069353245
+    "intraday_up": 0.04686,
+    "intraday_down": -0.026242,
+    "close_change": -0.02343
   },
   {
     "date": "2024-12-20",
@@ -2711,10 +2503,9 @@
     "close": 1.065,
     "volume": 22539911735,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.03646833013435704,
-    "intraday_down": -0.024952015355086395,
-    "close_change": 0.022072936660268626
+    "intraday_up": 0.036468,
+    "intraday_down": -0.024952,
+    "close_change": 0.022073
   },
   {
     "date": "2024-12-27",
@@ -2724,10 +2515,9 @@
     "close": 1.074,
     "volume": 20839871759,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.03192488262910801,
-    "intraday_down": -0.018779342723004713,
-    "close_change": 0.008450704225352225
+    "intraday_up": 0.031925,
+    "intraday_down": -0.018779,
+    "close_change": 0.008451
   },
   {
     "date": "2025-01-03",
@@ -2737,10 +2527,9 @@
     "close": 0.993,
     "volume": 19460877401,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.012104283054003632,
-    "intraday_down": -0.0763500931098697,
-    "close_change": -0.07541899441340788
+    "intraday_up": 0.012104,
+    "intraday_down": -0.07635,
+    "close_change": -0.075419
   },
   {
     "date": "2025-01-10",
@@ -2750,10 +2539,9 @@
     "close": 1.005,
     "volume": 21219232686,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.04128902316213498,
-    "intraday_down": -0.012084592145015116,
-    "close_change": 0.012084592145015005
+    "intraday_up": 0.041289,
+    "intraday_down": -0.012085,
+    "close_change": 0.012085
   },
   {
     "date": "2025-01-17",
@@ -2763,10 +2551,9 @@
     "close": 1.02,
     "volume": 21292195545,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.04278606965174145,
-    "intraday_down": -0.014925373134328263,
-    "close_change": 0.014925373134328483
+    "intraday_up": 0.042786,
+    "intraday_down": -0.014925,
+    "close_change": 0.014925
   },
   {
     "date": "2025-01-24",
@@ -2776,10 +2563,9 @@
     "close": 1.029,
     "volume": 16924169955,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.028431372549019524,
-    "intraday_down": -0.0029411764705883467,
-    "close_change": 0.008823529411764605
+    "intraday_up": 0.028431,
+    "intraday_down": -0.002941,
+    "close_change": 0.008824
   },
   {
     "date": "2025-01-31",
@@ -2789,10 +2575,9 @@
     "close": 1.009,
     "volume": 3357932031,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.0009718172983480194,
-    "intraday_down": -0.020408163265306034,
-    "close_change": -0.01943634596695823
+    "intraday_up": 0.000972,
+    "intraday_down": -0.020408,
+    "close_change": -0.019436
   },
   {
     "date": "2025-02-07",
@@ -2802,10 +2587,9 @@
     "close": 1.076,
     "volume": 16832732205,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.08325074331020821,
-    "intraday_down": 0.018830525272547204,
-    "close_change": 0.06640237859266618
+    "intraday_up": 0.083251,
+    "intraday_down": 0.018831,
+    "close_change": 0.066402
   },
   {
     "date": "2025-02-14",
@@ -2815,10 +2599,9 @@
     "close": 1.078,
     "volume": 20232956404,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.022304832713754667,
-    "intraday_down": -0.011152416356877333,
-    "close_change": 0.0018587360594795553
+    "intraday_up": 0.022305,
+    "intraday_down": -0.011152,
+    "close_change": 0.001859
   },
   {
     "date": "2025-02-21",
@@ -2828,10 +2611,9 @@
     "close": 1.157,
     "volume": 25293660019,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.07513914656771796,
-    "intraday_down": -0.014842300556586283,
-    "close_change": 0.07328385899814467
+    "intraday_up": 0.075139,
+    "intraday_down": -0.014842,
+    "close_change": 0.073284
   },
   {
     "date": "2025-02-28",
@@ -2841,10 +2623,9 @@
     "close": 1.133,
     "volume": 25464808547,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03716508210890227,
-    "intraday_down": -0.021607605877268912,
-    "close_change": -0.020743301642178063
+    "intraday_up": 0.037165,
+    "intraday_down": -0.021608,
+    "close_change": -0.020743
   },
   {
     "date": "2025-03-07",
@@ -2854,10 +2635,9 @@
     "close": 1.167,
     "volume": 21342637892,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.04589585172109448,
-    "intraday_down": -0.02294792586054724,
-    "close_change": 0.030008826125331005
+    "intraday_up": 0.045896,
+    "intraday_down": -0.022948,
+    "close_change": 0.030009
   },
   {
     "date": "2025-03-14",
@@ -2867,10 +2647,9 @@
     "close": 1.146,
     "volume": 18375473969,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.0034275921165381347,
-    "intraday_down": -0.04027420736932299,
-    "close_change": -0.017994858611825305
+    "intraday_up": 0.003428,
+    "intraday_down": -0.040274,
+    "close_change": -0.017995
   },
   {
     "date": "2025-03-21",
@@ -2880,10 +2659,9 @@
     "close": 1.095,
     "volume": 15429869739,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.013089005235602203,
-    "intraday_down": -0.050610820244327955,
-    "close_change": -0.04450261780104706
+    "intraday_up": 0.013089,
+    "intraday_down": -0.050611,
+    "close_change": -0.044503
   },
   {
     "date": "2025-03-28",
@@ -2893,10 +2671,9 @@
     "close": 1.081,
     "volume": 14909434506,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.010045662100456732,
-    "intraday_down": -0.016438356164383577,
-    "close_change": -0.012785388127853892
+    "intraday_up": 0.010046,
+    "intraday_down": -0.016438,
+    "close_change": -0.012785
   },
   {
     "date": "2025-04-04",
@@ -2906,10 +2683,9 @@
     "close": 1.068,
     "volume": 10511842568,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.006475485661424716,
-    "intraday_down": -0.017576318223866703,
-    "close_change": -0.012025901942645608
+    "intraday_up": 0.006475,
+    "intraday_down": -0.017576,
+    "close_change": -0.012026
   },
   {
     "date": "2025-04-11",
@@ -2919,10 +2695,9 @@
     "close": 1.061,
     "volume": 28467031784,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.00936329588014982,
-    "intraday_down": -0.13857677902621723,
-    "close_change": -0.006554307116104979
+    "intraday_up": 0.009363,
+    "intraday_down": -0.138577,
+    "close_change": -0.006554
   },
   {
     "date": "2025-04-18",
@@ -2932,10 +2707,9 @@
     "close": 1.059,
     "volume": 12288969423,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.014137606032045358,
-    "intraday_down": -0.01508011310084827,
-    "close_change": -0.0018850141376060337
+    "intraday_up": 0.014138,
+    "intraday_down": -0.01508,
+    "close_change": -0.001885
   },
   {
     "date": "2025-04-25",
@@ -2945,10 +2719,9 @@
     "close": 1.054,
     "volume": 9419499776,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.014164305949008617,
-    "intraday_down": -0.01133144475920681,
-    "close_change": -0.004721435316336066
+    "intraday_up": 0.014164,
+    "intraday_down": -0.011331,
+    "close_change": -0.004721
   },
   {
     "date": "2025-05-02",
@@ -2958,10 +2731,9 @@
     "close": 1.062,
     "volume": 4448538804,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.009487666034155606,
-    "intraday_down": -0.009487666034155606,
-    "close_change": 0.007590132827324484
+    "intraday_up": 0.009488,
+    "intraday_down": -0.009488,
+    "close_change": 0.00759
   },
   {
     "date": "2025-05-09",
@@ -2971,10 +2743,9 @@
     "close": 1.056,
     "volume": 9686463280,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.03389830508474579,
-    "intraday_down": -0.005649717514124298,
-    "close_change": -0.005649717514124298
+    "intraday_up": 0.033898,
+    "intraday_down": -0.00565,
+    "close_change": -0.00565
   },
   {
     "date": "2025-05-16",
@@ -2984,10 +2755,9 @@
     "close": 1.044,
     "volume": 11578847794,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.015151515151515164,
-    "intraday_down": -0.014204545454545572,
-    "close_change": -0.011363636363636373
+    "intraday_up": 0.015152,
+    "intraday_down": -0.014205,
+    "close_change": -0.011364
   },
   {
     "date": "2025-05-23",
@@ -2997,10 +2767,9 @@
     "close": 1.03,
     "volume": 9233186456,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.007662835249042152,
-    "intraday_down": -0.01436781609195414,
-    "close_change": -0.013409961685823766
+    "intraday_up": 0.007663,
+    "intraday_down": -0.014368,
+    "close_change": -0.01341
   },
   {
     "date": "2025-05-30",
@@ -3010,9 +2779,8 @@
     "close": 1.03,
     "volume": 8626343465,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.010679611650485338,
-    "intraday_down": -0.0077669902912621425,
+    "intraday_up": 0.01068,
+    "intraday_down": -0.007767,
     "close_change": 0.0
   },
   {
@@ -3023,10 +2791,9 @@
     "close": 1.047,
     "volume": 6305023704,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.022330097087378552,
-    "intraday_down": -0.0019417475728155356,
-    "close_change": 0.016504854368931947
+    "intraday_up": 0.02233,
+    "intraday_down": -0.001942,
+    "close_change": 0.016505
   },
   {
     "date": "2025-06-13",
@@ -3036,10 +2803,9 @@
     "close": 1.022,
     "volume": 10335340455,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.009551098376313285,
-    "intraday_down": -0.029608404966571078,
-    "close_change": -0.023877745940783106
+    "intraday_up": 0.009551,
+    "intraday_down": -0.029608,
+    "close_change": -0.023878
   },
   {
     "date": "2025-06-20",
@@ -3049,10 +2815,9 @@
     "close": 1.006,
     "volume": 10169118039,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0029354207436398157,
-    "intraday_down": -0.016634050880626347,
-    "close_change": -0.01565557729941293
+    "intraday_up": 0.002935,
+    "intraday_down": -0.016634,
+    "close_change": -0.015656
   },
   {
     "date": "2025-06-27",
@@ -3062,10 +2827,9 @@
     "close": 1.041,
     "volume": 15496471263,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.0516898608349901,
-    "intraday_down": -0.0049701789264414665,
-    "close_change": 0.03479125248508939
+    "intraday_up": 0.05169,
+    "intraday_down": -0.00497,
+    "close_change": 0.034791
   },
   {
     "date": "2025-07-04",
@@ -3075,10 +2839,9 @@
     "close": 1.035,
     "volume": 12490785455,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.014409221902017412,
-    "intraday_down": -0.013448607108549485,
-    "close_change": -0.005763688760806922
+    "intraday_up": 0.014409,
+    "intraday_down": -0.013449,
+    "close_change": -0.005764
   },
   {
     "date": "2025-07-11",
@@ -3088,10 +2851,9 @@
     "close": 1.047,
     "volume": 13955057215,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.016425120772946982,
-    "intraday_down": -0.006763285024154488,
-    "close_change": 0.011594202898550735
+    "intraday_up": 0.016425,
+    "intraday_down": -0.006763,
+    "close_change": 0.011594
   },
   {
     "date": "2025-07-18",
@@ -3101,10 +2863,9 @@
     "close": 1.06,
     "volume": 16195382991,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.017191977077363915,
-    "intraday_down": -0.009551098376313285,
-    "close_change": 0.012416427889207377
+    "intraday_up": 0.017192,
+    "intraday_down": -0.009551,
+    "close_change": 0.012416
   },
   {
     "date": "2025-07-25",
@@ -3114,10 +2875,9 @@
     "close": 1.109,
     "volume": 19289014039,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.05188679245283013,
-    "intraday_down": -0.00283018867924539,
-    "close_change": 0.04622641509433956
+    "intraday_up": 0.051887,
+    "intraday_down": -0.00283,
+    "close_change": 0.046226
   },
   {
     "date": "2025-08-01",
@@ -3127,10 +2887,9 @@
     "close": 1.091,
     "volume": 20596248845,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.01803426510369704,
-    "intraday_down": -0.024346257889990904,
-    "close_change": -0.016230838593327336
+    "intraday_up": 0.018034,
+    "intraday_down": -0.024346,
+    "close_change": -0.016231
   },
   {
     "date": "2025-08-08",
@@ -3140,10 +2899,9 @@
     "close": 1.096,
     "volume": 13598269244,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.029330889092575644,
-    "intraday_down": -0.004582951420714843,
-    "close_change": 0.004582951420715046
+    "intraday_up": 0.029331,
+    "intraday_down": -0.004583,
+    "close_change": 0.004583
   },
   {
     "date": "2025-08-15",
@@ -3153,10 +2911,9 @@
     "close": 1.158,
     "volume": 21726100581,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.06386861313868598,
+    "intraday_up": 0.063869,
     "intraday_down": 0.0,
-    "close_change": 0.05656934306569327
+    "close_change": 0.056569
   },
   {
     "date": "2025-08-22",
@@ -3166,10 +2923,9 @@
     "close": 1.323,
     "volume": 28773383037,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.1442141623488774,
-    "intraday_down": 0.0025906735751296322,
-    "close_change": 0.1424870466321244
+    "intraday_up": 0.144214,
+    "intraday_down": 0.002591,
+    "close_change": 0.142487
   },
   {
     "date": "2025-08-29",
@@ -3179,10 +2935,9 @@
     "close": 1.412,
     "volume": 36382451766,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.08465608465608473,
-    "intraday_down": -0.005291005291005212,
-    "close_change": 0.06727135298563867
+    "intraday_up": 0.084656,
+    "intraday_down": -0.005291,
+    "close_change": 0.067271
   },
   {
     "date": "2025-09-05",
@@ -3192,10 +2947,9 @@
     "close": 1.326,
     "volume": 24546587281,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.018413597733711064,
-    "intraday_down": -0.10764872521246453,
-    "close_change": -0.060906515580736446
+    "intraday_up": 0.018414,
+    "intraday_down": -0.107649,
+    "close_change": -0.060907
   },
   {
     "date": "2025-09-12",
@@ -3205,10 +2959,9 @@
     "close": 1.406,
     "volume": 20178699957,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.07843137254901951,
-    "intraday_down": -0.01885369532428366,
-    "close_change": 0.06033182503770727
+    "intraday_up": 0.078431,
+    "intraday_down": -0.018854,
+    "close_change": 0.060332
   },
   {
     "date": "2025-09-19",
@@ -3218,10 +2971,9 @@
     "close": 1.431,
     "volume": 21966499649,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.07112375533428172,
-    "intraday_down": -0.0056899004267425375,
-    "close_change": 0.017780938833570507
+    "intraday_up": 0.071124,
+    "intraday_down": -0.00569,
+    "close_change": 0.017781
   },
   {
     "date": "2025-09-26",
@@ -3231,10 +2983,9 @@
     "close": 1.524,
     "volume": 19834147651,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.09014675052410902,
-    "intraday_down": -0.007686932215234186,
-    "close_change": 0.06498951781970648
+    "intraday_up": 0.090147,
+    "intraday_down": -0.007687,
+    "close_change": 0.06499
   },
   {
     "date": "2025-10-03",
@@ -3244,10 +2995,9 @@
     "close": 1.57,
     "volume": 6818236373,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.036745406824147016,
-    "intraday_down": -0.01902887139107606,
-    "close_change": 0.030183727034120762
+    "intraday_up": 0.036745,
+    "intraday_down": -0.019029,
+    "close_change": 0.030184
   },
   {
     "date": "2025-10-10",
@@ -3257,10 +3007,9 @@
     "close": 1.528,
     "volume": 10067716933,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.06178343949044584,
-    "intraday_down": -0.03439490445859875,
-    "close_change": -0.02675159235668792
+    "intraday_up": 0.061783,
+    "intraday_down": -0.034395,
+    "close_change": -0.026752
   },
   {
     "date": "2025-10-17",
@@ -3270,10 +3019,9 @@
     "close": 1.433,
     "volume": 20869721339,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.022905759162303613,
-    "intraday_down": -0.06544502617801053,
-    "close_change": -0.06217277486910993
+    "intraday_up": 0.022906,
+    "intraday_down": -0.065445,
+    "close_change": -0.062173
   },
   {
     "date": "2025-10-24",
@@ -3283,10 +3031,9 @@
     "close": 1.535,
     "volume": 16359141590,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.07466852756454988,
-    "intraday_down": -0.005582693649685978,
-    "close_change": 0.07117934403349607
+    "intraday_up": 0.074669,
+    "intraday_down": -0.005583,
+    "close_change": 0.071179
   },
   {
     "date": "2025-10-31",
@@ -3296,10 +3043,9 @@
     "close": 1.488,
     "volume": 17129726480,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.022801302931596185,
-    "intraday_down": -0.03127035830618881,
-    "close_change": -0.03061889250814328
+    "intraday_up": 0.022801,
+    "intraday_down": -0.03127,
+    "close_change": -0.030619
   },
   {
     "date": "2025-11-07",
@@ -3309,10 +3055,9 @@
     "close": 1.487,
     "volume": 14112037043,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.017473118279569908,
-    "intraday_down": -0.04233870967741932,
-    "close_change": -0.0006720430107526142
+    "intraday_up": 0.017473,
+    "intraday_down": -0.042339,
+    "close_change": -0.000672
   },
   {
     "date": "2025-11-14",
@@ -3322,10 +3067,9 @@
     "close": 1.431,
     "volume": 11853543320,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.011432414256893009,
-    "intraday_down": -0.038332212508406294,
-    "close_change": -0.03765971755211839
+    "intraday_up": 0.011432,
+    "intraday_down": -0.038332,
+    "close_change": -0.03766
   },
   {
     "date": "2025-11-21",
@@ -3335,10 +3079,9 @@
     "close": 1.351,
     "volume": 13161825282,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.01048218029350098,
-    "intraday_down": -0.05870020964360592,
-    "close_change": -0.05590496156533897
+    "intraday_up": 0.010482,
+    "intraday_down": -0.0587,
+    "close_change": -0.055905
   },
   {
     "date": "2025-11-28",
@@ -3348,10 +3091,9 @@
     "close": 1.393,
     "volume": 13539649573,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.0503330866025167,
-    "intraday_down": -0.010362694300518144,
-    "close_change": 0.03108808290155443
+    "intraday_up": 0.050333,
+    "intraday_down": -0.010363,
+    "close_change": 0.031088
   },
   {
     "date": "2025-12-05",
@@ -3361,10 +3103,9 @@
     "close": 1.394,
     "volume": 10847140963,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.01148600143575019,
-    "intraday_down": -0.023689877961234687,
-    "close_change": 0.0007178750897343071
+    "intraday_up": 0.011486,
+    "intraday_down": -0.02369,
+    "close_change": 0.000718
   },
   {
     "date": "2025-12-12",
@@ -3374,10 +3115,9 @@
     "close": 1.418,
     "volume": 13411040237,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.025824964131994286,
-    "intraday_down": -0.009325681492108969,
-    "close_change": 0.017216642754662857
+    "intraday_up": 0.025825,
+    "intraday_down": -0.009326,
+    "close_change": 0.017217
   },
   {
     "date": "2025-12-19",
@@ -3387,10 +3127,9 @@
     "close": 1.38,
     "volume": 11593021103,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": -0.0028208744710860392,
-    "intraday_down": -0.04583921015514806,
-    "close_change": -0.026798307475317373
+    "intraday_up": -0.002821,
+    "intraday_down": -0.045839,
+    "close_change": -0.026798
   },
   {
     "date": "2025-12-26",
@@ -3400,10 +3139,9 @@
     "close": 1.419,
     "volume": 10715003968,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.035507246376811706,
-    "intraday_down": 0.002898550724637684,
-    "close_change": 0.0282608695652175
+    "intraday_up": 0.035507,
+    "intraday_down": 0.002899,
+    "close_change": 0.028261
   },
   {
     "date": "2026-01-02",
@@ -3413,10 +3151,9 @@
     "close": 1.417,
     "volume": 7206987131,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.015503875968992262,
-    "intraday_down": -0.004933051444679434,
-    "close_change": -0.0014094432699083873
+    "intraday_up": 0.015504,
+    "intraday_down": -0.004933,
+    "close_change": -0.001409
   },
   {
     "date": "2026-01-09",
@@ -3426,10 +3163,9 @@
     "close": 1.554,
     "volume": 18552325540,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.10232886379675371,
-    "intraday_down": 0.0077628793225122785,
-    "close_change": 0.09668313338038109
+    "intraday_up": 0.102329,
+    "intraday_down": 0.007763,
+    "close_change": 0.096683
   },
   {
     "date": "2026-01-16",
@@ -3439,10 +3175,9 @@
     "close": 1.593,
     "volume": 20286113096,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.03796653796653793,
-    "intraday_down": -0.011583011583011593,
-    "close_change": 0.025096525096525046
+    "intraday_up": 0.037967,
+    "intraday_down": -0.011583,
+    "close_change": 0.025097
   },
   {
     "date": "2026-01-23",
@@ -3452,10 +3187,9 @@
     "close": 1.635,
     "volume": 16310685693,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.040803515379786534,
-    "intraday_down": -0.026993094789704915,
-    "close_change": 0.02636534839924673
+    "intraday_up": 0.040804,
+    "intraday_down": -0.026993,
+    "close_change": 0.026365
   },
   {
     "date": "2026-01-30",
@@ -3465,10 +3199,9 @@
     "close": 1.588,
     "volume": 15314483809,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.014067278287461718,
-    "intraday_down": -0.05688073394495411,
-    "close_change": -0.02874617737003054
+    "intraday_up": 0.014067,
+    "intraday_down": -0.056881,
+    "close_change": -0.028746
   },
   {
     "date": "2026-02-06",
@@ -3478,10 +3211,9 @@
     "close": 1.499,
     "volume": 14313649997,
     "risk_score": -2,
-    "risk_label": "较大机会",
     "intraday_up": 0.0,
-    "intraday_down": -0.06801007556675069,
-    "close_change": -0.05604534005037781
+    "intraday_down": -0.06801,
+    "close_change": -0.056045
   },
   {
     "date": "2026-02-13",
@@ -3491,10 +3223,9 @@
     "close": 1.548,
     "volume": 9736520833,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.04736490993995994,
-    "intraday_down": 0.012008005336891123,
-    "close_change": 0.03268845897264838
+    "intraday_up": 0.047365,
+    "intraday_down": 0.012008,
+    "close_change": 0.032688
   },
   {
     "date": "2026-02-27",
@@ -3504,10 +3235,9 @@
     "close": 1.566,
     "volume": 8241060145,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.01679586563307495,
-    "intraday_down": -0.011627906976744196,
-    "close_change": 0.011627906976744196
+    "intraday_up": 0.016796,
+    "intraday_down": -0.011628,
+    "close_change": 0.011628
   },
   {
     "date": "2026-03-06",
@@ -3517,10 +3247,9 @@
     "close": 1.491,
     "volume": 12671899094,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": -0.000638569604086917,
-    "intraday_down": -0.07407407407407414,
-    "close_change": -0.04789272030651338
+    "intraday_up": -0.000639,
+    "intraday_down": -0.074074,
+    "close_change": -0.047893
   },
   {
     "date": "2026-03-13",
@@ -3530,10 +3259,9 @@
     "close": 1.45,
     "volume": 10808179123,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.008048289738430442,
-    "intraday_down": -0.0449362843729042,
-    "close_change": -0.02749832327297126
+    "intraday_up": 0.008048,
+    "intraday_down": -0.044936,
+    "close_change": -0.027498
   },
   {
     "date": "2026-03-20",
@@ -3543,10 +3271,9 @@
     "close": 1.388,
     "volume": 12781872844,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.009655172413793113,
-    "intraday_down": -0.04344827586206893,
-    "close_change": -0.04275862068965521
+    "intraday_up": 0.009655,
+    "intraday_down": -0.043448,
+    "close_change": -0.042759
   },
   {
     "date": "2026-03-27",
@@ -3556,10 +3283,9 @@
     "close": 1.37,
     "volume": 15279965292,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.006484149855907867,
-    "intraday_down": -0.05187319884726214,
-    "close_change": -0.012968299711815415
+    "intraday_up": 0.006484,
+    "intraday_down": -0.051873,
+    "close_change": -0.012968
   },
   {
     "date": "2026-04-03",
@@ -3569,10 +3295,9 @@
     "close": 1.324,
     "volume": 12105306930,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.0014598540145985414,
-    "intraday_down": -0.03576642335766434,
-    "close_change": -0.03357664233576645
+    "intraday_up": 0.00146,
+    "intraday_down": -0.035766,
+    "close_change": -0.033577
   },
   {
     "date": "2026-04-10",
@@ -3582,10 +3307,9 @@
     "close": 1.437,
     "volume": 11500994559,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.10045317220543806,
-    "intraday_down": 0.0022658610271902506,
-    "close_change": 0.08534743202416917
+    "intraday_up": 0.100453,
+    "intraday_down": 0.002266,
+    "close_change": 0.085347
   },
   {
     "date": "2026-04-17",
@@ -3595,10 +3319,9 @@
     "close": 1.499,
     "volume": 12507220002,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.0508002783576896,
-    "intraday_down": -0.009046624913013307,
-    "close_change": 0.04314544189283233
+    "intraday_up": 0.0508,
+    "intraday_down": -0.009047,
+    "close_change": 0.043145
   },
   {
     "date": "2026-04-24",
@@ -3608,10 +3331,9 @@
     "close": 1.531,
     "volume": 12943954432,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.034689793195463524,
-    "intraday_down": -0.005336891260840565,
-    "close_change": 0.02134756504336211
+    "intraday_up": 0.03469,
+    "intraday_down": -0.005337,
+    "close_change": 0.021348
   },
   {
     "date": "2026-05-01",
@@ -3621,10 +3343,9 @@
     "close": 1.654,
     "volume": 13058620067,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.08752449379490537,
-    "intraday_down": -0.0006531678641410124,
-    "close_change": 0.08033964728935336
+    "intraday_up": 0.087524,
+    "intraday_down": -0.000653,
+    "close_change": 0.08034
   },
   {
     "date": "2026-05-08",
@@ -3634,10 +3355,9 @@
     "close": 1.727,
     "volume": 9458863984,
     "risk_score": 2,
-    "risk_label": "较大风险",
-    "intraday_up": 0.0955259975816204,
-    "intraday_down": 0.03325272067714641,
-    "close_change": 0.044135429262394305
+    "intraday_up": 0.095526,
+    "intraday_down": 0.033253,
+    "close_change": 0.044135
   },
   {
     "date": "2026-05-15",
@@ -3647,10 +3367,9 @@
     "close": 1.787,
     "volume": 17910967339,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.09901563404748107,
-    "intraday_down": 0.01795020266357841,
-    "close_change": 0.03474232773595821
+    "intraday_up": 0.099016,
+    "intraday_down": 0.01795,
+    "close_change": 0.034742
   },
   {
     "date": "2026-05-22",
@@ -3660,10 +3379,9 @@
     "close": 1.887,
     "volume": 18641361346,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.11583659764969227,
-    "intraday_down": -0.015668718522663695,
-    "close_change": 0.055959709009513206
+    "intraday_up": 0.115837,
+    "intraday_down": -0.015669,
+    "close_change": 0.05596
   },
   {
     "date": "2026-05-29",
@@ -3673,10 +3391,9 @@
     "close": 1.844,
     "volume": 20375709771,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.06147323794382623,
-    "intraday_down": -0.03550609432962371,
-    "close_change": -0.02278749337572863
+    "intraday_up": 0.061473,
+    "intraday_down": -0.035506,
+    "close_change": -0.022787
   },
   {
     "date": "2026-06-05",
@@ -3686,10 +3403,9 @@
     "close": 1.763,
     "volume": 17185935459,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.015184381778741879,
-    "intraday_down": -0.06290672451193063,
-    "close_change": -0.04392624728850335
+    "intraday_up": 0.015184,
+    "intraday_down": -0.062907,
+    "close_change": -0.043926
   },
   {
     "date": "2026-06-12",
@@ -3699,10 +3415,9 @@
     "close": 1.756,
     "volume": 16002463577,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.0368689733408963,
-    "intraday_down": -0.05558706749858189,
-    "close_change": -0.003970504821327224
+    "intraday_up": 0.036869,
+    "intraday_down": -0.055587,
+    "close_change": -0.003971
   },
   {
     "date": "2026-06-19",
@@ -3712,10 +3427,9 @@
     "close": 2.017,
     "volume": 13101702692,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.16287015945330285,
-    "intraday_down": -0.003416856492027338,
-    "close_change": 0.148633257403189
+    "intraday_up": 0.16287,
+    "intraday_down": -0.003417,
+    "close_change": 0.148633
   },
   {
     "date": "2026-06-26",
@@ -3725,10 +3439,9 @@
     "close": 2.133,
     "volume": 19208695573,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.08527516113039176,
-    "intraday_down": -0.017848289538919093,
-    "close_change": 0.05751115518096188
+    "intraday_up": 0.085275,
+    "intraday_down": -0.017848,
+    "close_change": 0.057511
   },
   {
     "date": "2026-07-03",
@@ -3738,10 +3451,9 @@
     "close": 2.102,
     "volume": 19292007288,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.12048757618377877,
-    "intraday_down": -0.03047351148616969,
-    "close_change": -0.014533520862634852
+    "intraday_up": 0.120488,
+    "intraday_down": -0.030474,
+    "close_change": -0.014534
   },
   {
     "date": "2026-07-10",
@@ -3751,10 +3463,9 @@
     "close": 2.209,
     "volume": 19745743922,
     "risk_score": 3,
-    "risk_label": "巨大风险",
-    "intraday_up": 0.13510941960038073,
-    "intraday_down": -0.03377735490009502,
-    "close_change": 0.05090390104662237
+    "intraday_up": 0.135109,
+    "intraday_down": -0.033777,
+    "close_change": 0.050904
   },
   {
     "date": "2026-07-17",
@@ -3764,10 +3475,9 @@
     "close": 1.807,
     "volume": 25423947729,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.007695789950203668,
-    "intraday_down": -0.18922589406971485,
-    "close_change": -0.1819827976459937
+    "intraday_up": 0.007696,
+    "intraday_down": -0.189226,
+    "close_change": -0.181983
   },
   {
     "date": "2026-07-24",
@@ -3777,10 +3487,9 @@
     "close": 1.885,
     "volume": 39211859615,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.12783619258439397,
-    "intraday_down": -0.03873824017708901,
-    "close_change": 0.04316546762589932
+    "intraday_up": 0.127836,
+    "intraday_down": -0.038738,
+    "close_change": 0.043165
   },
   {
     "date": "2026-07-31",
@@ -3790,10 +3499,9 @@
     "close": 1.728,
     "volume": 35155386476,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.017506631299734704,
-    "intraday_down": -0.1262599469496021,
-    "close_change": -0.08328912466843502
+    "intraday_up": 0.017507,
+    "intraday_down": -0.12626,
+    "close_change": -0.083289
   },
   {
     "date": "2026-08-07",
@@ -3803,10 +3511,9 @@
     "close": 1.84,
     "volume": 27694376640,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.06712962962962969,
-    "intraday_down": -0.05381944444444443,
-    "close_change": 0.06481481481481487
+    "intraday_up": 0.06713,
+    "intraday_down": -0.053819,
+    "close_change": 0.064815
   },
   {
     "date": "2026-08-14",
@@ -3816,10 +3523,9 @@
     "close": 1.814,
     "volume": 16713365704,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.022282608695652132,
-    "intraday_down": -0.02989130434782617,
-    "close_change": -0.014130434782608708
+    "intraday_up": 0.022283,
+    "intraday_down": -0.029891,
+    "close_change": -0.01413
   },
   {
     "date": "2026-08-21",
@@ -3829,10 +3535,9 @@
     "close": 1.745,
     "volume": 19903850161,
     "risk_score": -1,
-    "risk_label": "一般机会",
-    "intraday_up": 0.046857772877618505,
-    "intraday_down": -0.04630650496141128,
-    "close_change": -0.038037486218302066
+    "intraday_up": 0.046858,
+    "intraday_down": -0.046307,
+    "close_change": -0.038037
   },
   {
     "date": "2026-08-28",
@@ -3842,10 +3547,9 @@
     "close": 1.756,
     "volume": 17197697608,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": 0.03553008595988529,
-    "intraday_down": -0.05386819484240692,
-    "close_change": 0.006303724928366704
+    "intraday_up": 0.03553,
+    "intraday_down": -0.053868,
+    "close_change": 0.006304
   },
   {
     "date": "2026-09-04",
@@ -3855,10 +3559,9 @@
     "close": 1.668,
     "volume": 15545395583,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.01252847380410024,
-    "intraday_down": -0.05751708428246013,
-    "close_change": -0.05011389521640096
+    "intraday_up": 0.012528,
+    "intraday_down": -0.057517,
+    "close_change": -0.050114
   },
   {
     "date": "2026-09-11",
@@ -3868,10 +3571,9 @@
     "close": 1.639,
     "volume": 16200703874,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.028776978417266213,
-    "intraday_down": -0.040167865707434025,
-    "close_change": -0.017386091127098272
+    "intraday_up": 0.028777,
+    "intraday_down": -0.040168,
+    "close_change": -0.017386
   },
   {
     "date": "2026-09-18",
@@ -3881,10 +3583,9 @@
     "close": 1.744,
     "volume": 19237753651,
     "risk_score": 0,
-    "risk_label": "中性",
-    "intraday_up": 0.0762660158633313,
-    "intraday_down": -0.021964612568639432,
-    "close_change": 0.06406345332519828
+    "intraday_up": 0.076266,
+    "intraday_down": -0.021965,
+    "close_change": 0.064063
   },
   {
     "date": "2026-09-25",
@@ -3894,10 +3595,9 @@
     "close": 1.713,
     "volume": 13164493059,
     "risk_score": 1,
-    "risk_label": "一般风险",
-    "intraday_up": 0.033256880733944984,
-    "intraday_down": -0.018348623853211024,
-    "close_change": -0.017775229357798118
+    "intraday_up": 0.033257,
+    "intraday_down": -0.018349,
+    "close_change": -0.017775
   },
   {
     "date": "2026-10-02",
@@ -3907,10 +3607,9 @@
     "close": 1.616,
     "volume": 12417754984,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.004670169293636898,
-    "intraday_down": -0.05837711617046123,
-    "close_change": -0.05662580268534732
+    "intraday_up": -0.00467,
+    "intraday_down": -0.058377,
+    "close_change": -0.056626
   },
   {
     "date": "2026-10-09",
@@ -3920,10 +3619,9 @@
     "close": 1.541,
     "volume": 12547837835,
     "risk_score": -2,
-    "risk_label": "较大机会",
-    "intraday_up": -0.0012376237623762387,
-    "intraday_down": -0.09096534653465348,
-    "close_change": -0.046410891089109015
+    "intraday_up": -0.001238,
+    "intraday_down": -0.090965,
+    "close_change": -0.046411
   },
   {
     "date": "2026-10-16",
@@ -3933,9 +3631,8 @@
     "close": 1.43,
     "volume": 29638436994,
     "risk_score": -3,
-    "risk_label": "巨大机会",
-    "intraday_up": 0.00973393900064901,
-    "intraday_down": -0.0902011680726801,
-    "close_change": -0.07203114860480207
+    "intraday_up": 0.009734,
+    "intraday_down": -0.090201,
+    "close_change": -0.072031
   }
 ]

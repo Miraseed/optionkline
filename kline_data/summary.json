@@ -1,0 +1,275 @@
+{
+  "510050": {
+    "name": "上证50ETF",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 2.878,
+      "high": 2.898,
+      "low": 2.844,
+      "close": 2.866,
+      "volume": 1880428080,
+      "risk_score": -2,
+      "intraday_up": 0.008,
+      "intraday_down": -0.010783,
+      "close_change": -0.00313
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 2.919,
+      "high": 2.947,
+      "low": 2.837,
+      "close": 2.866,
+      "volume": 4129295546,
+      "risk_score": -2,
+      "intraday_up": 0.009592,
+      "intraday_down": -0.028092,
+      "close_change": -0.018157
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 2.93,
+      "high": 2.953,
+      "low": 2.837,
+      "close": 2.866,
+      "volume": 5344930004,
+      "risk_score": -3,
+      "intraday_up": 0.005106,
+      "intraday_down": -0.034377,
+      "close_change": -0.024506
+    }
+  },
+  "510300": {
+    "name": "沪深300ETF",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 4.255,
+      "high": 4.282,
+      "low": 4.2,
+      "close": 4.236,
+      "volume": 3799508474,
+      "risk_score": -2,
+      "intraday_up": 0.00943,
+      "intraday_down": -0.009901,
+      "close_change": -0.001414
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 4.384,
+      "high": 4.408,
+      "low": 4.187,
+      "close": 4.236,
+      "volume": 8042489091,
+      "risk_score": -3,
+      "intraday_up": 0.005245,
+      "intraday_down": -0.045154,
+      "close_change": -0.033979
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 4.418,
+      "high": 4.459,
+      "low": 4.187,
+      "close": 4.236,
+      "volume": 10070094753,
+      "risk_score": -3,
+      "intraday_up": 0.006092,
+      "intraday_down": -0.05528,
+      "close_change": -0.044224
+    }
+  },
+  "588000": {
+    "name": "科创50ETF",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 1.453,
+      "high": 1.468,
+      "low": 1.416,
+      "close": 1.43,
+      "volume": 6184851705,
+      "risk_score": -3,
+      "intraday_up": 0.020862,
+      "intraday_down": -0.015299,
+      "close_change": -0.005563
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 1.524,
+      "high": 1.556,
+      "low": 1.402,
+      "close": 1.43,
+      "volume": 29638436994,
+      "risk_score": -3,
+      "intraday_up": 0.009734,
+      "intraday_down": -0.090201,
+      "close_change": -0.072031
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 1.614,
+      "high": 1.614,
+      "low": 1.402,
+      "close": 1.43,
+      "volume": 42186274829,
+      "risk_score": -2,
+      "intraday_up": -0.001238,
+      "intraday_down": -0.132426,
+      "close_change": -0.115099
+    }
+  },
+  "159915": {
+    "name": "创业板ETF",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 2.84,
+      "high": 2.85,
+      "low": 2.762,
+      "close": 2.789,
+      "volume": 2897398394,
+      "risk_score": -3,
+      "intraday_up": 0.015681,
+      "intraday_down": -0.015681,
+      "close_change": -0.006058
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 3.039,
+      "high": 3.069,
+      "low": 2.762,
+      "close": 2.789,
+      "volume": 14136979772,
+      "risk_score": -3,
+      "intraday_up": 0.001632,
+      "intraday_down": -0.098564,
+      "close_change": -0.089752
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 3.161,
+      "high": 3.188,
+      "low": 2.762,
+      "close": 2.789,
+      "volume": 18654047906,
+      "risk_score": -2,
+      "intraday_up": 0.01078,
+      "intraday_down": -0.124287,
+      "close_change": -0.115726
+    }
+  },
+  "510500": {
+    "name": "中证500ETF",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 6.88,
+      "high": 6.95,
+      "low": 6.752,
+      "close": 6.809,
+      "volume": 492356462,
+      "risk_score": -3,
+      "intraday_up": 0.021758,
+      "intraday_down": -0.007351,
+      "close_change": 0.001029
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 7.265,
+      "high": 7.284,
+      "low": 6.752,
+      "close": 6.809,
+      "volume": 2070489887,
+      "risk_score": -3,
+      "intraday_up": 0.000275,
+      "intraday_down": -0.072782,
+      "close_change": -0.064955
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 7.47,
+      "high": 7.501,
+      "low": 6.752,
+      "close": 6.809,
+      "volume": 2999129773,
+      "risk_score": -2,
+      "intraday_up": 0.003881,
+      "intraday_down": -0.09636,
+      "close_change": -0.088731
+    }
+  },
+  "000852": {
+    "name": "中证1000",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 6777.387,
+      "high": 6834.4491,
+      "low": 6626.5208,
+      "close": 6681.9444,
+      "volume": 210437542,
+      "risk_score": -3,
+      "intraday_up": 0.023328,
+      "intraday_down": -0.007805,
+      "close_change": 0.000493
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 7132.682,
+      "high": 7145.059,
+      "low": 6626.5208,
+      "close": 6681.9444,
+      "volume": 81983404542,
+      "risk_score": -3,
+      "intraday_up": -0.001517,
+      "intraday_down": -0.073979,
+      "close_change": -0.066234
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 7306.742,
+      "high": 7366.857,
+      "low": 6626.5208,
+      "close": 6681.9444,
+      "volume": 125033979842,
+      "risk_score": -3,
+      "intraday_up": 0.009322,
+      "intraday_down": -0.092111,
+      "close_change": -0.084517
+    }
+  },
+  "I0": {
+    "name": "铁矿石主连",
+    "daily": {
+      "date": "2026-10-19",
+      "open": 672.5,
+      "high": 686.5,
+      "low": 672.5,
+      "close": 685.0,
+      "volume": 171101,
+      "risk_score": 0,
+      "intraday_up": 0.020818,
+      "intraday_down": 0.0,
+      "close_change": 0.018587
+    },
+    "weekly": {
+      "date": "2026-10-23",
+      "open": 672.5,
+      "high": 686.5,
+      "low": 672.5,
+      "close": 685.0,
+      "volume": 171101,
+      "risk_score": -1,
+      "intraday_up": 0.020818,
+      "intraday_down": 0.0,
+      "close_change": 0.018587
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 692.0,
+      "high": 698.0,
+      "low": 667.0,
+      "close": 685.0,
+      "volume": 2132102,
+      "risk_score": -3,
+      "intraday_up": -0.006406,
+      "intraday_down": -0.050534,
+      "close_change": -0.024911
+    }
+  }
+}

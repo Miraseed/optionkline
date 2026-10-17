@@ -6,6 +6,7 @@
 import json
 import os
 import sys
+import math
 from datetime import datetime
 
 import pandas as pd
@@ -50,6 +51,25 @@ RISK_LABELS = {
     1: "一般风险", 2: "较大风险", 3: "巨大风险",
 }
 
+# 首屏快速预览: 每个周期只写"最近 N 根"到 _recent.json, 前端先渲染它, 再后台补全全部历史
+# 0 = 不拆分(该周期本身很小, 全量即"最近")
+RECENT_BARS = {"daily": 300, "weekly": 120, "monthly": 0}
+
+
+def slim_records(records):
+    """精简记录以减小传输体积: risk_label 可由 risk_score 推导故删除; 浮点保留 6 位"""
+    out = []
+    for r in records:
+        out.append({
+            "date": r["date"],
+            "open": r["open"], "high": r["high"], "low": r["low"], "close": r["close"],
+            "volume": r["volume"], "risk_score": r["risk_score"],
+            "intraday_up": None if r["intraday_up"] is None else round(r["intraday_up"], 6),
+            "intraday_down": None if r["intraday_down"] is None else round(r["intraday_down"], 6),
+            "close_change": None if r["close_change"] is None else round(r["close_change"], 6),
+        })
+    return out
+
 
 def calc_risk_score(closes, period):
     params = PERIOD_PARAMS[period]
@@ -84,7 +104,7 @@ def calc_risk_score(closes, period):
             if rsi > 70: score += 0.5
             elif rsi < 30: score -= 0.5
         score = max(-3, min(3, score))
-        scores.append(int(round(score)))
+        scores.append(int(math.floor(score + 0.5)))   # 标准四舍五入(非银行家舍入)
     return scores
 
 
@@ -318,16 +338,42 @@ def main():
         import akshare as ak
 
     success = 0
+    summary = {}   # 轻量摘要: 每个标的的日/周/月最后一根, 供前端秒开总览
     for etf in UNDERLYINGS:
         print(f"\n--- {etf['name']} ({etf['code']}) ---")
         try:
             kline_data = fetch_kline_data(etf)
+            rec = {"name": etf["name"]}
             for period, records in kline_data.items():
+                slim = slim_records(records)
                 path = os.path.join(DATA_DIR, f"{etf['code']}_{period}.json")
-                save_json(path, records)
+                save_json(path, slim)                       # 全部历史(后台补全用)
+                n = RECENT_BARS.get(period, 0)
+                if n:
+                    save_json(os.path.join(DATA_DIR, f"{etf['code']}_{period}_recent.json"), slim[-n:])  # 首屏预览用
+                if slim:
+                    rec[period] = slim[-1]
+            summary[etf["code"]] = rec
             success += 1
         except Exception as e:
             print(f"  错误: {e}")
+            # 回退: 用已存在的文件生成摘要, 避免该标的在总览里缺失
+            try:
+                rec = {"name": etf["name"]}
+                for period in ("daily", "weekly", "monthly"):
+                    p = os.path.join(DATA_DIR, f"{etf['code']}_{period}.json")
+                    if os.path.exists(p):
+                        with open(p, encoding="utf-8") as f:
+                            arr = json.load(f)
+                        if arr:
+                            rec[period] = arr[-1]
+                if len(rec) > 1:
+                    summary[etf["code"]] = rec
+            except Exception as e2:
+                print(f"  摘要回退失败: {e2}")
+
+    save_json(os.path.join(DATA_DIR, "summary.json"), summary)
+    print(f"摘要已写入 summary.json ({len(summary)} 个标的)")
 
     print(f"\n--- 获取PE(TTM)数据 ---")
     try:

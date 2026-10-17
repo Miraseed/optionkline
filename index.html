@@ -7,8 +7,9 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>期权时空容错交易系统 - K线数据</title>
-<!-- ECharts 本地自托管(同源 Pages 加速, 规避 jsdelivr 在国内被墙/极慢); defer 非阻塞, 不拖慢整页渲染 -->
-<script defer src="assets/echarts.min.js"></script>
+<!-- ECharts: 优先国内CDN(npmmirror, 国内访问极快), 失败则回退到本地自托管(同源, 无第三方依赖) -->
+<script src="https://registry.npmmirror.com/echarts/5.5.0/files/dist/echarts.min.js"></script>
+<script>window.echarts || document.write('<script src="assets/echarts.min.js"><\/script>');</script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -317,7 +318,9 @@ function nextRefreshInfo() {
 }
 
 // ==================== 数据加载 ====================
-let allData = {};       // {code: {daily:[], weekly:[], monthly:[]}}
+let allData = {};       // {code: {daily:[], weekly:[], monthly:[]}}  仅已加载的标的(按需)
+let fullLoaded = {};    // {code:true} 该标的全部历史是否已后台补全
+let summaryData = {};   // {code: {name, daily:{最后一根}, weekly, monthly}}  轻量摘要, 秒开总览
 let peData = {};        // {code: [{date, pe_ttm, quantile}]}
 let peLatest = {};      // {code: {pe_ttm, percentile}}
 let currentCode = null;
@@ -332,6 +335,9 @@ let dataUpdatedAt = null;   // 最近一次数据加载完成时间
 
 const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"risk-1","2":"risk-2","3":"risk-3"};
 const RISK_BG = {"-3":"#9ae6b4","-2":"#c6f6d5","-1":"#f0fff4","0":"#e2e8f0","1":"#fffaf0","2":"#feebc8","3":"#fed7d7"};
+// risk_label 由 risk_score 推导(数据文件已移除该字段以减小体积)
+const RISK_LABELS = {"-3":"巨大机会","-2":"较大机会","-1":"一般机会","0":"中性","1":"一般风险","2":"较大风险","3":"巨大风险"};
+function riskLabel(score) { return RISK_LABELS[String(score)] || "中性"; }
 
 function fmtPct(v) { return (v===null||v===undefined) ? "--" : (v*100).toFixed(2)+"%"; }
 function getDecimals(code) { const u = UNDERLYINGS.find(x=>x.code===code); return u ? (u.decimal_places||3) : 3; }
@@ -491,31 +497,44 @@ async function fetchAllRealtime() {
 
 function applyRealtimeToData(rtData) {
   let updated = false;
+  const today = new Date().toISOString().slice(0, 10);
   for (const u of UNDERLYINGS) {
     const rt = rtData[u.code];
     if (!rt || rt.price == null || rt.price <= 0) continue;
     const d = allData[u.code];
-    if (!d) continue;
     for (const p of PERIODS) {
-      const arr = d[p];
-      if (!arr || arr.length === 0) continue;
-      const last = arr[arr.length - 1];
-      const today = new Date().toISOString().slice(0, 10);
-      if (last.date === today) {
-        last.close = rt.price;
-        if (rt.high > last.high) last.high = rt.high;
-        if (rt.low < last.low || last.low === last.open) last.low = rt.low;
-        last.volume = rt.volume || last.volume;
-      } else if (last.date < today) {
-        arr.push({
-          date: today,
-          open: rt.open || rt.price,
-          high: rt.high || rt.price,
-          low: rt.low || rt.price,
-          close: rt.price,
-          volume: rt.volume || 0,
-        });
-        if (p === "daily" && arr.length > 1500) arr.shift();
+      const arr = d && d[p];
+      if (arr && arr.length) {
+        // 明细已加载: 更新今日K线 / 追加今日新柱
+        const last = arr[arr.length - 1];
+        if (last.date === today) {
+          last.close = rt.price;
+          if (rt.high > last.high) last.high = rt.high;
+          if (rt.low < last.low || last.low === last.open) last.low = rt.low;
+          last.volume = rt.volume || last.volume;
+          if (rt.change_pct != null) last.close_change = rt.change_pct / 100;
+        } else if (last.date < today) {
+          arr.push({
+            date: today,
+            open: rt.open || rt.price,
+            high: rt.high || rt.price,
+            low: rt.low || rt.price,
+            close: rt.price,
+            volume: rt.volume || 0,
+            close_change: rt.change_pct != null ? rt.change_pct / 100 : null,
+          });
+          if (p === "daily" && arr.length > 1500) arr.shift();
+        }
+      } else {
+        // 摘要模式(明细未加载): 更新摘要最后一根, 保证总览显示实时价
+        const s = summaryData[u.code] && summaryData[u.code][p];
+        if (s) {
+          s.close = rt.price;
+          if (rt.high > (s.high || 0)) s.high = rt.high;
+          if (rt.low && (s.low == null || rt.low < s.low)) s.low = rt.low;
+          s.volume = rt.volume || s.volume;
+          if (rt.change_pct != null) s.close_change = rt.change_pct / 100;
+        }
       }
     }
     updated = true;
@@ -550,17 +569,56 @@ async function loadAllData(noCache) {
   updateStatusUI();
 }
 
+// 取某标的某周期的"最后一根"记录(K线明细优先, 否则用摘要)
+function lastRec(code, period) {
+  const d = allData[code];
+  if (d && d[period] && d[period].length) return d[period][d[period].length - 1];
+  const s = summaryData[code];
+  return (s && s[period]) ? s[period] : null;
+}
+// 该标的完整K线是否已加载(有预览即可)
+function isCodeLoaded(code) {
+  const d = allData[code];
+  return !!(d && d.daily && d.daily.length);
+}
+// 首屏预览文件(最近N根) / 全量文件 的 URL; monthly 体积小, 不做拆分
+const RECENT_SPLIT = { daily: true, weekly: true, monthly: false };
+function recentUrl(code, p) { return `kline_data/${code}_${p}${RECENT_SPLIT[p] ? "_recent" : ""}.json`; }
+function fullUrl(code, p) { return `kline_data/${code}_${p}.json`; }
+
+// 按需加载某标的: 先拉"最近N根"秒出图, 再后台补全全部历史(不阻塞、不丢数据)
+async function loadCodeData(code, noCache, force) {
+  if (!force && isCodeLoaded(code)) return;
+  // 1) 快速预览: 拉最近N根(体积小, 首屏快)
+  const parts = await Promise.all(PERIODS.map(p =>
+    loadJSON(recentUrl(code, p), noCache).then(d => ({ p, d })).catch(() => ({ p, d: [] }))));
+  const obj = {};
+  PERIODS.forEach(p => obj[p] = []);
+  parts.forEach(({ p, d }) => obj[p] = d);
+  allData[code] = obj;
+  if (currentCode === code && !force) { renderDetail(); renderChart(); }
+
+  // 2) 后台补全: 拉全部历史, 替换预览数据后静默重绘
+  if (!fullLoaded[code]) {
+    fullLoaded[code] = true;
+    const fulls = await Promise.all(PERIODS.map(p =>
+      RECENT_SPLIT[p] ? loadJSON(fullUrl(code, p)).catch(() => null) : Promise.resolve(null)));
+    if (allData[code]) {
+      PERIODS.forEach((p, i) => { if (fulls[i] && fulls[i].length) allData[code][p] = fulls[i]; });
+      if (currentCode === code) { renderDetail(); renderChart(); }
+    }
+  }
+}
+
 // ==================== 渲染 ====================
 function renderSummary() {
   const grid = document.getElementById("summary-grid");
   let html = "";
   for (const u of UNDERLYINGS) {
     const code = u.code;
-    const d = allData[code] || {};
-    const daily = d.daily || [], weekly = d.weekly || [], monthly = d.monthly || [];
-    const lastDaily = daily.length ? daily[daily.length-1] : null;
-    const lastWeekly = weekly.length ? weekly[weekly.length-1] : null;
-    const lastMonthly = monthly.length ? monthly[monthly.length-1] : null;
+    const lastDaily = lastRec(code, "daily");
+    const lastWeekly = lastRec(code, "weekly");
+    const lastMonthly = lastRec(code, "monthly");
     const latest = lastDaily;
     const close = latest ? fmtNum(latest.close, u.decimal_places||3) : "--";
     const chg = latest && latest.close_change !== null ? fmtPct(latest.close_change) : "--";
@@ -570,7 +628,7 @@ function renderSummary() {
       const s = rec.risk_score;
       const bg = RISK_BG[String(s)] || "#a0aec0";
       const color = s >= 2 ? "#c53030" : s <= -2 ? "#22543d" : "#333";
-      return `<span class="rating-tag" style="background:${bg};color:${color}">${rec.risk_label}</span>`;
+      return `<span class="rating-tag" style="background:${bg};color:${color}">${riskLabel(rec.risk_score)}</span>`;
     }
     function peTag() {
       // PE 数据源不稳定（legulegu 反爬、csindex 仅近 20 天且缺创业板指），暂屏蔽显示
@@ -595,9 +653,18 @@ function selectETF(code) {
   currentCode = code;
   document.getElementById("detail-section").style.display = "block";
   renderSummary();
-  renderDetail();
-  renderChart();
   applyStatsVisibility();
+  if (isCodeLoaded(code)) {
+    renderDetail();
+    renderChart();
+  } else {
+    // 首次选中: 先出加载态, 再按需拉取该标的(最近N根秒出, 后台补全历史)
+    const tb = document.getElementById("data-tbody");
+    if (tb) tb.innerHTML = '<tr><td colspan="11" class="loading">K线加载中...</td></tr>';
+    const el = document.getElementById("kline-chart");
+    if (el && !chart) el.innerHTML = '<div class="loading"><div class="spinner"></div><p>加载K线...</p></div>';
+    loadCodeData(code).catch(e => showToast("K线加载失败: " + e.message, "error"));
+  }
 }
 
 // 切换统计面板显示/隐藏（手机端节省屏幕空间）
@@ -646,7 +713,7 @@ function renderDetail() {
     html += `<tr class="${cls}">
       <td>${r.date}</td><td>${fmtNum(r.open)}</td><td>${fmtNum(r.high)}</td>
       <td>${fmtNum(r.low)}</td><td>${fmtNum(r.close)}</td><td>${fmtVol(r.volume)}</td>
-      <td>${r.risk_score}</td><td class="label-cell">${r.risk_label}</td>
+      <td>${r.risk_score}</td><td class="label-cell">${riskLabel(r.risk_score)}</td>
       <td class="${iuCls}">${fmtPct(r.intraday_up)}</td>
       <td class="${idCls}">${fmtPct(r.intraday_down)}</td>
       <td class="${ccCls}">${fmtPct(r.close_change)}</td>
@@ -657,19 +724,24 @@ function renderDetail() {
 
 function renderChart() {
   if (!currentCode) return;
-  if (typeof echarts === "undefined") {   // 图表库(defer)尚未就绪时的兜底
+  const records = (allData[currentCode] && allData[currentCode][currentPeriod]) || [];
+  if (!records.length) {          // 明细未就绪: 显示加载态, 避免空图(仅首次初始化时改写容器)
+    const el = document.getElementById("kline-chart");
+    if (el && !chart) el.innerHTML = '<div class="loading"><div class="spinner"></div><p>加载K线...</p></div>';
+    return;
+  }
+  if (typeof echarts === "undefined") {   // 图表库尚未就绪时的兜底
     const el = document.getElementById("kline-chart");
     if (el) el.innerHTML = '<div class="loading">图表库加载中...</div>';
     return;
   }
   tooltipSide = "none";   // 切换标的/周期时重置悬浮窗侧别
   const el = document.getElementById("kline-chart");
-  if (!chart) { chart = echarts.init(el); window.addEventListener("resize", () => chart.resize()); }
-  const records = (allData[currentCode] && allData[currentCode][currentPeriod]) || [];
+  if (!chart) { el.innerHTML = ""; chart = echarts.init(el); window.addEventListener("resize", () => chart.resize()); }
   const dates = records.map(r => r.date);
   const values = records.map(r => [r.open, r.close, r.low, r.high]);
   const riskScores = records.map(r => r.risk_score);
-  const riskLabels = records.map(r => r.risk_label);
+  const riskLabels = records.map(r => riskLabel(r.risk_score));
   const closes = records.map(r => r.close);
   const ma5 = calcMA(closes, 5), ma10 = calcMA(closes, 10), ma20 = calcMA(closes, 20), ma60 = calcMA(closes, 60);
   const { peTtm, pePercentile } = getPEForDates(currentCode, dates);
@@ -909,7 +981,7 @@ async function manualRefresh() {
   showToast("正在重新加载数据...", "info");
   try {
     // 数据与实时行情并行拉取, 缩短总耗时
-    const [, rtData] = await Promise.all([loadAllData(true), fetchAllRealtime()]);
+    const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
     applyRealtimeToData(rtData);
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
@@ -934,14 +1006,42 @@ function setRefreshInterval(seconds) {
 
 function dataHash() {
   let h = "";
-  for (const code in allData) {
-    const d = allData[code];
+  for (const u of UNDERLYINGS) {
     for (const p of PERIODS) {
-      const arr = d[p] || [];
-      if (arr.length) h += code + p + arr.length + arr[arr.length-1].date + arr[arr.length-1].close;
+      const rec = lastRec(u.code, p);
+      if (rec) h += u.code + p + (rec.date || "") + rec.close;
     }
   }
   return h;
+}
+
+// 刷新: 仅重拉轻量摘要(几KB), 并用摘要的新增末根增量并入, 避免重下全量K线
+async function refreshData(noCache) {
+  try {
+    summaryData = await loadJSON("kline_data/summary.json", noCache);
+  } catch (e) {
+    // 摘要缺失时回退全量加载(兼容旧部署)
+    if (!Object.keys(summaryData).length) await loadAllData(noCache);
+  }
+  syncTailFromSummary();
+  if (currentCode && !isCodeLoaded(currentCode)) await loadCodeData(currentCode, noCache);
+}
+
+// 用摘要的最新一根增量并入已加载的K线: 同日则更新末根, 新日期则追加(不丢失历史)
+function syncTailFromSummary() {
+  for (const u of UNDERLYINGS) {
+    const d = allData[u.code];
+    if (!d) continue;
+    const s = summaryData[u.code];
+    if (!s) continue;
+    for (const p of PERIODS) {
+      const arr = d[p], tail = s[p];
+      if (!arr || !arr.length || !tail || !tail.date) continue;
+      const last = arr[arr.length - 1];
+      if (tail.date === last.date) arr[arr.length - 1] = tail;
+      else if (tail.date > last.date) arr.push(tail);
+    }
+  }
 }
 
 async function autoRefreshTask() {
@@ -954,7 +1054,7 @@ async function autoRefreshTask() {
   try {
     const oldHash = dataHash();
     // 数据与实时行情并行拉取
-    const [, rtData] = await Promise.all([loadAllData(true), fetchAllRealtime()]);
+    const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
     applyRealtimeToData(rtData);
     const newHash = dataHash();
     renderSummary();
@@ -1011,29 +1111,31 @@ function startAutoRefresh() {
 // ==================== 初始化 ====================
 async function initApp() {
   try {
-    // 实时行情与K线数据并行启动, 互不阻塞
+    // 实时行情与数据并行启动, 互不阻塞
     const rtPromise = fetchAllRealtime();
-    let firstSelected = false;
-    // 逐标的加载, 谁先到先渲染(渐进式): 首屏立刻出内容, 其余随到随补
-    await Promise.all(UNDERLYINGS.map(async (u) => {
-      const [d, w, m] = await Promise.all(PERIODS.map(p =>
-        loadJSON(`kline_data/${u.code}_${p}.json`).catch(() => [])));
-      allData[u.code] = { daily: d, weekly: w, monthly: m };
-      renderSummary();
-      if (!firstSelected) { firstSelected = true; selectETF(u.code); }
-    }));
+
+    // 1) 轻量摘要(~7KB): 秒出总览, 不再等待全部标的的完整K线
     try {
-      peData = await loadJSON("kline_data/pe_data.json");
-    } catch { peData = {}; }
-    calcPELatest();
+      summaryData = await loadJSON("kline_data/summary.json");
+    } catch (e) { summaryData = {}; }
+    // 摘要缺失时回退全量加载(兼容旧部署)
+    if (!Object.keys(summaryData).length) await loadAllData(false);
+
+    renderSummary();
     dataUpdatedAt = new Date();
-    // 实时行情到达后叠加到最新一根K线并刷新视图
+    updateStatusUI();
+
+    // 2) 立即选中首个标的, 按需加载其完整K线
+    const first = UNDERLYINGS[0];
+    if (first) selectETF(first.code);
+
+    // 3) 实时行情到达后叠加并刷新视图
     const rtData = await rtPromise;
-    if (applyRealtimeToData(rtData) && currentCode) {
+    if (applyRealtimeToData(rtData)) {
       renderSummary();
-      renderDetail();
-      renderChart();
+      if (currentCode && isCodeLoaded(currentCode)) { renderDetail(); renderChart(); }
     }
+
     startAutoRefresh();
   } catch (e) {
     console.error(e);
