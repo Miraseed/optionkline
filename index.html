@@ -7,7 +7,8 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>期权时空容错交易系统 - K线数据</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<!-- ECharts 本地自托管(同源 Pages 加速, 规避 jsdelivr 在国内被墙/极慢); defer 非阻塞, 不拖慢整页渲染 -->
+<script defer src="assets/echarts.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -327,6 +328,7 @@ let refreshTimer = null;
 let countdownInterval = null;
 let refreshMs = 300000;
 let nextRefreshAt = 0;
+let dataUpdatedAt = null;   // 最近一次数据加载完成时间
 
 const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"risk-1","2":"risk-2","3":"risk-3"};
 const RISK_BG = {"-3":"#9ae6b4","-2":"#c6f6d5","-1":"#f0fff4","0":"#e2e8f0","1":"#fffaf0","2":"#feebc8","3":"#fed7d7"};
@@ -407,12 +409,13 @@ function calcPELatest() {
   }
 }
 
-async function loadJSON(url) {
-  const sep = url.includes("?") ? "&" : "?";
-  const resp = await fetch(url + sep + "_t=" + Date.now(), {
-    cache: "no-store",
-    headers: { "Cache-Control": "no-cache", "Pragma": "no-cache", "Expires": "0" }
-  });
+async function loadJSON(url, noCache) {
+  let full = url;
+  // 仅刷新时绕过缓存; 首次加载允许用 HTTP 缓存(max-age=600), 大幅加快重复访问
+  if (noCache) full += (url.includes("?") ? "&" : "?") + "_t=" + Date.now();
+  const resp = await fetch(full, noCache
+    ? { cache: "no-store", headers: { "Cache-Control": "no-cache", "Pragma": "no-cache", "Expires": "0" } }
+    : { cache: "default" });
   if (!resp.ok) throw new Error(`${resp.status}`);
   return resp.json();
 }
@@ -520,12 +523,12 @@ function applyRealtimeToData(rtData) {
   return updated;
 }
 
-async function loadAllData() {
+async function loadAllData(noCache) {
   const promises = [];
   for (const u of UNDERLYINGS) {
     for (const p of PERIODS) {
       promises.push(
-        loadJSON(`kline_data/${u.code}_${p}.json`)
+        loadJSON(`kline_data/${u.code}_${p}.json`, noCache)
           .then(data => ({ code: u.code, period: p, data }))
           .catch(() => ({ code: u.code, period: p, data: [] }))
       );
@@ -539,20 +542,12 @@ async function loadAllData() {
   }
   // 加载PE数据
   try {
-    peData = await loadJSON("kline_data/pe_data.json");
+    peData = await loadJSON("kline_data/pe_data.json", noCache);
   } catch { peData = {}; }
   calcPELatest();
 
-  // 更新状态
-  document.getElementById("last-update").textContent = new Date().toLocaleString("zh-CN", { hour12: false });
-  const badge = document.getElementById("status-badge");
-  if (isTradingHours()) {
-    badge.textContent = "🟢 交易中";
-    badge.className = "status-badge status-trading";
-  } else {
-    badge.textContent = isTradingDay() ? "⚪ 非交易时段" : "⚪ 非交易日";
-    badge.className = "status-badge status-closed";
-  }
+  dataUpdatedAt = new Date();
+  updateStatusUI();
 }
 
 // ==================== 渲染 ====================
@@ -662,6 +657,11 @@ function renderDetail() {
 
 function renderChart() {
   if (!currentCode) return;
+  if (typeof echarts === "undefined") {   // 图表库(defer)尚未就绪时的兜底
+    const el = document.getElementById("kline-chart");
+    if (el) el.innerHTML = '<div class="loading">图表库加载中...</div>';
+    return;
+  }
   tooltipSide = "none";   // 切换标的/周期时重置悬浮窗侧别
   const el = document.getElementById("kline-chart");
   if (!chart) { chart = echarts.init(el); window.addEventListener("resize", () => chart.resize()); }
@@ -908,8 +908,8 @@ async function manualRefresh() {
   btn.disabled = true; btn.textContent = "刷新中...";
   showToast("正在重新加载数据...", "info");
   try {
-    await loadAllData();
-    const rtData = await fetchAllRealtime();
+    // 数据与实时行情并行拉取, 缩短总耗时
+    const [, rtData] = await Promise.all([loadAllData(true), fetchAllRealtime()]);
     applyRealtimeToData(rtData);
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
@@ -953,8 +953,8 @@ async function autoRefreshTask() {
   }
   try {
     const oldHash = dataHash();
-    await loadAllData();
-    const rtData = await fetchAllRealtime();
+    // 数据与实时行情并行拉取
+    const [, rtData] = await Promise.all([loadAllData(true), fetchAllRealtime()]);
     applyRealtimeToData(rtData);
     const newHash = dataHash();
     renderSummary();
@@ -976,6 +976,8 @@ function updateStatusUI() {
   const now = new Date();
   const timeEl = document.getElementById("server-time");
   if (timeEl) timeEl.textContent = now.toLocaleString("zh-CN", { hour12: false });
+  const lu = document.getElementById("last-update");
+  if (lu) lu.textContent = dataUpdatedAt ? dataUpdatedAt.toLocaleString("zh-CN", { hour12: false }) : "--";
   const badge = document.getElementById("status-badge");
   const cd = document.getElementById("countdown");
   if (isTradingHours(now)) {
@@ -1009,13 +1011,30 @@ function startAutoRefresh() {
 // ==================== 初始化 ====================
 async function initApp() {
   try {
-    await loadAllData();
-    const rtData = await fetchAllRealtime();
-    applyRealtimeToData(rtData);
-    renderSummary();
+    // 实时行情与K线数据并行启动, 互不阻塞
+    const rtPromise = fetchAllRealtime();
+    let firstSelected = false;
+    // 逐标的加载, 谁先到先渲染(渐进式): 首屏立刻出内容, 其余随到随补
+    await Promise.all(UNDERLYINGS.map(async (u) => {
+      const [d, w, m] = await Promise.all(PERIODS.map(p =>
+        loadJSON(`kline_data/${u.code}_${p}.json`).catch(() => [])));
+      allData[u.code] = { daily: d, weekly: w, monthly: m };
+      renderSummary();
+      if (!firstSelected) { firstSelected = true; selectETF(u.code); }
+    }));
+    try {
+      peData = await loadJSON("kline_data/pe_data.json");
+    } catch { peData = {}; }
+    calcPELatest();
+    dataUpdatedAt = new Date();
+    // 实时行情到达后叠加到最新一根K线并刷新视图
+    const rtData = await rtPromise;
+    if (applyRealtimeToData(rtData) && currentCode) {
+      renderSummary();
+      renderDetail();
+      renderChart();
+    }
     startAutoRefresh();
-    const first = UNDERLYINGS[0];
-    if (first) selectETF(first.code);
   } catch (e) {
     console.error(e);
     showToast("数据加载失败: " + e.message, "error");
