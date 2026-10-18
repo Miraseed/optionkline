@@ -194,6 +194,84 @@
       "close_change": -0.088731
     }
   },
+  "510880": {
+    "name": "红利ETF",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 3.405,
+      "high": 3.46,
+      "low": 3.404,
+      "close": 3.43,
+      "volume": 126206900,
+      "risk_score": 0,
+      "intraday_up": 0.015854,
+      "intraday_down": -0.000587,
+      "close_change": 0.007046
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 3.439,
+      "high": 3.52,
+      "low": 3.39,
+      "close": 3.43,
+      "volume": 756456637,
+      "risk_score": 1,
+      "intraday_up": 0.02594,
+      "intraday_down": -0.01195,
+      "close_change": -0.000291
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 3.37,
+      "high": 3.52,
+      "low": 3.369,
+      "close": 3.43,
+      "volume": 1065574912,
+      "risk_score": 1,
+      "intraday_up": 0.045131,
+      "intraday_down": 0.000297,
+      "close_change": 0.018409
+    }
+  },
+  "513530": {
+    "name": "港股通红利ETF",
+    "daily": {
+      "date": "2026-10-16",
+      "open": 1.568,
+      "high": 1.576,
+      "low": 1.56,
+      "close": 1.563,
+      "volume": 249435100,
+      "risk_score": 0,
+      "intraday_up": 0.010904,
+      "intraday_down": 0.000641,
+      "close_change": 0.002566
+    },
+    "weekly": {
+      "date": "2026-10-16",
+      "open": 1.565,
+      "high": 1.596,
+      "low": 1.554,
+      "close": 1.563,
+      "volume": 1338224000,
+      "risk_score": 0,
+      "intraday_up": 0.022422,
+      "intraday_down": -0.004484,
+      "close_change": 0.001281
+    },
+    "monthly": {
+      "date": "2026-10-31",
+      "open": 1.548,
+      "high": 1.596,
+      "low": 1.54,
+      "close": 1.563,
+      "volume": 1746519400,
+      "risk_score": -1,
+      "intraday_up": 0.022422,
+      "intraday_down": -0.013453,
+      "close_change": 0.001281
+    }
+  },
   "000852": {
     "name": "中证1000",
     "daily": {
