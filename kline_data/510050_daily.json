@@ -17212,11 +17212,11 @@
     "open": 2.863,
     "high": 2.901,
     "low": 2.858,
-    "close": 2.9,
-    "volume": 773996499,
-    "risk_score": 0,
+    "close": 2.896,
+    "volume": 787230599,
+    "risk_score": -1,
     "intraday_up": 0.012212,
     "intraday_down": -0.002791,
-    "close_change": 0.011863
+    "close_change": 0.010468
   }
 ]
