@@ -797,9 +797,9 @@ function renderChart() {
         return true;
       } } },
     yAxis: hasPE ? [
-      { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
+      { scale: true, position: "left", splitArea: { show: true }, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
       { scale: true, position: "right", axisLabel: { fontSize: 10, color: "#f97316", formatter: v => Number(v).toFixed(2) }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
-    ] : { scale: true, splitArea: { show: true }, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
+    ] : { scale: true, position: "left", splitArea: { show: true }, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -847,16 +847,8 @@ function renderChart() {
           const ld = lastDate;
           setTimeout(function() {
             if (!chart) return;
-            // Y轴移到悬浮窗对侧（含跟随光标的价格标签），grid 左右边距同步切换
-            // 传完整 yAxis 配置确保轴重布局生效（仅传 position 合并模式不可靠）
-            const yAxisLeft = side !== "left";  // 悬浮窗在左→Y轴在右；悬浮窗在右→Y轴在左
-            const yPos = yAxisLeft ? "left" : "right";
+            // Y轴固定左侧(不再随悬浮窗左右来回切换), 仅让横轴标签避让悬浮窗
             chart.setOption({
-              grid: { left: yAxisLeft ? "8%" : "3%", right: yAxisLeft ? "3%" : "8%" },
-              yAxis: hasPE ? [
-                { scale: true, position: yPos, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
-                { scale: true, position: yPos === "left" ? "right" : "left", axisLabel: { fontSize: 10, color: "#f97316", formatter: v => Number(v).toFixed(2) }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
-              ] : { scale: true, position: yPos, axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
               xAxis: { axisLabel: { interval: function(idx, val) {
                 if (idx % 5 !== 0 && val !== ld) return false;
                 if (total > 0) {
@@ -933,18 +925,13 @@ function renderChart() {
     ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
   };
   chart.setOption(option, true);
-  // 光标离开图表时恢复横轴标签全部显示 + Y轴回到左侧（避让复位）
+  // 光标离开图表时恢复横轴标签全部显示 (Y轴始终保持左侧)
   chart.off("globalout");
   chart.on("globalout", function() {
     if (tooltipSide !== "none") {
       tooltipSide = "none";
       const ld = lastDate;
       chart.setOption({
-        grid: { left: "8%", right: hasPE ? "9%" : "3%" },
-        yAxis: hasPE ? [
-          { scale: true, position: "left", axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
-          { scale: true, position: "right", axisLabel: { fontSize: 10, color: "#f97316", formatter: v => Number(v).toFixed(2) }, splitLine: { show: false }, name: "PE(TTM)", nameTextStyle: { fontSize: 10, color: "#f97316" } }
-        ] : { scale: true, position: "left", axisLabel: { fontSize: 10, formatter: v => Number(v).toFixed(2) } },
         xAxis: { axisLabel: { interval: function(idx, val) {
           return idx % 5 === 0 || val === ld;
         } } }
