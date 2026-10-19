@@ -3638,13 +3638,13 @@
   {
     "date": "2026-10-23",
     "open": 4.224,
-    "high": 4.258,
+    "high": 4.26,
     "low": 4.22,
-    "close": 4.25,
-    "volume": 604267831,
-    "risk_score": -3,
-    "intraday_up": 0.005194,
+    "close": 4.259,
+    "volume": 627559831,
+    "risk_score": -2,
+    "intraday_up": 0.005666,
     "intraday_down": -0.003777,
-    "close_change": 0.003305
+    "close_change": 0.00543
   }
 ]
