@@ -17222,13 +17222,13 @@
   {
     "date": "2026-10-20",
     "open": 6678.6378,
-    "high": 6763.5913,
+    "high": 6764.9666,
     "low": 6642.2996,
-    "close": 6759.6344,
-    "volume": 78190441,
+    "close": 6751.8752,
+    "volume": 80815821,
     "risk_score": -2,
-    "intraday_up": 0.009747,
+    "intraday_up": 0.009952,
     "intraday_down": -0.008361,
-    "close_change": 0.009156
+    "close_change": 0.007998
   }
 ]
