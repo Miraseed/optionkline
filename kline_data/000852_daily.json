@@ -17210,13 +17210,25 @@
   {
     "date": "2026-10-19",
     "open": 6639.938,
-    "high": 6746.3193,
+    "high": 6746.319,
     "low": 6578.935,
-    "close": 6698.3026,
-    "volume": 184022512,
+    "close": 6698.303,
+    "volume": 18402251200,
     "risk_score": -3,
     "intraday_up": 0.009634,
     "intraday_down": -0.015416,
     "close_change": 0.002448
+  },
+  {
+    "date": "2026-10-20",
+    "open": 6678.6378,
+    "high": 6678.6378,
+    "low": 6678.6378,
+    "close": 6678.6378,
+    "volume": 1349596,
+    "risk_score": -3,
+    "intraday_up": -0.002936,
+    "intraday_down": -0.002936,
+    "close_change": -0.002936
   }
 ]
