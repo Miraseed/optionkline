@@ -17236,11 +17236,11 @@
     "open": 680.5,
     "high": 686.0,
     "low": 676.5,
-    "close": 680.0,
-    "volume": 156039,
+    "close": 680.5,
+    "volume": 156869,
     "risk_score": -1,
     "intraday_up": 0.006603,
     "intraday_down": -0.007337,
-    "close_change": -0.002201
+    "close_change": -0.001467
   }
 ]
