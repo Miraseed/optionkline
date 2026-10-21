@@ -3639,12 +3639,12 @@
     "date": "2026-10-23",
     "open": 3.431,
     "high": 3.48,
-    "low": 3.405,
-    "close": 3.411,
-    "volume": 414244797,
+    "low": 3.398,
+    "close": 3.406,
+    "volume": 457117797,
     "risk_score": 1,
     "intraday_up": 0.014577,
-    "intraday_down": -0.007289,
-    "close_change": -0.005539
+    "intraday_down": -0.009329,
+    "close_change": -0.006997
   }
 ]
