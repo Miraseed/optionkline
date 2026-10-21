@@ -651,12 +651,12 @@
     "date": "2026-10-31",
     "open": 1.548,
     "high": 1.596,
-    "low": 1.52,
-    "close": 1.52,
-    "volume": 2251943666,
+    "low": 1.519,
+    "close": 1.521,
+    "volume": 2267415566,
     "risk_score": -2,
     "intraday_up": 0.022422,
-    "intraday_down": -0.026265,
-    "close_change": -0.026265
+    "intraday_down": -0.026906,
+    "close_change": -0.025625
   }
 ]
