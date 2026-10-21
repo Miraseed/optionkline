@@ -17235,12 +17235,12 @@
     "date": "2026-10-21",
     "open": 4.234,
     "high": 4.237,
-    "low": 4.208,
-    "close": 4.208,
-    "volume": 322654200,
+    "low": 4.204,
+    "close": 4.206,
+    "volume": 333346300,
     "risk_score": -2,
     "intraday_up": 0.004028,
-    "intraday_down": -0.002844,
-    "close_change": -0.002844
+    "intraday_down": -0.003791,
+    "close_change": -0.003318
   }
 ]
