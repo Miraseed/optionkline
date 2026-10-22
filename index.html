@@ -254,7 +254,7 @@
     </div>
   </div>
 
-  <div class="footer">期权时空容错交易系统 · 数据来源: akshare + 腾讯财经实时行情 · GitHub Actions 定时更新</div>
+  <div class="footer">期权时空容错交易系统 · 数据来源: akshare + 腾讯财经实时行情 · 服务端交易时段每3分钟更新</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -356,6 +356,7 @@ let currentPeriod = "daily";
 let chart = null;
 let tooltipSide = "none";   // 悬浮窗当前所在侧："left"/"right"/"none"（用于横轴标签动态避让）
 let refreshTimer = null;
+let statusTimer = null;     // 服务端数据新鲜度轮询
 let countdownInterval = null;
 let refreshMs = 300000;
 let nextRefreshAt = 0;
@@ -364,6 +365,9 @@ let dataUpdatedAt = null;   // 最近一次数据加载完成时间
 const REALTIME_MS = 3000;
 let lastDataSyncAt = 0;
 let refreshStopped = false;   // 人工"停止刷新": 收盘复盘时暂停一切自动请求
+// 服务端数据新鲜度: 由沙箱内 server.py 的 /api/status 提供(静态托管时为空)
+let serverStatus = null;
+let statusReceivedAt = 0;
 function isRealtimeMode() { return refreshMs <= REALTIME_MS; }
 
 const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"risk-1","2":"risk-2","3":"risk-3"};
@@ -1286,12 +1290,46 @@ async function autoRefreshTask() {
   updateStatusUI();
 }
 
+// 数据新鲜度: 每 15 秒问一次服务端"上次刷新到现在多久", 不必靠猜
+async function fetchServerStatus() {
+  try {
+    const r = await fetch("api/status?_=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) return;
+    serverStatus = await r.json();
+    statusReceivedAt = Date.now();
+  } catch (e) {
+    // 静态托管(GitHub Pages)没有该接口, 保持为空, 退回显示本页加载时间
+  }
+}
+
+function fmtAge(sec) {
+  if (sec < 60) return `${sec}秒前`;
+  if (sec < 3600) return `${Math.floor(sec / 60)}分钟前`;
+  return `${Math.floor(sec / 3600)}小时前`;
+}
+
 // 每秒更新头部状态：北京时间、交易时段徽标、下次刷新倒计时
 function updateStatusUI() {
   const timeEl = document.getElementById("server-time");
   if (timeEl) timeEl.textContent = fmtBJ();
   const lu = document.getElementById("last-update");
-  if (lu) lu.textContent = dataUpdatedAt ? fmtBJ(dataUpdatedAt) : "--";
+  if (lu) {
+    if (serverStatus && serverStatus.updated_at) {
+      const age = Math.max(0, Math.round(serverStatus.age_seconds + (Date.now() - statusReceivedAt) / 1000));
+      // 交易时段内超过 1.5 个刷新周期未更新, 标黄提醒
+      const stale = serverStatus.in_trading_session && !serverStatus.updating
+        && age > serverStatus.interval * 1.5;
+      lu.textContent = serverStatus.updating
+        ? "服务端更新中…"
+        : (stale ? "⚠ " : "") + `${serverStatus.updated_at.slice(11, 19)} (${fmtAge(age)})`;
+      lu.title = `服务端上次刷新: ${serverStatus.updated_at}（耗时 ${serverStatus.duration}s）\n`
+        + `刷新间隔: ${Math.round(serverStatus.interval / 60)} 分钟 · `
+        + `${serverStatus.in_trading_session ? "交易时段" : "非交易时段"}`
+        + (serverStatus.ok === false ? "\n⚠ 上次刷新返回异常" : "");
+    } else {
+      lu.textContent = dataUpdatedAt ? fmtBJ(dataUpdatedAt) : "--";
+    }
+  }
   const badge = document.getElementById("status-badge");
   const cd = document.getElementById("countdown");
   const trading = isTradingHours();
@@ -1337,6 +1375,10 @@ function startAutoRefresh() {
   if (sel) sel.value = String(saved);
   if (countdownInterval) clearInterval(countdownInterval);
   countdownInterval = setInterval(updateStatusUI, 1000);
+  // 状态查询只读服务端时间戳, 不重绘图表, 因此"停止刷新"时也保留
+  fetchServerStatus();
+  if (statusTimer) clearInterval(statusTimer);
+  statusTimer = setInterval(fetchServerStatus, 15000);
   if (saved < 0) {
     refreshStopped = true;
     if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
