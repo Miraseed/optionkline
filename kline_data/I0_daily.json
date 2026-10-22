@@ -17260,11 +17260,11 @@
     "open": 669.0,
     "high": 670.0,
     "low": 665.5,
-    "close": 668.0,
-    "volume": 61512,
+    "close": 668.5,
+    "volume": 62218,
     "risk_score": -1,
     "intraday_up": 0.001495,
     "intraday_down": -0.005232,
-    "close_change": -0.001495
+    "close_change": -0.000747
   }
 ]
