@@ -268,7 +268,7 @@ const UNDERLYINGS = [
   { code: "159915", name: "创业板ETF",  decimal_places: 3, tencent: "sz159915" },
   { code: "510500", name: "中证500ETF", decimal_places: 3, tencent: "sh510500" },
   { code: "000852", name: "中证1000",   decimal_places: 2, tencent: "sh000852" },
-  { code: "I0",     name: "铁矿石主连", decimal_places: 1, tencent: "" },
+  { code: "I0",     name: "铁矿石主连", decimal_places: 1, tencent: "", sinaFutures: "I0" },
   { code: "510880", name: "红利ETF",    decimal_places: 3, tencent: "sh510880" },
   { code: "513530", name: "港股通红利ETF", decimal_places: 3, tencent: "sh513530" },
   { code: "513650", name: "标普500ETF", decimal_places: 3, tencent: "sh513650" },
@@ -469,11 +469,7 @@ async function loadJSON(url, noCache) {
 //              [31]=涨跌额 [32]=涨跌幅% [33]=最高 [34]=最低
 // 注意: 腾讯成交量单位是"手"(100股), 本项目数据统一为"股", 需 ×100
 
-async function fetchAllRealtime() {
-  const results = {};
-  const tencentCodes = UNDERLYINGS.filter(u => u.tencent).map(u => u.tencent);
-  if (tencentCodes.length === 0) return results;
-
+function fetchTencentRealtime(tencentCodes, results) {
   return new Promise((resolve) => {
     const url = `https://qt.gtimg.cn/q=${tencentCodes.join(",")}`;
     const script = document.createElement("script");
@@ -534,27 +530,165 @@ async function fetchAllRealtime() {
   });
 }
 
+// ==================== 铁矿石(期货)实时行情 ====================
+// 腾讯行情不含期货, 铁矿石改用新浪"分钟线"JSONP接口(不校验 Referer, 可用 script 跨域加载)。
+// 接口每次返回约1023根1分钟K线(约110KB), 因此前端限频30秒一次, 其余时间复用缓存;
+// 这样夜盘/日盘期间铁矿石行情不再完全依赖 GitHub Actions 的更新频率。
+const FUTURES_RT_MIN_INTERVAL = 30000;
+const futuresRtCache = {};   // code -> { at, data }
+
+function parseSinaBarTime(s) {
+  const m = /(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(s || "");
+  if (!m) return null;
+  return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], 0);
+}
+
+function nextTradingDayStr(dt) {
+  const d = new Date(dt);
+  do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0 || d.getDay() === 6);
+  return bjDateStr(d);
+}
+
+// 当前期货交易日的归属日期与行情起点:
+// 夜盘 21:00-23:00 归属下一交易日, 起点为当日21:00; 日盘 09:00-15:00 归属当日, 起点为前一交易日21:00
+function futuresTradingContext(dt) {
+  dt = dt || bjNow();
+  const wd = dt.getDay();
+  if (wd === 0 || wd === 6) return null;          // 周末休市
+  const mins = dt.getHours() * 60 + dt.getMinutes();
+  if (mins >= 1260 && mins < 1380) {
+    const start = new Date(dt);
+    start.setHours(21, 0, 0, 0);
+    return { date: nextTradingDayStr(dt), start: start, night: true };
+  }
+  if (mins >= 540 && mins <= 900) {
+    const start = new Date(dt);
+    start.setDate(start.getDate() - 1);
+    while (start.getDay() === 0 || start.getDay() === 6) start.setDate(start.getDate() - 1);
+    start.setHours(21, 0, 0, 0);
+    return { date: bjDateStr(dt), start: start, night: false };
+  }
+  return null;                                    // 开盘前/午休/收盘后不更新
+}
+
+function buildFuturesRealtime(bars, ctx) {
+  if (!bars || !bars.length) return null;
+  const startMs = ctx.start.getTime();
+  let firstIdx = -1;
+  for (let i = 0; i < bars.length; i++) {
+    const t = parseSinaBarTime(bars[i].d);
+    if (t && t.getTime() >= startMs) { firstIdx = i; break; }
+  }
+  if (firstIdx < 0) return null;
+  let open = null, high = -Infinity, low = Infinity, volume = 0, price = null;
+  for (let i = firstIdx; i < bars.length; i++) {
+    const b = bars[i];
+    const c = parseFloat(b.c);
+    if (!(c > 0)) continue;
+    const o = parseFloat(b.o), h = parseFloat(b.h), l = parseFloat(b.l), v = parseFloat(b.v);
+    if (open === null && o > 0) open = o;
+    if (h > high) high = h;
+    if (l < low) low = l;
+    if (v > 0) volume += v;
+    price = c;
+  }
+  if (!(price > 0)) return null;
+  const prev = firstIdx > 0 ? parseFloat(bars[firstIdx - 1].c) : NaN;   // 上一交易日收盘价
+  return {
+    date: ctx.date,
+    price: price,
+    open: open || price,
+    high: high > 0 ? high : price,
+    low: low < Infinity ? low : price,
+    volume: Math.round(volume),
+    change_pct: prev > 0 ? (price / prev - 1) * 100 : null,
+  };
+}
+
+function fetchSinaFuturesMinute(cbName, symbol) {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    let done = false;
+    const finish = (v) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+      resolve(v);
+    };
+    const timer = setTimeout(() => finish(null), 8000);
+    script.charset = "gbk";
+    script.src = `https://stock2.finance.sina.com.cn/futures/api/jsonp.php/${cbName}=/InnerFuturesNewService.getFewMinLine?symbol=${encodeURIComponent(symbol)}&type=1&_=${Date.now()}`;
+    script.onload = () => finish(Array.isArray(window[cbName]) ? window[cbName] : null);
+    script.onerror = () => finish(null);
+    document.head.appendChild(script);
+  });
+}
+
+async function fetchFuturesRealtime(u, results) {
+  const code = u.code;
+  const now = Date.now();
+  const cached = futuresRtCache[code];
+  if (cached && now - cached.at < FUTURES_RT_MIN_INTERVAL) {
+    if (cached.data) results[code] = cached.data;
+    return;
+  }
+  const ctx = futuresTradingContext();
+  if (!ctx) return;                                  // 非交易时段不发请求
+  const cbName = "__sina_fut_" + code.replace(/[^A-Za-z0-9_]/g, "_") + "_" + now;
+  const bars = await fetchSinaFuturesMinute(cbName, u.sinaFutures);
+  const rt = bars ? buildFuturesRealtime(bars, ctx) : null;
+  futuresRtCache[code] = { at: now, data: rt };
+  if (rt) results[code] = rt;
+}
+
+async function fetchAllRealtime() {
+  const results = {};
+  const tencentCodes = UNDERLYINGS.filter(u => u.tencent).map(u => u.tencent);
+  const jobs = [];
+  if (tencentCodes.length) jobs.push(fetchTencentRealtime(tencentCodes, results));
+  for (const u of UNDERLYINGS) {
+    if (u.sinaFutures) jobs.push(fetchFuturesRealtime(u, results));
+  }
+  await Promise.all(jobs);
+  return results;
+}
+
 function applyRealtimeToData(rtData) {
   let updated = false;
   const today = bjDateStr();   // 按北京时间取日期，避免 UTC 跨日错位
   for (const u of UNDERLYINGS) {
     const rt = rtData[u.code];
     if (!rt || rt.price == null || rt.price <= 0) continue;
+    // 期货夜盘行情归属下一交易日: 用行情自带的日期, 否则按今日
+    const barDate = rt.date || today;
     const d = allData[u.code];
     for (const p of PERIODS) {
       const arr = d && d[p];
       if (arr && arr.length) {
-        // 明细已加载: 更新今日K线 / 追加今日新柱
         const last = arr[arr.length - 1];
-        if (last.date === today) {
+        if (p !== "daily") {
+          // 周/月线的日期是周期末(>=barDate才属于当前周期):
+          // 只更新价格与高低点, 成交量是周期累计值不能用当日量覆盖
+          if (last.date >= barDate) {
+            last.close = rt.price;
+            last.high = Math.max(last.high || 0, rt.high || rt.price);
+            last.low = Math.min(last.low || rt.low || rt.price, rt.low || rt.price);
+            if (rt.change_pct != null) last.close_change = rt.change_pct / 100;
+          }
+          continue;
+        }
+        // 日线: 更新当日K线 / 追加新交易日K柱
+        if (last.date === barDate) {
           last.close = rt.price;
           last.high = Math.max(last.high || 0, rt.high || rt.price);
           last.low = Math.min(last.low || rt.low || rt.price, rt.low || rt.price);
           last.volume = rt.volume || last.volume;
           if (rt.change_pct != null) last.close_change = rt.change_pct / 100;
-        } else if (last.date < today) {
+        } else if (last.date < barDate) {
           arr.push({
-            date: today,
+            date: barDate,
             open: rt.open || rt.price,
             high: rt.high || rt.price,
             low: rt.low || rt.price,
@@ -570,11 +704,33 @@ function applyRealtimeToData(rtData) {
       } else {
         // 摘要模式(明细未加载): 更新摘要最后一根, 保证总览显示实时价
         const s = summaryData[u.code] && summaryData[u.code][p];
-        if (s) {
+        if (!s) continue;
+        if (p === "daily") {
+          if (s.date === barDate) {
+            s.close = rt.price;
+            if (rt.high > (s.high || 0)) s.high = rt.high;
+            if (rt.low && (s.low == null || rt.low < s.low)) s.low = rt.low;
+            s.volume = rt.volume || s.volume;
+            if (rt.change_pct != null) s.close_change = rt.change_pct / 100;
+          } else if (!s.date || s.date < barDate) {
+            // 数据还没跟上(如夜盘刚开盘): 换成本笔行情, 避免把夜盘价写进上一交易日的旧K线
+            summaryData[u.code][p] = {
+              date: barDate,
+              open: rt.open || rt.price,
+              high: rt.high || rt.price,
+              low: rt.low || rt.price,
+              close: rt.price,
+              volume: rt.volume || 0,
+              risk_score: null,
+              intraday_up: null,
+              intraday_down: null,
+              close_change: rt.change_pct != null ? rt.change_pct / 100 : null,
+            };
+          }
+        } else if (s.date >= barDate) {
           s.close = rt.price;
           if (rt.high > (s.high || 0)) s.high = rt.high;
           if (rt.low && (s.low == null || rt.low < s.low)) s.low = rt.low;
-          s.volume = rt.volume || s.volume;
           if (rt.change_pct != null) s.close_change = rt.change_pct / 100;
         }
       }
