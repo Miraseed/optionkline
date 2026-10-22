@@ -7,7 +7,7 @@ import json
 import os
 import sys
 import math
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import pandas as pd
 
@@ -175,9 +175,73 @@ def fetch_futures_realtime_quote(symbol):
             "low": low,
             "close": latest_price,
             "volume": volume,
+            "ticktime": str(row.get("ticktime", "") or ""),
         }
     except Exception as e:
         print(f"  [期货实时行情获取失败] {symbol}: {e}")
+        return None
+
+
+# ============ 期货交易时段(北京时间) ============
+# 铁矿石(DCE): 日盘 09:00-11:30、13:30-15:00; 夜盘 21:00-23:00(周一至周五晚)
+# 夜盘属于"下一交易日", 报价的交易日(夜盘归属)需按交易所口径处理
+BJ_TZ = timezone(timedelta(hours=8))
+
+
+def bj_now():
+    return datetime.now(BJ_TZ)
+
+
+def futures_session(dt=None):
+    """返回当前期货时段: 'night' / 'day' / None(休市)"""
+    dt = dt or bj_now()
+    if dt.weekday() >= 5:
+        return None
+    mins = dt.hour * 60 + dt.minute
+    if 1260 <= mins < 1380:      # 21:00-23:00 夜盘
+        return "night"
+    if 540 <= mins <= 690:       # 09:00-11:30
+        return "day"
+    if 810 <= mins <= 900:       # 13:30-15:00
+        return "day"
+    return None
+
+
+def next_weekday(d):
+    d = d + timedelta(days=1)
+    while d.weekday() >= 5:
+        d += timedelta(days=1)
+    return d
+
+
+def futures_quote_is_live(rt, max_age_min=20):
+    """只接受当前交易时段内的新鲜报价。
+    开盘前(08:00-09:00)和收盘后, akshare 仍会返回上一时段的价格,
+    若直接写入会把旧价当成当日K线, 导致夜盘/次日开盘前数据错误。
+    """
+    if futures_session() is None:
+        return False
+    tick = str(rt.get("ticktime", "")).replace(":", "")
+    if len(tick) >= 4:
+        try:
+            hh, mm = int(tick[:2]), int(tick[2:4])
+            tick_dt = bj_now().replace(hour=hh, minute=mm, second=0, microsecond=0)
+            age = (bj_now() - tick_dt).total_seconds() / 60
+            if age < -5 or age > max_age_min:
+                return False
+        except ValueError:
+            return False
+    return True
+
+
+def load_last_record(code, period="daily"):
+    """读取本地已生成的最后一根K线(用于夜盘数据跨轮次保留)"""
+    path = os.path.join(DATA_DIR, f"{code}_{period}.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            arr = json.load(f)
+        return arr[-1] if arr else None
+    except Exception:
         return None
 
 
@@ -201,16 +265,40 @@ def fetch_kline_data(etf):
     start_ts = pd.Timestamp(START_DATE)
     df = df[df["date"] >= start_ts].reset_index(drop=True)
 
+    prev_tail = load_last_record(code) if etf_type == "futures" else None
+
     if etf_type == "futures":
         rt = fetch_futures_realtime_quote(symbol)
     else:
         rt = fetch_realtime_quote(symbol)
+    if etf_type == "futures" and rt:
+        # 期货特殊处理1: 只接受当前交易时段(含夜盘)内的新鲜报价。
+        # 开盘前/收盘后数据源仍返回上一时段旧价, 直接写入会把旧价当成当日K线
+        if not futures_quote_is_live(rt):
+            print(" [非交易时段/行情过期, 跳过实时]", end="")
+            rt = None
+    if rt and etf_type == "futures" and futures_session() == "night":
+        # 期货特殊处理2: 夜盘归属下一交易日(交易所口径), 避免把夜盘价写进当日已收盘K线
+        try:
+            if pd.Timestamp(rt["date"]).date() <= bj_now().date():
+                rt["date"] = next_weekday(bj_now().date()).isoformat()
+        except Exception:
+            rt["date"] = next_weekday(bj_now().date()).isoformat()
     if rt:
         today_ts = pd.Timestamp(rt["date"])
         last_ts = df.iloc[-1]["date"] if len(df) > 0 else None
         if last_ts is None or today_ts > last_ts:
-            new_row = pd.DataFrame([{"date": today_ts, "open": rt["open"], "high": rt["high"],
-                "low": rt["low"], "close": rt["close"], "volume": rt["volume"]}])
+            open_p, high, low, close_p, volume = rt["open"], rt["high"], rt["low"], rt["close"], rt["volume"]
+            # 期货特殊处理3: 同日K线已由夜盘写入时, 保留夜盘开盘价与高低点,
+            # 避免白天首轮更新(数据源日线尚未含夜盘)把夜盘区间丢掉
+            if prev_tail and str(prev_tail.get("date")) == str(rt["date"]):
+                open_p = prev_tail.get("open", open_p)
+                prev_high, prev_low = prev_tail.get("high"), prev_tail.get("low")
+                if prev_high: high = max(high, prev_high)
+                if prev_low: low = min(low, prev_low)
+                volume = max(volume or 0, prev_tail.get("volume") or 0)
+            new_row = pd.DataFrame([{"date": today_ts, "open": open_p, "high": high,
+                "low": low, "close": close_p, "volume": volume}])
             df = pd.concat([df, new_row], ignore_index=True)
             print(f" +实时[{rt['date']}]", end="")
         elif last_ts == today_ts:
@@ -220,6 +308,23 @@ def fetch_kline_data(etf):
             df.loc[df.index[-1], "low"] = min(df.loc[df.index[-1], "low"], rt["low"])
             df.loc[df.index[-1], "volume"] = rt["volume"]
             print(f" =更新[{rt['date']}]", end="")
+    elif etf_type == "futures" and prev_tail:
+        # 期货特殊处理4: 休市(午休/收盘后/开盘前)或数据源日线滞后时,
+        # 数据源还没有当日K线, 需把本地已写入的末根(夜盘/盘中)保留下来,
+        # 否则生成结果会丢掉当日K线, 造成夜盘与开盘前数据缺失/跳变
+        try:
+            prev_ts = pd.Timestamp(prev_tail["date"])
+            last_ts = df.iloc[-1]["date"] if len(df) > 0 else None
+            if last_ts is None or prev_ts > last_ts:
+                df = pd.concat([df, pd.DataFrame([{
+                    "date": prev_ts,
+                    "open": prev_tail["open"], "high": prev_tail["high"],
+                    "low": prev_tail["low"], "close": prev_tail["close"],
+                    "volume": prev_tail.get("volume", 0),
+                }])], ignore_index=True)
+                print(f" =保留[{prev_tail['date']}]", end="")
+        except Exception as e:
+            print(f"  [保留当日K线失败] {e}", end="")
     print(f" → 最终{len(df)}条")
 
     result = {}

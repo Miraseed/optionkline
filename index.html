@@ -216,6 +216,7 @@
         <option value="120">2分钟</option>
         <option value="180">3分钟</option>
         <option value="300" selected>5分钟</option>
+        <option value="-1">停止刷新</option>
       </select>
       <button class="logout-btn" onclick="doLogout()">退出</button>
     </div>
@@ -317,21 +318,29 @@ function fmtBJ(dt) {
   return (dt || new Date()).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai", hour12: false });
 }
 function isTradingDay(dt) { dt = dt || bjNow(); const d = dt.getDay(); return d >= 1 && d <= 5; }
+// 铁矿石夜盘: 21:00-23:00(周一至周五晚), 夜盘行情归属下一交易日
+function isFuturesNight(dt) {
+  dt = dt || bjNow();
+  if (!isTradingDay(dt)) return false;
+  const mins = dt.getHours() * 60 + dt.getMinutes();
+  return mins >= 1260 && mins < 1380;
+}
+// 交易时段(北京时间): ETF 9:30-11:30 / 13:00-15:00; 铁矿石另有 9:00 日盘开盘 + 21:00-23:00 夜盘
 function isTradingHours(dt) {
   dt = dt || bjNow();
   if (!isTradingDay(dt)) return false;
-  const h = dt.getHours(), m = dt.getMinutes();
-  const mins = h * 60 + m;
-  return (mins >= 570 && mins <= 690) || (mins >= 780 && mins <= 900); // 9:30-11:30 / 13:00-15:00
+  const mins = dt.getHours() * 60 + dt.getMinutes();
+  return (mins >= 540 && mins <= 690) || (mins >= 780 && mins <= 900) || (mins >= 1260 && mins < 1380);
 }
 function nextRefreshInfo() {
   const now = bjNow();
   const mins = now.getHours() * 60 + now.getMinutes();
-  if (isTradingHours(now)) return "交易时间内，定时自动刷新";
+  if (isTradingHours(now)) return isFuturesNight(now) ? "夜盘交易中（铁矿石），定时自动刷新" : "交易时间内，定时自动刷新";
   if (isTradingDay(now)) {
-    if (mins < 570) return "非交易时段，9:30后开始自动刷新";
+    if (mins < 540) return "非交易时段，9:00后开始自动刷新";
     if (mins < 780) return "午间休市，13:00后继续自动刷新";
-    return "今日交易已结束，已暂停自动刷新";
+    if (mins < 1260) return "日盘已结束，21:00夜盘开始后自动刷新（铁矿石）";
+    return "夜盘已结束，已暂停自动刷新";
   }
   return "非交易日，已暂停自动刷新";
 }
@@ -354,6 +363,7 @@ let dataUpdatedAt = null;   // 最近一次数据加载完成时间
 // 实时模式: 只轮询轻量行情(约3秒), 历史JSON每分钟才同步一次, 避免高频下载
 const REALTIME_MS = 3000;
 let lastDataSyncAt = 0;
+let refreshStopped = false;   // 人工"停止刷新": 收盘复盘时暂停一切自动请求
 function isRealtimeMode() { return refreshMs <= REALTIME_MS; }
 
 const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"risk-1","2":"risk-2","3":"risk-3"};
@@ -1016,9 +1026,18 @@ async function manualRefresh() {
 function setRefreshInterval(seconds) {
   seconds = parseInt(seconds, 10);
   if (isNaN(seconds)) seconds = 300;
+  localStorage.setItem("refreshInterval", String(seconds));
+  // -1 = 停止刷新: 收盘/复盘时人工暂停自动请求, 手动"刷新"按钮仍可用
+  if (seconds < 0) {
+    refreshStopped = true;
+    if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
+    updateStatusUI();
+    showToast("已停止自动刷新，可手动点击刷新", "info");
+    return;
+  }
+  refreshStopped = false;
   // 0 = 实时模式: 3秒轮询行情, 历史数据仍按60秒同步
   refreshMs = seconds > 0 ? seconds * 1000 : REALTIME_MS;
-  localStorage.setItem("refreshInterval", String(seconds));
   nextRefreshAt = Date.now() + refreshMs;
   if (refreshTimer) clearInterval(refreshTimer);
   refreshTimer = setInterval(autoRefreshTask, refreshMs);
@@ -1067,6 +1086,8 @@ function syncTailFromSummary() {
 }
 
 async function autoRefreshTask() {
+  // 人工停止刷新: 不做任何网络请求与重渲染, 便于收盘后复盘
+  if (refreshStopped) return;
   // 仅在交易时段自动刷新：非交易时段跳过网络请求与重渲染，避免干扰复盘
   if (!isTradingHours()) {
     nextRefreshAt = Date.now() + refreshMs;
@@ -1117,16 +1138,29 @@ function updateStatusUI() {
   if (lu) lu.textContent = dataUpdatedAt ? fmtBJ(dataUpdatedAt) : "--";
   const badge = document.getElementById("status-badge");
   const cd = document.getElementById("countdown");
-  if (isTradingHours()) {
-    if (badge) { badge.textContent = "🟢 交易中"; badge.className = "status-badge status-trading"; }
+  const trading = isTradingHours();
+  // 人工停止刷新: 行情徽标照常显示, 但不再自动请求
+  if (refreshStopped) {
+    if (badge) {
+      badge.textContent = trading ? (isFuturesNight() ? "🌙 夜盘交易中" : "🟢 交易中")
+        : (isTradingDay() ? "⚪ 非交易时段" : "⚪ 非交易日");
+      badge.className = "status-badge " + (trading ? "status-trading" : "status-closed");
+    }
+    if (cd) cd.textContent = "⏸ 已停止自动刷新（可手动刷新复盘）";
+    return;
+  }
+  if (trading) {
+    if (badge) {
+      badge.textContent = isFuturesNight() ? "🌙 夜盘交易中" : "🟢 交易中";
+      badge.className = "status-badge status-trading";
+    }
     if (cd) {
+      const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
+      const m = Math.floor(remain / 60), s = remain % 60;
       if (isRealtimeMode()) {
-        const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
         cd.textContent = `实时行情 · 每${Math.round(refreshMs/1000)}秒更新 (下次 ${remain}秒)`;
       } else {
-        const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
-        const m = Math.floor(remain / 60), s = remain % 60;
-        cd.textContent = `交易时段每${Math.round(refreshMs/1000/60)}分钟刷新 (下次 ${m}:${String(s).padStart(2,'0')})`;
+        cd.textContent = `${isFuturesNight() ? "夜盘行情" : "交易时段"}每${Math.round(refreshMs/1000/60)}分钟刷新 (下次 ${m}:${String(s).padStart(2,'0')})`;
       }
     }
   } else {
@@ -1139,19 +1173,26 @@ function updateStatusUI() {
 }
 
 function startAutoRefresh() {
-  // 注意: "0" 是实时模式, 不能用 || 默认值(0 会被误判为假值)
+  // 注意: "0" 是实时模式, "-1" 是停止刷新, 不能用 || 默认值(假值会被覆盖)
   const raw = localStorage.getItem("refreshInterval");
   let saved = (raw === null || raw === "") ? 300 : parseInt(raw, 10);
   if (isNaN(saved)) saved = 300;
   const sel = document.getElementById("interval-select");
   if (sel) sel.value = String(saved);
+  if (countdownInterval) clearInterval(countdownInterval);
+  countdownInterval = setInterval(updateStatusUI, 1000);
+  if (saved < 0) {
+    refreshStopped = true;
+    if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
+    updateStatusUI();
+    return;
+  }
+  refreshStopped = false;
   refreshMs = saved > 0 ? saved * 1000 : REALTIME_MS;
   lastDataSyncAt = Date.now();
   nextRefreshAt = Date.now() + refreshMs;
   if (refreshTimer) clearInterval(refreshTimer);
-  if (countdownInterval) clearInterval(countdownInterval);
   refreshTimer = setInterval(autoRefreshTask, refreshMs);
-  countdownInterval = setInterval(updateStatusUI, 1000);
   updateStatusUI();
 }
 

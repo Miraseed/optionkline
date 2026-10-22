@@ -5,9 +5,11 @@ on:
     branches: [main]
   schedule:
     # cron 仅作兜底 (GitHub 高负载时会降频甚至跳过)
-    # 交易时段: UTC 1:30-3:30 (北京9:30-11:30) + UTC 5:00-7:00 (北京13:00-15:00)
+    # 日盘: UTC 1:00-3:30 (北京9:00-11:30) + UTC 5:00-7:00 (北京13:00-15:00)
+    # 夜盘: UTC 13:00-14:59 (北京21:00-22:59, 铁矿石夜盘; 无夜盘品种数据不会变化)
     - cron: '*/10 1-3 * * 1-5'
     - cron: '*/10 5-7 * * 1-5'
+    - cron: '*/10 13-14 * * 1-5'
   workflow_dispatch:
 
 permissions:
@@ -71,15 +73,18 @@ jobs:
           fi
 
           # 交易时段判断 (留3分钟给当前job完成 + dispatch延迟):
-          #   北京 9:20-11:25 = UTC 1:20-3:25  -> 续跑区间 1:20~3:25
+          #   北京 9:00-11:25 = UTC 1:00-3:25   -> 续跑区间 1:00~3:25 (铁矿石9:00开盘)
           #   北京 12:50-14:55 = UTC 4:50-6:55 -> 续跑区间 4:50~6:55
-          # 关键: 必须从 9:20 前就开始续跑, 否则开盘前那次运行(如9:27)不续跑,
+          #   北京 21:00-22:55 = UTC 13:00-14:55 -> 夜盘续跑区间 13:00~14:55 (铁矿石)
+          # 关键: 必须尽早开始续跑, 否则开盘前那次运行不续跑,
           #       而 GitHub cron 在高负载时会整段跳过, 导致开盘后完全没有新数据
           # 不在收盘前5分钟续跑, 避免跑到收盘后产生空跑
           IN_TRADING=false
-          if [ "$CURRENT_TIME" -ge 120 ] && [ "$CURRENT_TIME" -le 325 ]; then
+          if [ "$CURRENT_TIME" -ge 100 ] && [ "$CURRENT_TIME" -le 325 ]; then
             IN_TRADING=true
           elif [ "$CURRENT_TIME" -ge 450 ] && [ "$CURRENT_TIME" -le 655 ]; then
+            IN_TRADING=true
+          elif [ "$CURRENT_TIME" -ge 1300 ] && [ "$CURRENT_TIME" -le 1455 ]; then
             IN_TRADING=true
           fi
 
