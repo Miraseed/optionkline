@@ -1,20 +1,18 @@
 name: 更新K线数据
 
+# 只在收盘后提交数据（一天两次），避免交易时段每几分钟推一次数据
+# 把 GitHub Pages 的一次次构建顶掉，导致线上页面永远停留在旧版本。
+# 实时数据由沙箱内服务（server.py）提供，GitHub 这里只做每日兜底归档。
 on:
-  push:
-    branches: [main]
   schedule:
-    # cron 仅作兜底 (GitHub 高负载时会降频甚至跳过)
-    # 日盘: UTC 1:00-3:30 (北京9:00-11:30) + UTC 5:00-7:00 (北京13:00-15:00)
-    # 夜盘: UTC 13:00-14:59 (北京21:00-22:59, 铁矿石夜盘; 无夜盘品种数据不会变化)
-    - cron: '*/10 1-3 * * 1-5'
-    - cron: '*/10 5-7 * * 1-5'
-    - cron: '*/10 13-14 * * 1-5'
+    # 日盘收盘后: UTC 07:20 = 北京 15:20
+    - cron: '20 7 * * 1-5'
+    # 夜盘收盘后: UTC 15:10 = 北京 23:10（铁矿石 21:00-23:00）
+    - cron: '10 15 * * 1-5'
   workflow_dispatch:
 
 permissions:
   contents: write
-  actions: write   # 自续跑需要触发 workflow_dispatch
 
 jobs:
   update:
@@ -45,56 +43,7 @@ jobs:
             echo "无数据变更，跳过提交"
           else
             git commit -m "自动更新K线数据 $(date '+%Y-%m-%d %H:%M:%S')"
-            # 并发跑时远端可能已被另一个 job 更新, 先 rebase 再推, 避免 push 失败中断自续跑
+            # 并发跑时远端可能已被更新, 先 rebase 再推
             git pull --rebase origin main || true
             git push
-          fi
-
-      # ============ 自续跑: 绕过 schedule 降频 ============
-      # 原理: workflow 跑完后在交易时段 dispatch 自己, 形成连续链条
-      # cron 只作兜底 (链条断裂时恢复), 降频到 */10 减少冗余触发
-      - name: Self-dispatch during trading hours
-        # 即使上一步提交失败也要续跑, 否则链条断裂
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # 当前 UTC 时间
-          CURRENT_TIME=$(date -u +"%H%M")
-          CURRENT_DOW=$(date -u +"%u")   # 1=周一 ... 5=周五
-
-          echo "当前 UTC 时间: $(date -u '+%Y-%m-%d %H:%M:%S') (周$CURRENT_DOW)"
-          echo "当前 UTC HHMM: $CURRENT_TIME"
-
-          # 非交易日不自续跑
-          if [ "$CURRENT_DOW" -gt 5 ]; then
-            echo "周末, 不自续跑, 等待周一 cron 兜底"
-            exit 0
-          fi
-
-          # 交易时段判断 (留3分钟给当前job完成 + dispatch延迟):
-          #   北京 9:00-11:25 = UTC 1:00-3:25   -> 续跑区间 1:00~3:25 (铁矿石9:00开盘)
-          #   北京 12:50-14:55 = UTC 4:50-6:55 -> 续跑区间 4:50~6:55
-          #   北京 21:00-22:55 = UTC 13:00-14:55 -> 夜盘续跑区间 13:00~14:55 (铁矿石)
-          # 关键: 必须尽早开始续跑, 否则开盘前那次运行不续跑,
-          #       而 GitHub cron 在高负载时会整段跳过, 导致开盘后完全没有新数据
-          # 不在收盘前5分钟续跑, 避免跑到收盘后产生空跑
-          IN_TRADING=false
-          if [ "$CURRENT_TIME" -ge 100 ] && [ "$CURRENT_TIME" -le 325 ]; then
-            IN_TRADING=true
-          elif [ "$CURRENT_TIME" -ge 450 ] && [ "$CURRENT_TIME" -le 655 ]; then
-            IN_TRADING=true
-          elif [ "$CURRENT_TIME" -ge 1300 ] && [ "$CURRENT_TIME" -le 1455 ]; then
-            IN_TRADING=true
-          fi
-
-          if [ "$IN_TRADING" = "true" ]; then
-            echo "在交易时段内, 安排自续跑..."
-            # 等待3分钟, 让数据源更新后再续跑
-            sleep 180
-            echo "触发 workflow_dispatch 自续跑..."
-            gh workflow run update-data.yml
-            echo "自续跑已触发, 链条继续"
-          else
-            echo "不在交易时段 (UTC $CURRENT_TIME), 不自续跑, 等待 cron 兜底"
           fi
