@@ -17248,11 +17248,11 @@
     "open": 1.422,
     "high": 1.425,
     "low": 1.376,
-    "close": 1.378,
-    "volume": 6466049623,
-    "risk_score": -3,
+    "close": 1.385,
+    "volume": 6561251482,
+    "risk_score": -2,
     "intraday_up": 0.004937,
     "intraday_down": -0.029619,
-    "close_change": -0.028209
+    "close_change": -0.023272
   }
 ]
