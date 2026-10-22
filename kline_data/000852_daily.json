@@ -17247,12 +17247,12 @@
     "date": "2026-10-22",
     "open": 6782.2825,
     "high": 6782.8981,
-    "low": 6702.286,
-    "close": 6702.286,
-    "volume": 64162313,
+    "low": 6697.9022,
+    "close": 6697.9022,
+    "volume": 65301218,
     "risk_score": -1,
     "intraday_up": 0.000389,
-    "intraday_down": -0.0115,
-    "close_change": -0.0115
+    "intraday_down": -0.012147,
+    "close_change": -0.012147
   }
 ]
