@@ -43,6 +43,8 @@ jobs:
             echo "无数据变更，跳过提交"
           else
             git commit -m "自动更新K线数据 $(date '+%Y-%m-%d %H:%M:%S')"
+            # 并发跑时远端可能已被另一个 job 更新, 先 rebase 再推, 避免 push 失败中断自续跑
+            git pull --rebase origin main || true
             git push
           fi
 
@@ -50,6 +52,8 @@ jobs:
       # 原理: workflow 跑完后在交易时段 dispatch 自己, 形成连续链条
       # cron 只作兜底 (链条断裂时恢复), 降频到 */10 减少冗余触发
       - name: Self-dispatch during trading hours
+        # 即使上一步提交失败也要续跑, 否则链条断裂
+        if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -67,13 +71,15 @@ jobs:
           fi
 
           # 交易时段判断 (留3分钟给当前job完成 + dispatch延迟):
-          #   北京 9:30-11:25 = UTC 1:30-3:25  -> 续跑区间 1:30~3:25
-          #   北京 13:00-14:55 = UTC 5:00-6:55 -> 续跑区间 5:00~6:55
+          #   北京 9:20-11:25 = UTC 1:20-3:25  -> 续跑区间 1:20~3:25
+          #   北京 12:50-14:55 = UTC 4:50-6:55 -> 续跑区间 4:50~6:55
+          # 关键: 必须从 9:20 前就开始续跑, 否则开盘前那次运行(如9:27)不续跑,
+          #       而 GitHub cron 在高负载时会整段跳过, 导致开盘后完全没有新数据
           # 不在收盘前5分钟续跑, 避免跑到收盘后产生空跑
           IN_TRADING=false
-          if [ "$CURRENT_TIME" -ge 130 ] && [ "$CURRENT_TIME" -le 325 ]; then
+          if [ "$CURRENT_TIME" -ge 120 ] && [ "$CURRENT_TIME" -le 325 ]; then
             IN_TRADING=true
-          elif [ "$CURRENT_TIME" -ge 500 ] && [ "$CURRENT_TIME" -le 655 ]; then
+          elif [ "$CURRENT_TIME" -ge 450 ] && [ "$CURRENT_TIME" -le 655 ]; then
             IN_TRADING=true
           fi
 

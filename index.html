@@ -205,7 +205,7 @@
   <div class="header">
     <h1>📈 期权时空容错交易系统 · K线数据与风险评级</h1>
     <div class="header-info">
-      <span>本地: <span id="server-time">--</span></span>
+      <span>北京: <span id="server-time">--</span></span>
       <span>数据: <span id="last-update">--</span></span>
       <span id="status-badge" class="status-badge status-closed">加载中...</span>
       <span class="countdown" id="countdown">--</span>
@@ -299,16 +299,30 @@ function doLogout() {
 }
 
 // ==================== 交易时间判断（前端） ====================
-function isTradingDay(dt) { dt = dt || new Date(); const d = dt.getDay(); return d >= 1 && d <= 5; }
+// 统一按北京时间(UTC+8)判断, 避免设备时区不同导致交易时段误判
+function bjNow() {
+  const now = new Date();
+  return new Date(now.getTime() + (now.getTimezoneOffset() + 480) * 60000);
+}
+function bjDateStr(dt) {
+  const d = dt || bjNow();
+  const p = n => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+// 任何时间统一显示为北京时间(不随设备时区变化)
+function fmtBJ(dt) {
+  return (dt || new Date()).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai", hour12: false });
+}
+function isTradingDay(dt) { dt = dt || bjNow(); const d = dt.getDay(); return d >= 1 && d <= 5; }
 function isTradingHours(dt) {
-  dt = dt || new Date();
+  dt = dt || bjNow();
   if (!isTradingDay(dt)) return false;
   const h = dt.getHours(), m = dt.getMinutes();
   const mins = h * 60 + m;
   return (mins >= 570 && mins <= 690) || (mins >= 780 && mins <= 900); // 9:30-11:30 / 13:00-15:00
 }
 function nextRefreshInfo() {
-  const now = new Date();
+  const now = bjNow();
   const mins = now.getHours() * 60 + now.getMinutes();
   if (isTradingHours(now)) return "交易时间内，定时自动刷新";
   if (isTradingDay(now)) {
@@ -339,7 +353,10 @@ const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"ris
 const RISK_BG = {"-3":"#9ae6b4","-2":"#c6f6d5","-1":"#f0fff4","0":"#e2e8f0","1":"#fffaf0","2":"#feebc8","3":"#fed7d7"};
 // risk_label 由 risk_score 推导(数据文件已移除该字段以减小体积)
 const RISK_LABELS = {"-3":"巨大机会","-2":"较大机会","-1":"一般机会","0":"中性","1":"一般风险","2":"较大风险","3":"巨大风险"};
-function riskLabel(score) { return RISK_LABELS[String(score)] || "中性"; }
+function riskLabel(score) {
+  if (score === null || score === undefined || score === "") return "—";
+  return RISK_LABELS[String(score)] || "中性";
+}
 
 function fmtPct(v) { return (v===null||v===undefined) ? "--" : (v*100).toFixed(2)+"%"; }
 function getDecimals(code) { const u = UNDERLYINGS.find(x=>x.code===code); return u ? (u.decimal_places||3) : 3; }
@@ -431,7 +448,9 @@ async function loadJSON(url, noCache) {
 // ==================== 实时行情（腾讯财经API） ====================
 // 腾讯API不检查Referer，可通过script tag在GitHub Pages上跨域加载（无403/CORS问题）
 // 格式: v_sh510050="1~上证50ETF华夏~510050~2.926~2.918~2.907~7396780~..."
-// 字段(以~分隔): [3]=最新价 [4]=昨收 [5]=今开 [6]=成交量 [32]=涨跌 [33]=涨跌幅 [34]=最高 [35]=最低
+// 字段(以~分隔): [3]=最新价 [4]=昨收 [5]=今开 [6]=成交量(手) [30]=时间
+//              [31]=涨跌额 [32]=涨跌幅% [33]=最高 [34]=最低
+// 注意: 腾讯成交量单位是"手"(100股), 本项目数据统一为"股", 需 ×100
 
 async function fetchAllRealtime() {
   const results = {};
@@ -442,6 +461,7 @@ async function fetchAllRealtime() {
     const url = `https://qt.gtimg.cn/q=${tencentCodes.join(",")}`;
     const script = document.createElement("script");
     script.charset = "gbk";
+    script.src = url;
     let done = false;
 
     function cleanup() {
@@ -459,10 +479,10 @@ async function fetchAllRealtime() {
             const price = parseFloat(fields[3]);
             const prevClose = parseFloat(fields[4]);
             const open = parseFloat(fields[5]);
-            const volume = parseFloat(fields[6]);
-            const high = parseFloat(fields[34]);
-            const low = parseFloat(fields[35]);
-            const changePct = parseFloat(fields[33]);
+            const volume = parseFloat(fields[6]) * 100;   // 手 -> 股
+            const high = parseFloat(fields[33]);
+            const low = parseFloat(fields[34]);
+            const changePct = parseFloat(fields[32]);
             if (price > 0) {
               results[u.code] = {
                 price: price,
@@ -499,7 +519,7 @@ async function fetchAllRealtime() {
 
 function applyRealtimeToData(rtData) {
   let updated = false;
-  const today = new Date().toISOString().slice(0, 10);
+  const today = bjDateStr();   // 按北京时间取日期，避免 UTC 跨日错位
   for (const u of UNDERLYINGS) {
     const rt = rtData[u.code];
     if (!rt || rt.price == null || rt.price <= 0) continue;
@@ -511,8 +531,8 @@ function applyRealtimeToData(rtData) {
         const last = arr[arr.length - 1];
         if (last.date === today) {
           last.close = rt.price;
-          if (rt.high > last.high) last.high = rt.high;
-          if (rt.low < last.low || last.low === last.open) last.low = rt.low;
+          last.high = Math.max(last.high || 0, rt.high || rt.price);
+          last.low = Math.min(last.low || rt.low || rt.price, rt.low || rt.price);
           last.volume = rt.volume || last.volume;
           if (rt.change_pct != null) last.close_change = rt.change_pct / 100;
         } else if (last.date < today) {
@@ -523,6 +543,9 @@ function applyRealtimeToData(rtData) {
             low: rt.low || rt.price,
             close: rt.price,
             volume: rt.volume || 0,
+            risk_score: null,   // 盘中临时柱暂无评级, 待数据更新后补齐
+            intraday_up: null,
+            intraday_down: null,
             close_change: rt.change_pct != null ? rt.change_pct / 100 : null,
           });
           if (p === "daily" && arr.length > 1500) arr.shift();
@@ -715,7 +738,7 @@ function renderDetail() {
     html += `<tr class="${cls}">
       <td>${r.date}</td><td>${fmtNum(r.open)}</td><td>${fmtNum(r.high)}</td>
       <td>${fmtNum(r.low)}</td><td>${fmtNum(r.close)}</td><td>${fmtVol(r.volume)}</td>
-      <td>${r.risk_score}</td><td class="label-cell">${riskLabel(r.risk_score)}</td>
+      <td>${r.risk_score ?? "—"}</td><td class="label-cell">${riskLabel(r.risk_score)}</td>
       <td class="${iuCls}">${fmtPct(r.intraday_up)}</td>
       <td class="${idCls}">${fmtPct(r.intraday_down)}</td>
       <td class="${ccCls}">${fmtPct(r.close_change)}</td>
@@ -972,6 +995,7 @@ async function manualRefresh() {
     // 数据与实时行情并行拉取, 缩短总耗时
     const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
     applyRealtimeToData(rtData);
+    dataUpdatedAt = new Date();
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
     showToast("数据已更新（含实时行情）！", "success");
@@ -1045,6 +1069,7 @@ async function autoRefreshTask() {
     // 数据与实时行情并行拉取
     const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
     applyRealtimeToData(rtData);
+    dataUpdatedAt = new Date();
     const newHash = dataHash();
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
@@ -1060,16 +1085,15 @@ async function autoRefreshTask() {
   updateStatusUI();
 }
 
-// 每秒更新头部状态：本地时间、交易时段徽标、下次刷新倒计时
+// 每秒更新头部状态：北京时间、交易时段徽标、下次刷新倒计时
 function updateStatusUI() {
-  const now = new Date();
   const timeEl = document.getElementById("server-time");
-  if (timeEl) timeEl.textContent = now.toLocaleString("zh-CN", { hour12: false });
+  if (timeEl) timeEl.textContent = fmtBJ();
   const lu = document.getElementById("last-update");
-  if (lu) lu.textContent = dataUpdatedAt ? dataUpdatedAt.toLocaleString("zh-CN", { hour12: false }) : "--";
+  if (lu) lu.textContent = dataUpdatedAt ? fmtBJ(dataUpdatedAt) : "--";
   const badge = document.getElementById("status-badge");
   const cd = document.getElementById("countdown");
-  if (isTradingHours(now)) {
+  if (isTradingHours()) {
     if (badge) { badge.textContent = "🟢 交易中"; badge.className = "status-badge status-trading"; }
     if (cd) {
       const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
