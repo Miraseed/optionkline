@@ -7,6 +7,8 @@ import json
 import os
 import sys
 import math
+import gzip
+import shutil
 from datetime import datetime, timedelta, timezone
 
 import pandas as pd
@@ -16,7 +18,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "kline_data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
-START_DATE = "2020-11-16"
+# 从各标的上市首日开始取全量历史(数据源返回多长就保留多长), 便于复盘验证
+START_DATE = "1990-01-01"
 
 UNDERLYINGS = [
     {"code": "510050", "name": "上证50ETF", "symbol": "sh510050", "type": "etf"},
@@ -40,9 +43,10 @@ PE_INDEX_MAP = {
 }
 
 PERIODS = [
-    {"name": "daily", "max_bars": 1500},
-    {"name": "weekly", "max_bars": 350},
-    {"name": "monthly", "max_bars": 80},
+    # max_bars 放宽到"不截断": 覆盖各标的从上市首日至今的全部K线
+    {"name": "daily", "max_bars": 10000},
+    {"name": "weekly", "max_bars": 2000},
+    {"name": "monthly", "max_bars": 500},
 ]
 
 PERIOD_PARAMS = {
@@ -430,6 +434,11 @@ def fetch_pe_data():
 def save_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    # 同步生成预压缩副本: 全量历史日线已达 1MB 级, gzip 后约 1/7,
+    # 沙箱服务端在浏览器支持时直接下发 .gz, 避免公网隧道慢速传输
+    if path.endswith(".json"):
+        with open(path, "rb") as src, gzip.open(path + ".gz", "wb", compresslevel=9) as dst:
+            shutil.copyfileobj(src, dst)
 
 
 def main():

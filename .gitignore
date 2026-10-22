@@ -9,6 +9,11 @@ build/
 # 数据文件（GitHub Pages 部署时需入库，由 Actions 定期更新）
 # kline_data/*.json 已不忽略
 # kline_charts/*.png 已不忽略
+# 预压缩副本由脚本生成, 不入库(沙箱服务端按需提供 gzip)
+kline_data/*.gz
+index.html.gz
+# 期权链快照缓存(62MB 级), 仅沙箱本地使用, 不入库
+kline_data/option_cache/
 
 # Excel文件
 *.xlsx

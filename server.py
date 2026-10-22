@@ -4,14 +4,17 @@ TRAE 沙箱内运行的 Web 服务：
 2) 后台线程按交易时段定时运行 update_data_pages.py 刷新K线（不再依赖 GitHub Actions）
 用法: python3 server.py [port]
 """
+import gzip
 import json
 import os
+import shutil
 import sys
 import subprocess
 import threading
 import time
 from datetime import datetime, timezone, timedelta
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+from urllib.parse import unquote
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_DIR = os.path.join(BASE_DIR, "logs")
@@ -97,10 +100,34 @@ class Handler(SimpleHTTPRequestHandler):
         super().__init__(*args, directory=BASE_DIR, **kwargs)
 
     def do_GET(self):
-        if self.path.split("?")[0] == "/api/status":
+        path_only = self.path.split("?")[0]
+        if path_only == "/api/status":
             self.send_status()
             return
+        # 浏览器支持 gzip 且存在较新的预压缩副本时, 直接下发 .gz(全量K线约省 85% 流量)
+        if "gzip" in self.headers.get("Accept-Encoding", "").lower():
+            rel = unquote(path_only).lstrip("/") or "index.html"
+            src = os.path.join(BASE_DIR, rel)
+            gz = src + ".gz"
+            if rel.endswith((".json", ".html")) and os.path.isfile(src) and os.path.isfile(gz) \
+                    and os.path.getmtime(gz) >= os.path.getmtime(src):
+                self.send_gzip(gz, rel)
+                return
         super().do_GET()
+
+    def send_gzip(self, gz_path, rel):
+        try:
+            size = os.path.getsize(gz_path)
+            self.send_response(200)
+            ctype = "application/json; charset=utf-8" if rel.endswith(".json") else "text/html; charset=utf-8"
+            self.send_header("Content-Type", ctype)
+            self.send_header("Content-Encoding", "gzip")
+            self.send_header("Content-Length", str(size))
+            self.end_headers()
+            with open(gz_path, "rb") as f:
+                shutil.copyfileobj(f, self.wfile)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def send_status(self):
         """数据新鲜度: 上次成功刷新时间、距今秒数、是否正在更新"""
@@ -133,9 +160,22 @@ class Handler(SimpleHTTPRequestHandler):
         pass
 
 
+def prepare_static_gzip():
+    """index.html 由人工维护, 源文件更新时重新生成 gzip 副本"""
+    src = os.path.join(BASE_DIR, "index.html")
+    gz = src + ".gz"
+    try:
+        if os.path.isfile(src) and (not os.path.isfile(gz) or os.path.getmtime(gz) < os.path.getmtime(src)):
+            with open(src, "rb") as f, gzip.open(gz, "wb", compresslevel=9) as g:
+                shutil.copyfileobj(f, g)
+    except Exception:
+        pass
+
+
 def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     load_status()
+    prepare_static_gzip()
     threading.Thread(target=updater_loop, daemon=True).start()
     httpd = ThreadingHTTPServer(("0.0.0.0", port), Handler)
     print(f"[server] listening on 0.0.0.0:{port}", flush=True)
