@@ -5,37 +5,37 @@
       "date": "2026-10-22",
       "open": 2.875,
       "high": 2.875,
-      "low": 2.875,
-      "close": 2.875,
-      "volume": 6159000,
-      "risk_score": 0,
+      "low": 2.833,
+      "close": 2.847,
+      "volume": 181951602,
+      "risk_score": -1,
       "intraday_up": 0.006653,
-      "intraday_down": 0.006653,
-      "close_change": 0.006653
+      "intraday_down": -0.008053,
+      "close_change": -0.003151
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 2.863,
       "high": 2.901,
-      "low": 2.843,
-      "close": 2.875,
-      "volume": 4276535856,
-      "risk_score": -1,
+      "low": 2.833,
+      "close": 2.847,
+      "volume": 4452328458,
+      "risk_score": -2,
       "intraday_up": 0.012212,
-      "intraday_down": -0.008025,
-      "close_change": 0.00314
+      "intraday_down": -0.011514,
+      "close_change": -0.006629
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 2.93,
       "high": 2.953,
-      "low": 2.837,
-      "close": 2.875,
-      "volume": 9621465860,
+      "low": 2.833,
+      "close": 2.847,
+      "volume": 9797258462,
       "risk_score": -3,
       "intraday_up": 0.005106,
-      "intraday_down": -0.034377,
-      "close_change": -0.021443
+      "intraday_down": -0.035739,
+      "close_change": -0.030973
     }
   },
   "510300": {
@@ -43,38 +43,38 @@
     "daily": {
       "date": "2026-10-22",
       "open": 4.185,
-      "high": 4.185,
-      "low": 4.185,
-      "close": 4.185,
-      "volume": 6428800,
+      "high": 4.189,
+      "low": 4.133,
+      "close": 4.144,
+      "volume": 334644500,
       "risk_score": -2,
-      "intraday_up": 0.0,
-      "intraday_down": 0.0,
-      "close_change": 0.0
+      "intraday_up": 0.000956,
+      "intraday_down": -0.012425,
+      "close_change": -0.009797
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 4.224,
       "high": 4.267,
-      "low": 4.17,
-      "close": 4.185,
-      "volume": 3690073213,
+      "low": 4.133,
+      "close": 4.144,
+      "volume": 4018288913,
       "risk_score": -3,
       "intraday_up": 0.007318,
-      "intraday_down": -0.015581,
-      "close_change": -0.01204
+      "intraday_down": -0.024315,
+      "close_change": -0.021719
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 4.418,
       "high": 4.459,
-      "low": 4.17,
-      "close": 4.185,
-      "volume": 13760167966,
+      "low": 4.133,
+      "close": 4.144,
+      "volume": 14088383666,
       "risk_score": -3,
       "intraday_up": 0.006092,
-      "intraday_down": -0.059116,
-      "close_change": -0.055731
+      "intraday_down": -0.067464,
+      "close_change": -0.064982
     }
   },
   "588000": {
@@ -82,38 +82,38 @@
     "daily": {
       "date": "2026-10-22",
       "open": 1.422,
-      "high": 1.422,
-      "low": 1.422,
-      "close": 1.422,
-      "volume": 28736600,
+      "high": 1.425,
+      "low": 1.4,
+      "close": 1.4,
+      "volume": 1312483150,
       "risk_score": -2,
-      "intraday_up": 0.002821,
-      "intraday_down": 0.002821,
-      "close_change": 0.002821
+      "intraday_up": 0.004937,
+      "intraday_down": -0.012694,
+      "close_change": -0.012694
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 1.422,
       "high": 1.447,
       "low": 1.383,
-      "close": 1.422,
-      "volume": 17944431199,
+      "close": 1.4,
+      "volume": 19228177749,
       "risk_score": -3,
       "intraday_up": 0.011888,
       "intraday_down": -0.032867,
-      "close_change": -0.005594
+      "close_change": -0.020979
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 1.614,
       "high": 1.614,
       "low": 1.383,
-      "close": 1.422,
-      "volume": 60130706028,
+      "close": 1.4,
+      "volume": 61414452578,
       "risk_score": -2,
       "intraday_up": -0.001238,
       "intraday_down": -0.144183,
-      "close_change": -0.12005
+      "close_change": -0.133663
     }
   },
   "159915": {
@@ -121,38 +121,38 @@
     "daily": {
       "date": "2026-10-22",
       "open": 2.701,
-      "high": 2.701,
-      "low": 2.701,
-      "close": 2.701,
-      "volume": 26835700,
-      "risk_score": -2,
-      "intraday_up": -0.004423,
-      "intraday_down": -0.004423,
-      "close_change": -0.004423
+      "high": 2.708,
+      "low": 2.653,
+      "close": 2.654,
+      "volume": 1455316043,
+      "risk_score": -3,
+      "intraday_up": -0.001843,
+      "intraday_down": -0.022116,
+      "close_change": -0.021747
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 2.772,
       "high": 2.809,
-      "low": 2.7,
-      "close": 2.701,
-      "volume": 9234194586,
+      "low": 2.653,
+      "close": 2.654,
+      "volume": 10662674929,
       "risk_score": -3,
       "intraday_up": 0.007171,
-      "intraday_down": -0.031911,
-      "close_change": -0.031553
+      "intraday_down": -0.048763,
+      "close_change": -0.048404
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 3.161,
       "high": 3.188,
-      "low": 2.7,
-      "close": 2.701,
-      "volume": 27888242492,
-      "risk_score": -2,
+      "low": 2.653,
+      "close": 2.654,
+      "volume": 29316722835,
+      "risk_score": -3,
       "intraday_up": 0.01078,
-      "intraday_down": -0.143944,
-      "close_change": -0.143627
+      "intraday_down": -0.158846,
+      "close_change": -0.158529
     }
   },
   "510500": {
@@ -160,38 +160,38 @@
     "daily": {
       "date": "2026-10-22",
       "open": 6.869,
-      "high": 6.869,
-      "low": 6.869,
-      "close": 6.869,
-      "volume": 802000,
+      "high": 6.875,
+      "low": 6.797,
+      "close": 6.798,
+      "volume": 64022218,
       "risk_score": -1,
-      "intraday_up": 0.000728,
-      "intraday_down": 0.000728,
-      "close_change": 0.000728
+      "intraday_up": 0.001603,
+      "intraday_down": -0.009761,
+      "close_change": -0.009615
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 6.78,
       "high": 6.983,
       "low": 6.731,
-      "close": 6.869,
-      "volume": 1813257247,
+      "close": 6.798,
+      "volume": 1876477465,
       "risk_score": -3,
       "intraday_up": 0.025554,
       "intraday_down": -0.011455,
-      "close_change": 0.008812
+      "close_change": -0.001616
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 7.47,
       "high": 7.501,
       "low": 6.731,
-      "close": 6.869,
-      "volume": 4812387020,
+      "close": 6.798,
+      "volume": 4875607238,
       "risk_score": -2,
       "intraday_up": 0.003881,
       "intraday_down": -0.09917,
-      "close_change": -0.080701
+      "close_change": -0.090203
     }
   },
   "510880": {
@@ -199,38 +199,38 @@
     "daily": {
       "date": "2026-10-22",
       "open": 3.39,
-      "high": 3.39,
-      "low": 3.39,
-      "close": 3.39,
-      "volume": 337800,
+      "high": 3.391,
+      "low": 3.342,
+      "close": 3.349,
+      "volume": 36683100,
       "risk_score": 0,
-      "intraday_up": 0.001477,
-      "intraday_down": 0.001477,
-      "close_change": 0.001477
+      "intraday_up": 0.001773,
+      "intraday_down": -0.012703,
+      "close_change": -0.010635
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 3.431,
       "high": 3.48,
-      "low": 3.383,
-      "close": 3.39,
-      "volume": 513882137,
+      "low": 3.342,
+      "close": 3.349,
+      "volume": 550227437,
       "risk_score": 0,
       "intraday_up": 0.014577,
-      "intraday_down": -0.013703,
-      "close_change": -0.011662
+      "intraday_down": -0.025656,
+      "close_change": -0.023615
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 3.37,
       "high": 3.52,
-      "low": 3.369,
-      "close": 3.39,
-      "volume": 1579457049,
-      "risk_score": 0,
+      "low": 3.342,
+      "close": 3.349,
+      "volume": 1615802349,
+      "risk_score": -1,
       "intraday_up": 0.045131,
-      "intraday_down": 0.000297,
-      "close_change": 0.006532
+      "intraday_down": -0.00772,
+      "close_change": -0.005641
     }
   },
   "513530": {
@@ -238,38 +238,38 @@
     "daily": {
       "date": "2026-10-22",
       "open": 1.52,
-      "high": 1.52,
-      "low": 1.52,
-      "close": 1.52,
-      "volume": 1016400,
+      "high": 1.521,
+      "low": 1.496,
+      "close": 1.5,
+      "volume": 91414400,
       "risk_score": -1,
-      "intraday_up": -0.001314,
-      "intraday_down": -0.001314,
-      "close_change": -0.001314
+      "intraday_up": -0.000657,
+      "intraday_down": -0.017083,
+      "close_change": -0.014455
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 1.556,
       "high": 1.561,
-      "low": 1.519,
-      "close": 1.52,
-      "volume": 540404166,
-      "risk_score": -1,
+      "low": 1.496,
+      "close": 1.5,
+      "volume": 630802166,
+      "risk_score": -2,
       "intraday_up": -0.00128,
-      "intraday_down": -0.028151,
-      "close_change": -0.027511
+      "intraday_down": -0.042866,
+      "close_change": -0.040307
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 1.548,
       "high": 1.596,
-      "low": 1.519,
-      "close": 1.52,
-      "volume": 2286923566,
+      "low": 1.496,
+      "close": 1.5,
+      "volume": 2377321566,
       "risk_score": -2,
       "intraday_up": 0.022422,
-      "intraday_down": -0.026906,
-      "close_change": -0.026265
+      "intraday_down": -0.04164,
+      "close_change": -0.039078
     }
   },
   "000852": {
@@ -277,38 +277,38 @@
     "daily": {
       "date": "2026-10-22",
       "open": 6782.2825,
-      "high": 6782.2825,
-      "low": 6782.2825,
-      "close": 6782.2825,
-      "volume": 1442275,
+      "high": 6782.8981,
+      "low": 6702.286,
+      "close": 6702.286,
+      "volume": 64162313,
       "risk_score": -1,
-      "intraday_up": 0.000298,
-      "intraday_down": 0.000298,
-      "close_change": 0.000298
+      "intraday_up": 0.000389,
+      "intraday_down": -0.0115,
+      "close_change": -0.0115
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 6639.938,
       "high": 6880.553,
       "low": 6578.935,
-      "close": 6782.2825,
-      "volume": 53792456775,
+      "close": 6702.286,
+      "volume": 53855176813,
       "risk_score": -3,
       "intraday_up": 0.029723,
       "intraday_down": -0.015416,
-      "close_change": 0.015016
+      "close_change": 0.003044
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 7306.742,
       "high": 7366.857,
       "low": 6578.935,
-      "close": 6782.2825,
-      "volume": 199659753275,
+      "close": 6702.286,
+      "volume": 199722473313,
       "risk_score": -3,
       "intraday_up": 0.009322,
       "intraday_down": -0.09863,
-      "close_change": -0.07077
+      "close_change": -0.08173
     }
   },
   "I0": {
@@ -317,37 +317,37 @@
       "date": "2026-10-22",
       "open": 679.5,
       "high": 680.0,
-      "low": 673.0,
-      "close": 674.5,
-      "volume": 134275,
+      "low": 665.5,
+      "close": 666.0,
+      "volume": 219216,
       "risk_score": -1,
       "intraday_up": -0.002201,
-      "intraday_down": -0.012472,
-      "close_change": -0.010271
+      "intraday_down": -0.023478,
+      "close_change": -0.022744
     },
     "weekly": {
       "date": "2026-10-23",
       "open": 672.5,
       "high": 689.0,
-      "low": 672.5,
-      "close": 674.5,
-      "volume": 895545,
-      "risk_score": -2,
+      "low": 665.5,
+      "close": 666.0,
+      "volume": 980486,
+      "risk_score": -3,
       "intraday_up": 0.024535,
-      "intraday_down": 0.0,
-      "close_change": 0.002974
+      "intraday_down": -0.010409,
+      "close_change": -0.009665
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 692.0,
       "high": 698.0,
-      "low": 667.0,
-      "close": 674.5,
-      "volume": 2856546,
+      "low": 665.5,
+      "close": 666.0,
+      "volume": 2941487,
       "risk_score": -3,
       "intraday_up": -0.006406,
-      "intraday_down": -0.050534,
-      "close_change": -0.039858
+      "intraday_down": -0.052669,
+      "close_change": -0.051957
     }
   }
 }
