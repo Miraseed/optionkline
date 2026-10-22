@@ -211,6 +211,7 @@
       <span class="countdown" id="countdown">--</span>
       <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">🔄 刷新</button>
       <select class="interval-selector" id="interval-select" onchange="setRefreshInterval(this.value)">
+        <option value="0">实时</option>
         <option value="60">1分钟</option>
         <option value="120">2分钟</option>
         <option value="180">3分钟</option>
@@ -265,10 +266,12 @@ const UNDERLYINGS = [
   { code: "588000", name: "科创50ETF",  decimal_places: 3, tencent: "sh588000" },
   { code: "159915", name: "创业板ETF",  decimal_places: 3, tencent: "sz159915" },
   { code: "510500", name: "中证500ETF", decimal_places: 3, tencent: "sh510500" },
-  { code: "510880", name: "红利ETF",    decimal_places: 3, tencent: "sh510880" },
-  { code: "513530", name: "港股通红利ETF", decimal_places: 3, tencent: "sh513530" },
   { code: "000852", name: "中证1000",   decimal_places: 2, tencent: "sh000852" },
   { code: "I0",     name: "铁矿石主连", decimal_places: 1, tencent: "" },
+  { code: "510880", name: "红利ETF",    decimal_places: 3, tencent: "sh510880" },
+  { code: "513530", name: "港股通红利ETF", decimal_places: 3, tencent: "sh513530" },
+  { code: "513650", name: "标普500ETF", decimal_places: 3, tencent: "sh513650" },
+  { code: "159509", name: "纳指科技ETF", decimal_places: 3, tencent: "sz159509" },
 ];
 // 密码 option2024 的 base64 编码（基础门禁，非安全加密）
 const PASSWORD_ENC = "b3B0aW9uMjAyNA==";
@@ -348,6 +351,10 @@ let countdownInterval = null;
 let refreshMs = 300000;
 let nextRefreshAt = 0;
 let dataUpdatedAt = null;   // 最近一次数据加载完成时间
+// 实时模式: 只轮询轻量行情(约3秒), 历史JSON每分钟才同步一次, 避免高频下载
+const REALTIME_MS = 3000;
+let lastDataSyncAt = 0;
+function isRealtimeMode() { return refreshMs <= REALTIME_MS; }
 
 const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"risk-1","2":"risk-2","3":"risk-3"};
 const RISK_BG = {"-3":"#9ae6b4","-2":"#c6f6d5","-1":"#f0fff4","0":"#e2e8f0","1":"#fffaf0","2":"#feebc8","3":"#fed7d7"};
@@ -1007,14 +1014,16 @@ async function manualRefresh() {
 }
 
 function setRefreshInterval(seconds) {
-  seconds = parseInt(seconds);
-  refreshMs = seconds * 1000;
+  seconds = parseInt(seconds, 10);
+  if (isNaN(seconds)) seconds = 300;
+  // 0 = 实时模式: 3秒轮询行情, 历史数据仍按60秒同步
+  refreshMs = seconds > 0 ? seconds * 1000 : REALTIME_MS;
   localStorage.setItem("refreshInterval", String(seconds));
   nextRefreshAt = Date.now() + refreshMs;
   if (refreshTimer) clearInterval(refreshTimer);
   refreshTimer = setInterval(autoRefreshTask, refreshMs);
-  const label = seconds < 60 ? seconds + " 秒" : seconds / 60 + " 分钟";
-  showToast(`自动刷新间隔已设为 ${label}`, "success");
+  const label = seconds > 0 ? (seconds < 60 ? seconds + " 秒" : seconds / 60 + " 分钟") : "实时（每3秒）";
+  showToast(`自动刷新已设为 ${label}`, "success");
 }
 
 function dataHash() {
@@ -1065,18 +1074,33 @@ async function autoRefreshTask() {
     return;
   }
   try {
-    const oldHash = dataHash();
-    // 数据与实时行情并行拉取
-    const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
-    applyRealtimeToData(rtData);
-    dataUpdatedAt = new Date();
-    const newHash = dataHash();
-    renderSummary();
-    if (currentCode) { renderDetail(); renderChart(); }
-    if (oldHash !== newHash) {
-      showToast("数据有更新！", "success");
+    if (isRealtimeMode()) {
+      // 实时模式: 每3秒只拉一次轻量行情(约几KB);
+      // 历史JSON(摘要+当前标的)每60秒才同步一次, 避免频繁下载与重绘
+      if (Date.now() - lastDataSyncAt >= 60000) {
+        await refreshData(true);
+        lastDataSyncAt = Date.now();
+      }
+      const rtData = await fetchAllRealtime();
+      applyRealtimeToData(rtData);
+      dataUpdatedAt = new Date();
+      renderSummary();
+      if (currentCode && isCodeLoaded(currentCode)) { renderDetail(); renderChart(); }
     } else {
-      showToast("数据暂无变化（等待GitHub Actions更新）", "info");
+      const oldHash = dataHash();
+      // 数据与实时行情并行拉取
+      const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
+      applyRealtimeToData(rtData);
+      dataUpdatedAt = new Date();
+      lastDataSyncAt = Date.now();
+      const newHash = dataHash();
+      renderSummary();
+      if (currentCode) { renderDetail(); renderChart(); }
+      if (oldHash !== newHash) {
+        showToast("数据有更新！", "success");
+      } else {
+        showToast("数据暂无变化（等待GitHub Actions更新）", "info");
+      }
     }
   } catch (e) {
     showToast("自动刷新失败: " + e.message, "error");
@@ -1096,13 +1120,18 @@ function updateStatusUI() {
   if (isTradingHours()) {
     if (badge) { badge.textContent = "🟢 交易中"; badge.className = "status-badge status-trading"; }
     if (cd) {
-      const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
-      const m = Math.floor(remain / 60), s = remain % 60;
-      cd.textContent = `实时 · 交易时段每${Math.round(refreshMs/1000/60) || Math.round(refreshMs/1000)}${refreshMs>=60000?'分钟':'秒'}刷新 (下次 ${m}:${String(s).padStart(2,'0')})`;
+      if (isRealtimeMode()) {
+        const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
+        cd.textContent = `实时行情 · 每${Math.round(refreshMs/1000)}秒更新 (下次 ${remain}秒)`;
+      } else {
+        const remain = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
+        const m = Math.floor(remain / 60), s = remain % 60;
+        cd.textContent = `交易时段每${Math.round(refreshMs/1000/60)}分钟刷新 (下次 ${m}:${String(s).padStart(2,'0')})`;
+      }
     }
   } else {
     if (badge) {
-      badge.textContent = isTradingDay(now) ? "⚪ 非交易时段" : "⚪ 非交易日";
+      badge.textContent = isTradingDay() ? "⚪ 非交易时段" : "⚪ 非交易日";
       badge.className = "status-badge status-closed";
     }
     if (cd) cd.textContent = "已暂停自动刷新（仅交易时段刷新）";
@@ -1110,9 +1139,14 @@ function updateStatusUI() {
 }
 
 function startAutoRefresh() {
-  const saved = parseInt(localStorage.getItem("refreshInterval")) || 300;
-  document.getElementById("interval-select").value = String(saved);
-  refreshMs = saved * 1000;
+  // 注意: "0" 是实时模式, 不能用 || 默认值(0 会被误判为假值)
+  const raw = localStorage.getItem("refreshInterval");
+  let saved = (raw === null || raw === "") ? 300 : parseInt(raw, 10);
+  if (isNaN(saved)) saved = 300;
+  const sel = document.getElementById("interval-select");
+  if (sel) sel.value = String(saved);
+  refreshMs = saved > 0 ? saved * 1000 : REALTIME_MS;
+  lastDataSyncAt = Date.now();
   nextRefreshAt = Date.now() + refreshMs;
   if (refreshTimer) clearInterval(refreshTimer);
   if (countdownInterval) clearInterval(countdownInterval);

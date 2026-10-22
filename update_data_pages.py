@@ -24,16 +24,18 @@ UNDERLYINGS = [
     {"code": "588000", "name": "科创50ETF", "symbol": "sh588000", "type": "etf"},
     {"code": "159915", "name": "创业板ETF", "symbol": "sz159915", "type": "etf"},
     {"code": "510500", "name": "中证500ETF", "symbol": "sh510500", "type": "etf"},
-    {"code": "510880", "name": "红利ETF", "symbol": "sh510880", "type": "etf"},
-    {"code": "513530", "name": "港股通红利ETF", "symbol": "sh513530", "type": "etf"},
     {"code": "000852", "name": "中证1000", "symbol": "sh000852", "type": "index"},
     {"code": "I0", "name": "铁矿石主连", "symbol": "nf_I0", "type": "futures"},
+    {"code": "510880", "name": "红利ETF", "symbol": "sh510880", "type": "etf"},
+    {"code": "513530", "name": "港股通红利ETF", "symbol": "sh513530", "type": "etf"},
+    {"code": "513650", "name": "标普500ETF", "symbol": "sh513650", "type": "etf"},
+    {"code": "159509", "name": "纳指科技ETF", "symbol": "sz159509", "type": "etf"},
 ]
 
 PE_INDEX_MAP = {
     "510050": "000016.SH", "510300": "000300.SH", "588000": "000688.SH",
     "159915": "399006.SZ", "510500": "000905.SH", "000852": "000852.SH",
-    "510880": None, "513530": None,
+    "510880": None, "513530": None, "513650": None, "159509": None,
     "I0": None,
 }
 
