@@ -3591,12 +3591,12 @@
     "date": "2026-10-22",
     "open": 6782.2825,
     "high": 6782.8981,
-    "low": 6660.355,
-    "close": 6660.355,
-    "volume": 77403460,
+    "low": 6658.1999,
+    "close": 6658.1999,
+    "volume": 81255856,
     "risk_score": -1,
     "intraday_up": 0.000389,
-    "intraday_down": -0.017684,
-    "close_change": -0.017684
+    "intraday_down": -0.018002,
+    "close_change": -0.018002
   }
 ]
