@@ -10,7 +10,7 @@ LOG=logs/tunnel.log
 while true; do
   echo "=== connect $(date '+%F %T') ===" >> "$LOG"
   ssh -tt \
-    -i ~/.ssh/id_ed25519 \
+    -i "$(pwd)/.ssh/id_ed25519" \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
     -o ServerAliveInterval=10 \

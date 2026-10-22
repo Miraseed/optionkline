@@ -14,6 +14,8 @@ kline_data/*.gz
 index.html.gz
 # 期权链快照缓存(62MB 级), 仅沙箱本地使用, 不入库
 kline_data/option_cache/
+# SSH 私钥(srv.us 隧道用, 放 workspace 内以在沙箱回收后保持同一公网地址)
+.ssh/
 
 # Excel文件
 *.xlsx

@@ -718,6 +718,7 @@ function applyRealtimeToData(rtData) {
             if (rt.change_pct != null) s.close_change = rt.change_pct / 100;
           } else if (!s.date || s.date < barDate) {
             // 数据还没跟上(如夜盘刚开盘): 换成本笔行情, 避免把夜盘价写进上一交易日的旧K线
+            // 评级沿用上一交易日的(最新已知), 避免总览显示"—"
             summaryData[u.code][p] = {
               date: barDate,
               open: rt.open || rt.price,
@@ -725,7 +726,7 @@ function applyRealtimeToData(rtData) {
               low: rt.low || rt.price,
               close: rt.price,
               volume: rt.volume || 0,
-              risk_score: null,
+              risk_score: (s.risk_score !== undefined ? s.risk_score : null),
               intraday_up: null,
               intraday_down: null,
               close_change: rt.change_pct != null ? rt.change_pct / 100 : null,
@@ -825,12 +826,27 @@ function renderSummary() {
     const close = latest ? fmtNum(latest.close, u.decimal_places||3) : "--";
     const chg = latest && latest.close_change !== null ? fmtPct(latest.close_change) : "--";
     const chgCls = latest && latest.close_change !== null ? (latest.close_change >= 0 ? "pct-pos" : "pct-neg") : "";
-    function ratingTag(rec) {
+    function ratingTag(code, period, rec) {
+      // 盘中临时柱 risk_score 为空(待服务端数据补齐): 回退到最近一个已评级K线,
+      // 避免日评级在数据更新前一直显示"—"(GitHub Pages 上要 15:20 才有当日评级)
+      if (!rec || rec.risk_score == null || rec.risk_score === "") {
+        const arr = allData[code] && allData[code][period];
+        if (arr && arr.length) {
+          for (let i = arr.length - 1; i >= 0 && i >= arr.length - 10; i--) {
+            const r = arr[i];
+            if (r && r.risk_score !== null && r.risk_score !== undefined && r.risk_score !== "") { rec = r; break; }
+          }
+        }
+        if (!rec || rec.risk_score == null || rec.risk_score === "") {
+          const s2 = summaryData[code] && summaryData[code][period];
+          if (s2 && s2.risk_score !== null && s2.risk_score !== undefined) rec = s2;
+        }
+      }
       if (!rec) return '<span class="rating-tag" style="background:#a0aec0">--</span>';
       const s = rec.risk_score;
       const bg = RISK_BG[String(s)] || "#a0aec0";
       const color = s >= 2 ? "#c53030" : s <= -2 ? "#22543d" : "#333";
-      return `<span class="rating-tag" style="background:${bg};color:${color}">${riskLabel(rec.risk_score)}</span>`;
+      return `<span class="rating-tag" style="background:${bg};color:${color}">${riskLabel(s)}</span>`;
     }
     function peTag() {
       // PE 数据源不稳定（legulegu 反爬、csindex 仅近 20 天且缺创业板指），暂屏蔽显示
@@ -843,7 +859,7 @@ function renderSummary() {
           <span class="card-right"><span class="${chgCls}">${close} ${chg}</span></span>
         </div>
         <div class="etf-card-rating">
-          <span class="rating-left">日:${ratingTag(lastDaily)} 周:${ratingTag(lastWeekly)} 月:${ratingTag(lastMonthly)}</span>
+          <span class="rating-left">日:${ratingTag(code,"daily",lastDaily)} 周:${ratingTag(code,"weekly",lastWeekly)} 月:${ratingTag(code,"monthly",lastMonthly)}</span>
           ${peTag()}
         </div>
       </div>`;
