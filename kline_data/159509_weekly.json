@@ -1971,12 +1971,12 @@
     "date": "2026-10-23",
     "open": 3.202,
     "high": 3.25,
-    "low": 2.916,
-    "close": 2.917,
-    "volume": 2524801531,
+    "low": 2.906,
+    "close": 2.919,
+    "volume": 2549495338,
     "risk_score": -2,
     "intraday_up": -0.000615,
-    "intraday_down": -0.103321,
-    "close_change": -0.103014
+    "intraday_down": -0.106396,
+    "close_change": -0.102399
   }
 ]
