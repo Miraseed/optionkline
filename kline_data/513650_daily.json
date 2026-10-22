@@ -10299,12 +10299,12 @@
     "date": "2026-10-22",
     "open": 2.001,
     "high": 2.003,
-    "low": 1.985,
-    "close": 1.985,
-    "volume": 156245356,
+    "low": 1.981,
+    "close": 1.981,
+    "volume": 160690256,
     "risk_score": 0,
     "intraday_up": 0.002503,
-    "intraday_down": -0.006507,
-    "close_change": -0.006507
+    "intraday_down": -0.008509,
+    "close_change": -0.008509
   }
 ]

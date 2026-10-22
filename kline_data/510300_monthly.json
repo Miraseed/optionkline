@@ -855,12 +855,12 @@
     "date": "2026-10-31",
     "open": 4.418,
     "high": 4.459,
-    "low": 4.102,
-    "close": 4.103,
-    "volume": 15033518066,
+    "low": 4.1,
+    "close": 4.101,
+    "volume": 15063459937,
     "risk_score": -3,
     "intraday_up": 0.006092,
-    "intraday_down": -0.074458,
-    "close_change": -0.074233
+    "intraday_down": -0.07491,
+    "close_change": -0.074684
   }
 ]
