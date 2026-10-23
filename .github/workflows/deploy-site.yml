@@ -1,0 +1,59 @@
+name: deploy-site
+# 静态站"准实时"方案: 交易时段每5分钟拉取最新K线并直接部署 Pages 工件。
+# 不经 git 提交、不经 legacy 分支构建, 从根上避免"频繁提交顶掉构建"的限制。
+# 前置(一次性): 仓库 Settings → Pages → Build and deployment → Source 选 "GitHub Actions"
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC 1:00-7:55 = 北京 9:00-15:55 (日盘)
+    - cron: "*/5 1-7 * * 1-5"
+    # UTC 13:00-15:55 = 北京 21:00-23:55 (夜盘, 含铁矿石)
+    - cron: "*/5 13-15 * * 1-5"
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "assets/**"
+      - "update_data_pages.py"
+      - ".github/workflows/deploy-site.yml"
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+# 新部署排队时取消旧的, 永远只让最新数据生效, 不会互相顶掉
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Fetch latest kline data
+        run: python update_data_pages.py
+      - name: Assemble site
+        run: |
+          mkdir -p site
+          cp index.html site/
+          cp -r assets site/assets
+          cp -r kline_data site/kline_data
+          # 只发布站点所需文件: 排除期权缓存/压缩副本/日志
+          rm -rf site/kline_data/option_cache site/logs
+          find site -name "*.gz" -delete
+          du -sh site
+      - uses: actions/configure-pages@v5
+      - id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4

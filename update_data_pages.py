@@ -491,8 +491,10 @@ def main():
             except Exception as e2:
                 print(f"  摘要回退失败: {e2}")
 
+    # 生成时间戳: 静态托管(GitHub Pages)时前端据此显示"数据 X 秒前更新"
+    summary["_meta"] = {"generated_at": bj_now().strftime("%Y-%m-%d %H:%M:%S")}
     save_json(os.path.join(DATA_DIR, "summary.json"), summary)
-    print(f"摘要已写入 summary.json ({len(summary)} 个标的)")
+    print(f"摘要已写入 summary.json ({len(summary) - 1} 个标的)")
 
     print(f"\n--- 获取PE(TTM)数据 ---")
     try:
