@@ -1731,12 +1731,12 @@
     "date": "2026-10-31",
     "open": 7306.742,
     "high": 7366.857,
-    "low": 6578.272,
-    "close": 6578.2722,
-    "volume": 199852996417,
+    "low": 6301.8139,
+    "close": 6734.5467,
+    "volume": 219379528985,
     "risk_score": -3,
     "intraday_up": 0.009322,
-    "intraday_down": -0.098721,
-    "close_change": -0.098721
+    "intraday_down": -0.136598,
+    "close_change": -0.07731
   }
 ]

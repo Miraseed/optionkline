@@ -8847,12 +8847,12 @@
     "date": "2026-10-23",
     "open": 4.224,
     "high": 4.267,
-    "low": 4.097,
-    "close": 4.107,
-    "volume": 7225622428,
+    "low": 4.031,
+    "close": 4.178,
+    "volume": 10981230641,
     "risk_score": -3,
     "intraday_up": 0.007318,
-    "intraday_down": -0.032814,
-    "close_change": -0.030453
+    "intraday_down": -0.048395,
+    "close_change": -0.013692
   }
 ]
