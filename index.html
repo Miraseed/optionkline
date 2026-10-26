@@ -127,6 +127,18 @@
   .stats-panel .stats-row { display: flex; flex-wrap: wrap; gap: 6px 24px; }
   .stats-panel .risk-high { color: #c53030; font-weight: bold; }
   .stats-panel .risk-low { color: #22543d; font-weight: bold; }
+  /* ===== 评级历史胜率表 ===== */
+  .stats-panel table.rating-stats { border-collapse: collapse; margin-top: 6px; width: 100%; max-width: 760px; }
+  .stats-panel table.rating-stats th, .stats-panel table.rating-stats td {
+    border: 1px solid #e2e8f0; padding: 3px 8px; text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .stats-panel table.rating-stats th { background: #edf2f7; font-weight: bold; white-space: nowrap; }
+  .stats-panel table.rating-stats td:first-child, .stats-panel table.rating-stats th:first-child { text-align: left; white-space: nowrap; }
+  .stats-panel table.rating-stats tr.hl td { background: #fffbeb; }
+  .stats-panel table.rating-stats .tag { display: inline-block; padding: 0 6px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 11px; }
+  .rating-hz-btns { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
+  .rating-hz-btns button { padding: 1px 8px; font-size: 11px; border: 1px solid #cbd5e0; background: white; border-radius: 4px; cursor: pointer; }
+  .rating-hz-btns button.active { background: #2b6cb0; color: white; border-color: #2b6cb0; }
   .pct-pos { color: #c53030; }
   .pct-neg { color: #2f855a; }
 
@@ -1330,6 +1342,7 @@ function renderChart() {
       });
     }
   });
+  lastStatsWindow = { dates, values, riskScores };
   renderStats(dates, values, riskScores);
 }
 
@@ -1352,7 +1365,116 @@ function renderStats(dates, values, riskScores) {
     <div class="stats-row"><span>最高价: <b>${highPrice.toFixed(decimals)}</b></span><span>最低价: <b>${lowPrice.toFixed(decimals)}</b></span></div>
     <div class="stats-row"><span>期初价: <b>${startPrice.toFixed(decimals)}</b></span><span>期末价: <b>${endPrice.toFixed(decimals)}</b></span><span>涨幅: <b class="${changeCls}">${changeSign}${(change*100).toFixed(2)}%</b></span></div>
     <div class="stats-row"><span class="risk-high">巨大风险: ${riskCount}天 (${(riskCount/total*100).toFixed(1)}%)</span><span class="risk-low">巨大机会: ${chanceCount}天 (${(chanceCount/total*100).toFixed(1)}%)</span></div>
+    ${buildRatingStatsHTML()}
   `;
+}
+
+// ==================== 评级历史胜率(统计背书) ====================
+// 对每根已评级K线, 统计"未来N根"的收益分布: 验证评级体系的历史有效性
+const HORIZONS_BY_PERIOD = { daily: [1, 5, 10, 20], weekly: [1, 2, 4, 8], monthly: [1, 2, 3, 6] };
+let ratingHorizon = parseInt(localStorage.getItem("ratingHorizon") || "0", 10) || 0; // 0=取该周期默认(第2档)
+
+function setRatingHorizon(n) {
+  ratingHorizon = n;
+  localStorage.setItem("ratingHorizon", String(n));
+  // 只重算统计面板, 不重画主图
+  const arr = (allData[currentCode] && allData[currentCode][currentPeriod]) || [];
+  const el = document.getElementById("stats-panel");
+  if (el && arr.length) {
+    // 替换表格部分: 简单起见整体重渲染(原始统计依赖的窗口数据由 renderChart 维护)
+    renderChartStatsOnly();
+  }
+}
+
+let lastStatsWindow = null; // renderChart 最近一次传入的窗口数据, 供 horizon 切换复用
+function renderChartStatsOnly() {
+  if (lastStatsWindow) renderStats(lastStatsWindow.dates, lastStatsWindow.values, lastStatsWindow.riskScores);
+}
+
+function computeRatingStats(records, horizon) {
+  // 分桶: score -> {n, sum, rets[]}; baseline=全部已评级K线
+  const buckets = {};
+  for (let s = -3; s <= 3; s++) buckets[s] = { n: 0, rets: [] };
+  const base = { n: 0, rets: [] };
+  for (let i = 0; i < records.length; i++) {
+    const r = records[i];
+    if (r.risk_score === null || r.risk_score === undefined || r.risk_score === "") continue;
+    if (i + horizon >= records.length) break;
+    const c0 = r.close, c1 = records[i + horizon].close;
+    if (!c0 || !c1) continue;
+    const ret = c1 / c0 - 1;
+    const b = buckets[r.risk_score];
+    if (b) { b.n++; b.rets.push(ret); }
+    base.n++; base.rets.push(ret);
+  }
+  return { buckets, base };
+}
+
+function statsOf(rets) {
+  if (!rets.length) return null;
+  const sorted = [...rets].sort((a, b) => a - b);
+  const mean = rets.reduce((a, b) => a + b, 0) / rets.length;
+  const med = sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+  return { mean, med, up: rets.filter(r => r > 0).length / rets.length, n: rets.length };
+}
+
+function buildRatingStatsHTML() {
+  const arr = (allData[currentCode] && allData[currentCode][currentPeriod]) || [];
+  if (arr.length < 30) return "";
+  const horizons = HORIZONS_BY_PERIOD[currentPeriod] || [1, 5, 10, 20];
+  const hz = horizons.includes(ratingHorizon) ? ratingHorizon : horizons[1];
+  const { buckets, base } = computeRatingStats(arr, hz);
+  const bAll = statsOf(base.rets);
+  if (!bAll || bAll.n < 20) return "";
+  const periodName = { daily: "日K", weekly: "周K", monthly: "月K" }[currentPeriod];
+  const unit = { daily: "天", weekly: "周", monthly: "月" }[currentPeriod];
+  const pct = (v, signed) => (signed && v > 0 ? "+" : "") + (v * 100).toFixed(2) + "%";
+  const labelCls = s => s >= 2 ? "risk-high" : s <= -2 ? "risk-low" : "";
+  let rows = "";
+  for (let s = -3; s <= 3; s++) {
+    const st = statsOf(buckets[s].rets);
+    if (!st || st.n < 5) {
+      rows += `<tr><td><span class="tag" style="background:${RISK_BG[String(s)] || "#a0aec0"}">${riskLabel(s)}</span></td><td>${st ? st.n : 0}</td><td colspan="4" style="color:#a0aec0">样本不足</td></tr>`;
+      continue;
+    }
+    // 方向正确率: 负分(机会档)→正收益占比; 正分(风险档)→负收益占比
+    const acc = s < 0 ? st.up : s > 0 ? 1 - st.up : null;
+    const excess = st.mean - bAll.mean;
+    const accCls = acc === null ? "" : acc >= 0.55 ? "pct-pos" : acc <= 0.45 ? "pct-neg" : "";
+    const isHl = s !== 0 && Math.abs(s) >= 2;
+    rows += `<tr${isHl ? ' class="hl"' : ""}>
+      <td><span class="tag" style="background:${RISK_BG[String(s)] || "#a0aec0"}">${riskLabel(s)}</span></td>
+      <td>${st.n}</td>
+      <td class="${st.mean > 0 ? "pct-pos" : "pct-neg"}">${pct(st.mean, true)}</td>
+      <td class="${st.med > 0 ? "pct-pos" : "pct-neg"}">${pct(st.med, true)}</td>
+      <td class="${accCls}">${acc === null ? "--" : (acc * 100).toFixed(1) + "%"}</td>
+      <td class="${excess > 0 ? "pct-pos" : "pct-neg"}">${pct(excess, true)}</td>
+    </tr>`;
+  }
+  // 基准行
+  const baseAcc = "";
+  rows += `<tr style="background:#f1f5f9">
+    <td style="color:#718096">全部K线(基准)</td>
+    <td>${bAll.n}</td>
+    <td class="${bAll.mean > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.mean, true)}</td>
+    <td class="${bAll.med > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.med, true)}</td>
+    <td>${(bAll.up * 100).toFixed(1)}%↑</td>
+    <td>--</td>
+  </tr>`;
+  const hzBtns = horizons.map(h =>
+    `<button class="${h === hz ? "active" : ""}" onclick="setRatingHorizon(${h})">${h}</button>`).join("");
+  const range = `${arr[0].date} ~ ${arr[arr.length - 1].date}`;
+  return `
+    <div class="stats-title">【评级历史胜率】未来 ${hz} 根${periodName}
+      <span class="rating-hz-btns">${hzBtns}</span>
+    </div>
+    <table class="rating-stats">
+      <thead><tr><th>评级</th><th>样本</th><th>平均收益</th><th>中位数</th><th>方向正确率</th><th>超额(vs基准)</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="font-size:11px;color:#718096;margin-top:4px">
+      样本区间 ${range} · 方向正确率: 机会档=未来上涨占比, 风险档=未来下跌占比 · 超额=该档平均收益-全样本平均收益 · 现价/临时柱不参与(未评级)
+    </div>`;
 }
 
 // ==================== 刷新 ====================
