@@ -33,6 +33,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Record schedule delay (observe GitHub cron drift)
+        run: echo "schedule_delay=$(( $(date +%s) % 300 ))" >> "$GITHUB_ENV"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -41,6 +43,16 @@ jobs:
         run: pip install -r requirements.txt
       - name: Fetch latest kline data
         run: python update_data_pages.py
+      - name: Annotate schedule delay into summary
+        run: |
+          python3 - <<'EOF'
+          import json
+          p = "kline_data/summary.json"
+          d = json.load(open(p, encoding="utf-8"))
+          d.setdefault("_meta", {})["schedule_delay_seconds"] = int("${{ env.schedule_delay }}")
+          json.dump(d, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+          print(f"调度延迟: {d['_meta']['schedule_delay_seconds']}s")
+          EOF
       - name: Assemble site
         run: |
           mkdir -p site

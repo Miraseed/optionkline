@@ -249,6 +249,64 @@ def load_last_record(code, period="daily"):
         return None
 
 
+def fetch_etf_dividends(symbol):
+    """新浪基金分红记录(累计值) → [(除息日'YYYY-MM-DD', 每份分红额)] 升序。失败返回 []"""
+    import akshare as ak
+    try:
+        df = ak.fund_etf_dividend_sina(symbol=symbol)
+    except Exception:
+        return []
+    if df is None or df.empty:
+        return []
+    out, prev = [], 0.0
+    for _, row in df.sort_values("日期").iterrows():
+        cum = float(row["累计分红"])
+        amt = round(cum - prev, 6)
+        if amt > 0:
+            out.append((str(row["日期"]), amt))
+        prev = cum
+    return out
+
+
+def apply_qfq_adjustment(df, dividends):
+    """前复权(比例法): 除息日 D 的真实持有收益 = (P_D + d)/P_{D-1}。
+    将 D 之前的所有bar乘以 k = P_D/(P_D + d)(P_D为除息日原始收盘价),
+    收益率序列即连续。最新bar因子=1(锚定真实价), 与实时行情合并保持一致。
+    不复权数据的除息日假跌会污染 ROC/RSI 评级, 513530这类月度分红ETF尤其严重。"""
+    if not dividends:
+        return df
+    ex_map = {}
+    for d_str, amt in dividends:
+        ex_map[d_str] = ex_map.get(d_str, 0.0) + amt
+    date_list = [str(x)[:10] for x in df["date"]]
+    close_raw = df["close"].tolist()
+    fac = [1.0] * len(df)
+    cum = 1.0
+    n_used = 0
+    for d_str in sorted(ex_map, reverse=True):
+        d_amt = ex_map[d_str]
+        idx_ex = None
+        for i in range(len(date_list) - 1, -1, -1):
+            if date_list[i] == d_str:
+                idx_ex = i
+                break
+        if idx_ex is None or idx_ex == 0:
+            continue
+        p_ex = close_raw[idx_ex]
+        if p_ex <= 0 or p_ex <= d_amt:
+            continue
+        cum *= p_ex / (p_ex + d_amt)
+        for i in range(idx_ex):
+            fac[i] = cum
+        n_used += 1
+    if n_used == 0:
+        return df
+    df = df.copy()
+    for col in ("open", "high", "low", "close"):
+        df[col] = [round(v * f, 6) for v, f in zip(df[col].tolist(), fac)]
+    return df
+
+
 def fetch_kline_data(etf):
     import akshare as ak
     code = etf["code"]
@@ -329,6 +387,12 @@ def fetch_kline_data(etf):
                 print(f" =保留[{prev_tail['date']}]", end="")
         except Exception as e:
             print(f"  [保留当日K线失败] {e}", end="")
+    if etf_type == "etf":
+        # ETF前复权: 消除除息日假跌对 ROC/RSI 评级的污染(分红记录获取失败则按不复权)
+        divs = fetch_etf_dividends(symbol)
+        if divs:
+            df = apply_qfq_adjustment(df, divs)
+            print(f" [前复权:{len(divs)}次分红]", end="")
     print(f" → 最终{len(df)}条")
 
     result = {}
@@ -457,6 +521,7 @@ def main():
         import akshare as ak
 
     success = 0
+    failed = []
     summary = {}   # 轻量摘要: 每个标的的日/周/月最后一根, 供前端秒开总览
     for etf in UNDERLYINGS:
         print(f"\n--- {etf['name']} ({etf['code']}) ---")
@@ -476,6 +541,7 @@ def main():
             success += 1
         except Exception as e:
             print(f"  错误: {e}")
+            failed.append(f"{etf['code']}:{str(e)[:40]}")
             # 回退: 用已存在的文件生成摘要, 避免该标的在总览里缺失
             try:
                 rec = {"name": etf["name"]}
@@ -492,7 +558,10 @@ def main():
                 print(f"  摘要回退失败: {e2}")
 
     # 生成时间戳: 静态托管(GitHub Pages)时前端据此显示"数据 X 秒前更新"
-    summary["_meta"] = {"generated_at": bj_now().strftime("%Y-%m-%d %H:%M:%S")}
+    summary["_meta"] = {
+        "generated_at": bj_now().strftime("%Y-%m-%d %H:%M:%S"),
+        "failed_codes": failed,   # 本轮抓取失败的标的(前端/监控可据此告警)
+    }
     save_json(os.path.join(DATA_DIR, "summary.json"), summary)
     print(f"摘要已写入 summary.json ({len(summary) - 1} 个标的)")
 
@@ -504,8 +573,13 @@ def main():
         print(f"PE数据获取失败: {e}")
 
     print("\n" + "=" * 60)
-    print(f"更新完成! K线: {success}/{len(UNDERLYINGS)} 成功")
+    print(f"更新完成! K线: {success}/{len(UNDERLYINGS)} 成功"
+          + (f" 失败: {', '.join(failed)}" if failed else ""))
     print("=" * 60)
+    # 护栏: 超半数标的失败(数据源大面积异常/网络故障)时以非零码退出,
+    # 让 deploy-site 工作流失败从而保留上一次的正常部署, 不发布残缺数据
+    if success * 2 < len(UNDERLYINGS):
+        sys.exit(1)
 
 
 if __name__ == "__main__":
