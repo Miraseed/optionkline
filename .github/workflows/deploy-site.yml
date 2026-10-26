@@ -15,6 +15,7 @@ on:
       - "index.html"
       - "assets/**"
       - "update_data_pages.py"
+      - "update_options.py"
       - ".github/workflows/deploy-site.yml"
 permissions:
   contents: read
@@ -43,6 +44,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: Fetch latest kline data
         run: python update_data_pages.py
+      - name: Fetch options data (IV/PCR/微笑, 失败不阻断)
+        run: python update_options.py || true
       - name: Annotate schedule delay into summary
         run: |
           python3 - <<'EOF'

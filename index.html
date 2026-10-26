@@ -90,6 +90,24 @@
   .rating-tag { padding: 1px 5px; border-radius: 4px; color: white; font-weight: bold; }
   .pe-tag { padding: 1px 5px; border-radius: 4px; color: #333; font-weight: bold; font-size: 9px; white-space: nowrap; }
 
+  /* ===== 卡片期权摘要行 ===== */
+  .etf-card-opt { font-size: 10px; color: #4a5568; margin-top: 5px; display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px dashed #e2e8f0; padding-top: 4px; }
+  .etf-card-opt span b { color: #2b6cb0; }
+
+  /* ===== 期权仪表盘 ===== */
+  #option-panel { background: white; border-radius: 10px; padding: 14px; margin-top: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  #option-panel h3 { font-size: 14px; color: #2c5282; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .opt-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .opt-chip { font-size: 11px; padding: 4px 10px; border-radius: 12px; background: #edf2f7; color: #2d3748; }
+  .opt-chip b { font-size: 13px; margin-left: 2px; }
+  .opt-chip .sub { font-weight: normal; color: #718096; }
+  .opt-chip.warn { background: #feebc8; color: #c05621; }
+  .opt-chip.good { background: #c6f6d5; color: #22543d; }
+  .opt-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+  .opt-chart-box { border: 1px solid #edf2f7; border-radius: 8px; overflow: hidden; }
+  .opt-chart-title { font-size: 12px; color: #4a5568; font-weight: bold; padding: 6px 10px 0; }
+  .opt-chart { height: 220px; }
+
   .detail { background: white; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
   .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
   .detail-header h2 { font-size: 15px; color: #2c5282; }
@@ -240,6 +258,15 @@
       </div>
     </div>
     <div class="chart-container" id="kline-chart"></div>
+    <div id="option-panel" style="display:none;">
+      <h3>期权仪表盘 <span id="opt-updated" style="font-size:11px;color:#a0aec0;font-weight:normal"></span></h3>
+      <div class="opt-chips" id="opt-chips"></div>
+      <div class="opt-charts">
+        <div class="opt-chart-box"><div class="opt-chart-title">波动率微笑（近月）</div><div class="opt-chart" id="opt-smile"></div></div>
+        <div class="opt-chart-box"><div class="opt-chart-title">期限结构（ATM IV）</div><div class="opt-chart" id="opt-term"></div></div>
+        <div class="opt-chart-box"><div class="opt-chart-title">ATM IV 历史</div><div class="opt-chart" id="opt-hist"></div></div>
+      </div>
+    </div>
     <div class="stats-panel" id="stats-panel" style="display:none;"></div>
     <div class="table-container">
       <table id="data-table">
@@ -813,6 +840,153 @@ async function loadCodeData(code, noCache, force) {
   }
 }
 
+// ==================== 期权仪表盘 ====================
+const OPTION_CODES = ["510050", "510300", "510500", "588000", "000852", "I0"];
+const optCache = {};   // code -> snapshot
+const optHist = {};    // code -> iv history 数组
+const optCharts = {};  // {smile, term, hist} -> {dom, chart}
+
+// 后台预取所有标的的期权快照(404容错), 完成后补渲染卡片与面板
+async function preloadOptions() {
+  await Promise.all(OPTION_CODES.map(async code => {
+    try { optCache[code] = await loadJSON(`kline_data/options/${code}_snapshot.json`); }
+    catch (e) { optCache[code] = null; }
+  }));
+  if (typeof renderSummary === "function") renderSummary();
+  if (currentCode) renderOptionPanel(currentCode);
+}
+
+async function loadOptHist(code) {
+  if (optHist[code]) return optHist[code];
+  try { optHist[code] = await loadJSON(`kline_data/options/iv_history/${code}.json`); }
+  catch (e) { optHist[code] = []; }
+  return optHist[code];
+}
+
+// 总览卡片里的期权摘要行
+function optCardLine(code) {
+  const s = optCache[code];
+  if (!s || s.atm_iv == null) return "";
+  const exp = s.expiries && s.expiries[0];
+  const pcr = s.pcr_vol != null ? `PCR量 <b>${s.pcr_vol}</b>` : (s.pcr_oi != null ? `PCR仓 <b>${s.pcr_oi}</b>` : "");
+  const ratio = s.iv_hv_ratio != null ? `IV/HV <b>${s.iv_hv_ratio}</b>` : "";
+  return `<div class="etf-card-opt"><span>IV <b>${s.atm_iv}</b></span>${ratio}${pcr}${exp ? `<span>距到期 <b>${exp.days_left}天</b></span>` : ""}</div>`;
+}
+
+function getOptChart(key, dom) {
+  let entry = optCharts[key];
+  if (!entry || entry.dom !== dom) {
+    if (entry && entry.chart) entry.chart.dispose();
+    entry = { dom, chart: echarts.init(dom) };
+    optCharts[key] = entry;
+  }
+  return entry.chart;
+}
+
+function resizeOptCharts() {
+  Object.values(optCharts).forEach(e => { if (e && e.chart) e.chart.resize(); });
+}
+
+async function renderOptionPanel(code) {
+  const panel = document.getElementById("option-panel");
+  if (!panel) return;
+  const s = optCache[code];
+  if (!s || s.atm_iv == null) { panel.style.display = "none"; return; }
+  panel.style.display = "block";
+  document.getElementById("opt-updated").textContent = `更新于 ${s.updated_at || "--"}`;
+  // 指标 chips
+  const hvTxt = s.hv20 != null ? `${s.hv20}%` : "--";
+  const hvSub = s.hv20_pct != null ? ` (分位 ${s.hv20_pct}%)` : "";
+  const pcr = s.pcr_vol != null ? `${s.pcr_vol} (量)` : s.pcr_oi != null ? `${s.pcr_oi} (仓)` : "--";
+  const exp = s.expiries && s.expiries[0];
+  const daysLeft = exp ? exp.days_left : null;
+  const ratioCls = s.iv_hv_ratio != null ? (s.iv_hv_ratio >= 1.4 ? "warn" : s.iv_hv_ratio <= 0.8 ? "good" : "") : "";
+  const chips = [
+    { label: "近月ATM IV", val: `${s.atm_iv}%`, cls: "" },
+    { label: "HV20", val: hvTxt, sub: hvSub, cls: "" },
+    { label: "IV/HV", val: s.iv_hv_ratio != null ? s.iv_hv_ratio : "--", cls: ratioCls, sub: s.iv_hv_ratio != null ? (s.iv_hv_ratio >= 1.4 ? " 权利金偏贵" : s.iv_hv_ratio <= 0.8 ? " 权利金偏宜" : "") : "" },
+    { label: "PCR", val: pcr, cls: "" },
+    { label: "近月到期", val: daysLeft != null ? `${daysLeft}天` : "--", cls: daysLeft != null && daysLeft <= 7 ? "warn" : "", sub: exp ? ` ${exp.expiry}` : "" },
+  ];
+  document.getElementById("opt-chips").innerHTML = chips.map(c =>
+    `<span class="opt-chip ${c.cls}">${c.label}<b>${c.val}</b>${c.sub ? `<span class="sub">${c.sub}</span>` : ""}</span>`).join("");
+  renderSmileChart(s);
+  renderTermChart(s);
+  const hist = await loadOptHist(code);
+  renderHistChart(hist);
+}
+
+function renderSmileChart(s) {
+  const el = document.getElementById("opt-smile");
+  if (!el || !s.smile || !s.smile.length) return;
+  const sm = s.smile[0];
+  const chart = getOptChart("smile", el);
+  // 标的现价参考线: 最近档行权价
+  let atmIdx = null;
+  if (s.spot && sm.strikes.length) {
+    atmIdx = sm.strikes.reduce((best, k, i) =>
+      Math.abs(k - s.spot) < Math.abs(sm.strikes[best] - s.spot) ? i : best, 0);
+  }
+  chart.setOption({
+    grid: { left: 44, right: 14, top: 28, bottom: 28 },
+    tooltip: { trigger: "axis", valueFormatter: v => v == null ? "--" : v + "%" },
+    legend: { top: 2, itemWidth: 14, textStyle: { fontSize: 10 } },
+    xAxis: { type: "category", data: sm.strikes, axisLabel: { fontSize: 9 } },
+    yAxis: { type: "value", scale: true, axisLabel: { fontSize: 9, formatter: "{value}%" } },
+    series: [
+      { name: "认购IV", type: "line", data: sm.call_iv, smooth: true, symbolSize: 3,
+        lineStyle: { width: 2, color: "#e53e3e" }, itemStyle: { color: "#e53e3e" },
+        markLine: atmIdx == null ? undefined : { silent: true, symbol: "none", label: { formatter: "现价", fontSize: 9 },
+          lineStyle: { type: "dashed", color: "#718096" }, data: [{ xAxis: atmIdx }] } },
+      { name: "认沽IV", type: "line", data: sm.put_iv, smooth: true, symbolSize: 3,
+        lineStyle: { width: 2, color: "#2b6cb0" }, itemStyle: { color: "#2b6cb0" } },
+    ],
+  }, true);
+  chart.resize();
+}
+
+function renderTermChart(s) {
+  const el = document.getElementById("opt-term");
+  if (!el) return;
+  const ts = (s.term_structure || []).filter(t => t.atm_iv != null);
+  const chart = getOptChart("term", el);
+  chart.setOption({
+    grid: { left: 44, right: 14, top: 28, bottom: 28 },
+    tooltip: { trigger: "axis", valueFormatter: v => v == null ? "--" : v + "%" },
+    xAxis: { type: "category", data: ts.map(t => t.month), axisLabel: { fontSize: 9 } },
+    yAxis: { type: "value", scale: true, axisLabel: { fontSize: 9, formatter: "{value}%" } },
+    series: [{
+      name: "ATM IV", type: "bar", data: ts.map(t => t.atm_iv),
+      itemStyle: { color: "#805ad5", borderRadius: [3, 3, 0, 0] },
+      label: { show: true, position: "top", fontSize: 9, color: "#553c9a", formatter: p => p.value == null ? "" : p.value },
+      barMaxWidth: 36,
+    }],
+  }, true);
+  chart.resize();
+}
+
+function renderHistChart(hist) {
+  const el = document.getElementById("opt-hist");
+  if (!el) return;
+  const chart = getOptChart("hist", el);
+  chart.setOption({
+    grid: { left: 44, right: 14, top: 28, bottom: 44 },
+    tooltip: { trigger: "axis", valueFormatter: v => v == null ? "--" : v + "%" },
+    legend: { top: 2, itemWidth: 14, textStyle: { fontSize: 10 } },
+    xAxis: { type: "category", data: hist.map(h => h.date), axisLabel: { fontSize: 9, rotate: 30 } },
+    yAxis: { type: "value", scale: true, axisLabel: { fontSize: 9, formatter: "{value}%" } },
+    series: [
+      { name: "ATM IV", type: "line", data: hist.map(h => h.atm_iv), symbolSize: 3,
+        lineStyle: { width: 2, color: "#d69e2e" }, itemStyle: { color: "#d69e2e" },
+        areaStyle: { opacity: 0.08, color: "#d69e2e" } },
+      { name: "HV20", type: "line", data: hist.map(h => h.hv20), symbolSize: 0,
+        lineStyle: { width: 1, type: "dashed", color: "#718096" }, itemStyle: { color: "#718096" } },
+    ],
+  }, true);
+  chart.resize();
+}
+window.addEventListener("resize", resizeOptCharts);
+
 // ==================== 渲染 ====================
 function renderSummary() {
   const grid = document.getElementById("summary-grid");
@@ -862,6 +1036,7 @@ function renderSummary() {
           <span class="rating-left">日:${ratingTag(code,"daily",lastDaily)} 周:${ratingTag(code,"weekly",lastWeekly)} 月:${ratingTag(code,"monthly",lastMonthly)}</span>
           ${peTag()}
         </div>
+        ${optCardLine(code)}
       </div>`;
   }
   grid.innerHTML = html;
@@ -871,6 +1046,7 @@ function selectETF(code) {
   currentCode = code;
   document.getElementById("detail-section").style.display = "block";
   renderSummary();
+  renderOptionPanel(code);  // 期权仪表盘(无期权标的自动隐藏)
   applyStatsVisibility();
   if (isCodeLoaded(code)) {
     renderDetail();
@@ -1440,6 +1616,9 @@ async function initApp() {
     // 2) 立即选中首个标的, 按需加载其完整K线
     const first = UNDERLYINGS[0];
     if (first) selectETF(first.code);
+
+    // 2.5) 期权快照后台预取(不阻塞首屏), 完成后自动补渲染卡片与面板
+    preloadOptions();
 
     // 3) 实时行情到达后叠加并刷新视图
     const rtData = await rtPromise;

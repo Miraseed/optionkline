@@ -74,7 +74,12 @@ def run_update():
                 [sys.executable, "update_data_pages.py"],
                 cwd=BASE_DIR, stdout=f, stderr=subprocess.STDOUT,
             )
-            f.write(f"===== 更新结束 {bj_now().strftime('%H:%M:%S')} rc={r.returncode} =====\n")
+            # 期权数据(IV/PCR/微笑/期限结构), 失败不阻断主数据
+            r2 = subprocess.run(
+                [sys.executable, "update_options.py"],
+                cwd=BASE_DIR, stdout=f, stderr=subprocess.STDOUT,
+            )
+            f.write(f"===== 更新结束 {bj_now().strftime('%H:%M:%S')} rc={r.returncode}/{r2.returncode} =====\n")
         _last_update.update(ts=time.time(), ok=(r.returncode == 0),
                             duration=round(time.time() - t0, 1))
         save_status()
