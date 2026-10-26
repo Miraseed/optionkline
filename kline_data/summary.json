@@ -188,7 +188,7 @@
       "low": 6.475,
       "close": 6.75,
       "volume": 7739600293,
-      "risk_score": -3,
+      "risk_score": -2,
       "intraday_up": 0.003881,
       "intraday_down": -0.133431,
       "close_change": -0.096627
@@ -236,40 +236,40 @@
   "I0": {
     "name": "铁矿石主连",
     "daily": {
-      "date": "2026-10-23",
-      "open": 669.0,
-      "high": 676.5,
-      "low": 665.5,
-      "close": 675.0,
-      "volume": 277242,
+      "date": "2026-10-26",
+      "open": 673.5,
+      "high": 674.0,
+      "low": 667.0,
+      "close": 671.5,
+      "volume": 222827,
       "risk_score": -1,
-      "intraday_up": 0.011211,
-      "intraday_down": -0.005232,
-      "close_change": 0.008969
+      "intraday_up": -0.001481,
+      "intraday_down": -0.011852,
+      "close_change": -0.005185
     },
     "weekly": {
-      "date": "2026-10-23",
-      "open": 672.5,
-      "high": 689.0,
-      "low": 664.5,
-      "close": 675.0,
-      "volume": 1393250,
+      "date": "2026-10-30",
+      "open": 673.5,
+      "high": 674.0,
+      "low": 667.0,
+      "close": 671.5,
+      "volume": 222827,
       "risk_score": -2,
-      "intraday_up": 0.024535,
-      "intraday_down": -0.011896,
-      "close_change": 0.003717
+      "intraday_up": -0.001481,
+      "intraday_down": -0.011852,
+      "close_change": -0.005185
     },
     "monthly": {
       "date": "2026-10-31",
       "open": 692.0,
       "high": 698.0,
       "low": 664.5,
-      "close": 675.0,
-      "volume": 3354251,
+      "close": 671.5,
+      "volume": 3577078,
       "risk_score": -3,
       "intraday_up": -0.006406,
       "intraday_down": -0.054093,
-      "close_change": -0.039146
+      "close_change": -0.044128
     }
   },
   "510880": {
@@ -339,15 +339,15 @@
     },
     "monthly": {
       "date": "2026-10-31",
-      "open": 1.548,
-      "high": 1.596,
+      "open": 1.538134,
+      "high": 1.585828,
       "low": 1.474,
       "close": 1.507,
       "volume": 2968141301,
-      "risk_score": -2,
+      "risk_score": -1,
       "intraday_up": 0.022422,
-      "intraday_down": -0.055734,
-      "close_change": -0.034593
+      "intraday_down": -0.049677,
+      "close_change": -0.028401
     }
   },
   "513650": {
@@ -429,6 +429,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-26 16:09:12"
+    "generated_at": "2026-10-27 00:07:48",
+    "failed_codes": []
   }
 }
