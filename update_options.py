@@ -463,6 +463,12 @@ def main():
             print(f"  [{code}] 失败: {str(e)[:80]}")
     if failed:
         print(f"[期权] 失败标的: {failed}")
+    # 期权快照更新后重算复盘报告, 让 IV/HV 等提示反映本轮最新数据
+    try:
+        from update_data_pages import generate_review
+        generate_review()
+    except Exception as e:
+        print(f"[期权] 复盘报告生成失败: {str(e)[:80]}")
     # 至少成功一半才算通过(护栏)
     if len(failed) >= len(OPTION_TARGETS):
         print("[期权] 全部失败, 退出码1")

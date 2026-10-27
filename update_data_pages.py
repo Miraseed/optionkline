@@ -505,6 +505,84 @@ def save_json(path, data):
             shutil.copyfileobj(src, dst)
 
 
+def generate_review():
+    """收盘复盘报告: 各标的最新评级/较上一根变化/评级跳变/期权极端提示。
+    读已落盘的K线与期权快照, 零额外网络请求。产出:
+      kline_data/review_latest.json   前端展示(每轮覆盖)
+      kline_data/review_archive/{date}_{session}.json  存档(每日job入库)
+    """
+    review_dir = os.path.join(DATA_DIR, "review_archive")
+    os.makedirs(review_dir, exist_ok=True)
+    now = bj_now()
+    session = "day" if now.hour < 16 else "night"
+    items, alerts = [], []
+    for etf in UNDERLYINGS:
+        code = etf["code"]
+        ratings, prev = {}, {}
+        spot = chg = None
+        for period in ("daily", "weekly", "monthly"):
+            try:
+                with open(os.path.join(DATA_DIR, f"{code}_{period}.json"), encoding="utf-8") as f:
+                    arr = json.load(f)
+            except Exception:
+                continue
+            if len(arr) >= 1:
+                ratings[period] = arr[-1].get("risk_score")
+                spot = arr[-1].get("close") if spot is None else spot
+                chg = arr[-1].get("close_change") if chg is None else chg
+            if len(arr) >= 2:
+                prev[period] = arr[-2].get("risk_score")
+        if "daily" not in ratings:
+            continue
+        changes = {p: (ratings[p] - prev[p]) if (ratings.get(p) is not None and prev.get(p) is not None) else None
+                   for p in ratings}
+        jump = any(c is not None and abs(c) >= 2 for c in changes.values())
+        item = {"code": code, "name": etf["name"], "spot": spot, "chg": chg,
+                "ratings": ratings, "changes": changes, "jump": jump}
+        # 期权提示
+        opt_path = os.path.join(DATA_DIR, "options", f"{code}_snapshot.json")
+        try:
+            with open(opt_path, encoding="utf-8") as f:
+                snap = json.load(f)
+            iv = {"atm_iv": snap.get("atm_iv"), "iv_hv_ratio": snap.get("iv_hv_ratio"),
+                  "pcr_vol": snap.get("pcr_vol"), "pcr_oi": snap.get("pcr_oi"),
+                  "days_left": (snap.get("expiries") or [{}])[0].get("days_left")}
+            item["iv"] = iv
+            r = iv.get("iv_hv_ratio")
+            if r is not None and r >= 1.4:
+                alerts.append(f"{etf['name']} 权利金偏贵 (IV/HV {r})")
+            elif r is not None and r <= 0.8:
+                alerts.append(f"{etf['name']} 权利金偏宜 (IV/HV {r})")
+            dl = iv.get("days_left")
+            if dl is not None and dl <= 7:
+                alerts.append(f"{etf['name']} 期权近月 {dl} 天后到期 (末日轮, IV失真)")
+        except Exception:
+            pass
+        # 评级跳变 & 多周期共振
+        for p, c in changes.items():
+            if c is not None and abs(c) >= 2:
+                pn = {"daily": "日", "weekly": "周", "monthly": "月"}[p]
+                alerts.append(f"{etf['name']} {pn}评级跳变 {prev[p]:+d}→{ratings[p]:+d}")
+        d, w = ratings.get("daily"), ratings.get("weekly")
+        if d is not None and w is not None:
+            if d <= -2 and w <= -1:
+                alerts.append(f"{etf['name']} 日+周共振机会 (日{d:+d}/周{w:+d})")
+            elif d >= 2 and w >= 1:
+                alerts.append(f"{etf['name']} 日+周共振风险 (日{d:+d}/周{w:+d})")
+        items.append(item)
+    review = {
+        "date": now.strftime("%Y-%m-%d"),
+        "session": session,
+        "generated_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+        "items": items,
+        "alerts": alerts,
+    }
+    save_json(os.path.join(DATA_DIR, "review_latest.json"), review)
+    save_json(os.path.join(review_dir, f"{review['date']}_{session}.json"), review)
+    print(f"复盘报告已生成: {len(items)} 标的, {len(alerts)} 条提醒 ({session})")
+    return review
+
+
 def main():
     print("=" * 60)
     print("期权时空容错交易系统 - GitHub Pages 数据更新")
@@ -571,6 +649,12 @@ def main():
         save_json(os.path.join(DATA_DIR, "pe_data.json"), pe_data)
     except Exception as e:
         print(f"PE数据获取失败: {e}")
+
+    # 收盘复盘报告(读已落盘数据, 零网络请求)
+    try:
+        generate_review()
+    except Exception as e:
+        print(f"复盘报告生成失败: {e}")
 
     print("\n" + "=" * 60)
     print(f"更新完成! K线: {success}/{len(UNDERLYINGS)} 成功"

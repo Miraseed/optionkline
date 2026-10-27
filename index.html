@@ -108,6 +108,26 @@
   .opt-chart-title { font-size: 12px; color: #4a5568; font-weight: bold; padding: 6px 10px 0; }
   .opt-chart { height: 220px; }
 
+  /* ===== 收盘复盘 ===== */
+  #review-panel { background: white; border-radius: 10px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .review-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .review-head h2 { font-size: 14px; color: #2c5282; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .review-meta { font-size: 11px; color: #718096; font-weight: normal; }
+  .review-toggle { background: #edf2f7; border: 1px solid #cbd5e0; color: #4a5568; font-size: 11px; padding: 3px 10px; border-radius: 6px; cursor: pointer; }
+  .review-alerts { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .review-alert { font-size: 11px; padding: 3px 10px; border-radius: 12px; background: #edf2f7; color: #2d3748; }
+  .review-alert.bad { background: #fed7d7; color: #c53030; }
+  .review-alert.good { background: #c6f6d5; color: #22543d; }
+  .review-table-wrap { overflow-x: auto; }
+  table.review-table { border-collapse: collapse; width: 100%; font-size: 12px; font-variant-numeric: tabular-nums; }
+  table.review-table th, table.review-table td { border: 1px solid #e2e8f0; padding: 5px 8px; text-align: right; white-space: nowrap; }
+  table.review-table th { background: #f7fafc; color: #4a5568; }
+  table.review-table td:first-child, table.review-table th:first-child { text-align: left; }
+  table.review-table tr.jump { background: #fffaf0; }
+  .review-delta { font-size: 10px; margin-left: 4px; }
+  .review-delta.up { color: #c53030; }
+  .review-delta.down { color: #22543d; }
+
   .detail { background: white; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
   .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
   .detail-header h2 { font-size: 15px; color: #2c5282; }
@@ -256,6 +276,19 @@
     <h2>📊 标的风险评级总览（点击查看详情）</h2>
     <div class="summary-grid" id="summary-grid">
       <div class="loading"><div class="spinner"></div><p>加载中...</p></div>
+    </div>
+  </div>
+
+  <div id="review-panel" style="display:none;">
+    <div class="review-head">
+      <h2>🗒️ 收盘复盘 <span class="review-meta" id="review-meta"></span></h2>
+      <button class="review-toggle" id="review-toggle" onclick="toggleReview()">收起</button>
+    </div>
+    <div id="review-body">
+      <div class="review-alerts" id="review-alerts"></div>
+      <div class="review-table-wrap">
+        <table class="review-table" id="review-table"></table>
+      </div>
     </div>
   </div>
 
@@ -873,6 +906,67 @@ async function loadOptHist(code) {
   try { optHist[code] = await loadJSON(`kline_data/options/iv_history/${code}.json`); }
   catch (e) { optHist[code] = []; }
   return optHist[code];
+}
+
+// ==================== 收盘复盘 ====================
+// 服务端每轮更新后生成 review_latest.json: 各标的评级/较上一根变化 + 异常提醒
+let reviewData = null;
+let reviewCollapsed = false;
+
+async function loadReview(noCache) {
+  try {
+    reviewData = await loadJSON("kline_data/review_latest.json", noCache);
+    renderReview();
+  } catch (e) { /* 尚未生成时静默隐藏 */ }
+}
+
+function toggleReview() {
+  reviewCollapsed = !reviewCollapsed;
+  document.getElementById("review-body").style.display = reviewCollapsed ? "none" : "block";
+  document.getElementById("review-toggle").textContent = reviewCollapsed ? "展开" : "收起";
+}
+
+function reviewDelta(c) {
+  if (c === null || c === undefined || c === 0) return "";
+  return `<span class="review-delta ${c > 0 ? "up" : "down"}">${c > 0 ? "+" : ""}${c}</span>`;
+}
+
+function renderReview() {
+  const panel = document.getElementById("review-panel");
+  if (!panel || !reviewData || !reviewData.items || !reviewData.items.length) return;
+  panel.style.display = "block";
+  const r = reviewData;
+  document.getElementById("review-meta").textContent =
+    `${r.date} ${r.session === "night" ? "夜盘" : "日盘"} · 生成于 ${r.generated_at}`;
+  // 异常提醒 chips
+  const alerts = r.alerts || [];
+  document.getElementById("review-alerts").innerHTML = alerts.length
+    ? alerts.map(t => {
+        const cls = /风险|跳变|末日轮|偏贵/.test(t) ? "bad" : /机会|偏宜/.test(t) ? "good" : "";
+        return `<span class="review-alert ${cls}">${t}</span>`;
+      }).join("")
+    : `<span class="review-alert">本轮无异常提醒</span>`;
+  // 评级变化表
+  const P = { daily: "日", weekly: "周", monthly: "月" };
+  let html = `<thead><tr><th>标的</th><th>现价</th><th>涨跌</th>`
+    + Object.values(P).map(p => `<th>${p}评级</th>`).join("") + `<th>期权</th></tr></thead><tbody>`;
+  for (const it of r.items) {
+    const chg = it.chg != null
+      ? `<span style="color:${it.chg >= 0 ? "#c53030" : "#22543d"}">${(it.chg * 100).toFixed(2)}%</span>` : "--";
+    const cells = ["daily", "weekly", "monthly"].map(p => {
+      const v = it.ratings ? it.ratings[p] : null;
+      const c = it.changes ? it.changes[p] : null;
+      const bg = RISK_BG[String(v)] || "#e2e8f0";
+      return `<td><span style="background:${bg};padding:1px 6px;border-radius:4px">${riskLabel(v)}</span>${reviewDelta(c)}</td>`;
+    }).join("");
+    const iv = it.iv && it.iv.atm_iv != null
+      ? `IV ${it.iv.atm_iv}%${it.iv.iv_hv_ratio != null ? ` · IV/HV ${it.iv.iv_hv_ratio}` : ""}`
+      : "—";
+    html += `<tr class="${it.jump ? "jump" : ""}"><td>${it.name}</td>`
+      + `<td>${it.spot != null ? it.spot : "--"}</td><td>${chg}</td>${cells}`
+      + `<td style="text-align:left">${iv}</td></tr>`;
+  }
+  document.getElementById("review-table").innerHTML = html + "</tbody>";
 }
 
 // 总览卡片里的期权摘要行
@@ -1540,6 +1634,7 @@ async function refreshData(noCache) {
   }
   syncTailFromSummary();
   if (currentCode && !isCodeLoaded(currentCode)) await loadCodeData(currentCode, noCache);
+  loadReview(noCache);   // 复盘报告随数据一起刷新(小文件, 不 await)
 }
 
 // 用摘要的最新一根增量并入已加载的K线: 同日则更新末根, 新日期则追加(不丢失历史)
@@ -1741,6 +1836,8 @@ async function initApp() {
 
     // 2.5) 期权快照后台预取(不阻塞首屏), 完成后自动补渲染卡片与面板
     preloadOptions();
+    // 2.6) 收盘复盘报告(服务端生成, 小文件, 不阻塞)
+    loadReview();
 
     // 3) 实时行情到达后叠加并刷新视图
     const rtData = await rtPromise;
