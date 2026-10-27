@@ -65,9 +65,13 @@ def bs_price(S, K, T, r, sigma, is_call, fut=False):
         return (max(S - K, 0.0) if is_call else max(K - S, 0.0))
     d1 = (math.log(S / K) + 0.5 * sigma * sigma * T) / (sigma * math.sqrt(T))
     d2 = d1 - sigma * math.sqrt(T)
-    if fut:
-        return math.exp(-r * T) * (S * norm_cdf(d1) - K * norm_cdf(d2))
-    return S * norm_cdf(d1) - math.exp(-r * T) * K * norm_cdf(d2)
+    if fut:      # Black-76: 以标的期货价 F 为基准, 贴现到现值
+        if is_call:
+            return math.exp(-r * T) * (S * norm_cdf(d1) - K * norm_cdf(d2))
+        return math.exp(-r * T) * (K * norm_cdf(-d2) - S * norm_cdf(-d1))
+    if is_call:
+        return S * norm_cdf(d1) - math.exp(-r * T) * K * norm_cdf(d2)
+    return math.exp(-r * T) * K * norm_cdf(-d2) - S * norm_cdf(-d1)
 
 
 def implied_vol(price, S, K, T, r, is_call, fut=False):
@@ -100,16 +104,28 @@ def third_friday(y, m):
     return datetime(y, m, fridays[2]).date()
 
 
-def last_n_workday(y, m, n=5):
-    """大商所商品期权: 标的期货交割月前第一月的倒数第5个交易日(工作日近似)"""
+def nth_workday(y, m, n):
+    """某月第 n 个工作日(不剔除法定节假日, 与交易所日历误差 1~2 天)"""
     import calendar
     cnt = 0
-    for d in range(calendar.monthrange(y, m)[1], 0, -1):
+    for d in range(1, calendar.monthrange(y, m)[1] + 1):
         if datetime(y, m, d).weekday() < 5:
             cnt += 1
             if cnt == n:
                 return datetime(y, m, d).date()
     return None
+
+
+def dce_expiry(y, m):
+    """大商所商品期权最后交易日: 交割月前一个月的第 n 个交易日
+
+    2024-11 大商所公告将最后交易日由"第5个交易日"延后至"第12个交易日",
+    自 2501 合约起施行(实测 i2501→2024-12-17、i2505→2025-04-17、i2509→2025-08-18
+    均与 12 个交易日吻合)。m 为标的期货的交割月份。
+    """
+    n = 12 if y * 100 + m >= 2501 else 5
+    ey, em = (y - 1, 12) if m == 1 else (y, m - 1)
+    return nth_workday(ey, em, n)
 
 
 # ============ 标的现价与 HV ============
@@ -273,13 +289,9 @@ def fetch_dce_option(code):
     months_out, chains = [], {}
     for c in contracts:
         ym = c.replace("i", "")
-        # 大商所: 到期日 = 交割月前第一月的倒数第5个交易日(工作日近似)
+        # 大商所: 到期日 = 交割月前第一月的第 n 个交易日(2501 起 n=12, 之前 n=5)
         y, m = 2000 + int(ym[:2]), int(ym[2:])
-        if m == 1:
-            y, m = y - 1, 12
-        else:
-            m -= 1
-        exp = last_n_workday(y, m, 5)
+        exp = dce_expiry(y, m)
         if not exp:
             continue
         T = max((exp - bj_now().date()).days, 0) / 365.0
@@ -341,6 +353,26 @@ def chain_metrics(calls, puts, S):
             "smile": smile, "atm_chain": atm_chain}
 
 
+# 固定期限ATM IV: 选到期天数落在 [15,45] 且最接近30天的月份, 避免末日轮IV失真
+# 注: 与 backfill_iv.py 的口径必须一致, 否则历史分位与实时值不可比
+IV_TENOR_MIN, IV_TENOR_MAX, IV_TENOR_TARGET = 15, 45, 30
+
+
+def pick_atm_iv(term_structure):
+    """从期限结构中挑"约30天"的 ATM IV; 无合适月份时回退最近月。
+    返回 (atm_iv, month, days_left)"""
+    cands = [t for t in term_structure
+             if t.get("atm_iv") and t.get("days_left") is not None
+             and IV_TENOR_MIN <= t["days_left"] <= IV_TENOR_MAX]
+    if cands:
+        t = min(cands, key=lambda x: abs(x["days_left"] - IV_TENOR_TARGET))
+        return t["atm_iv"], t.get("month"), t["days_left"]
+    t = next((x for x in term_structure if x.get("atm_iv")), None)
+    if t:
+        return t["atm_iv"], t.get("month"), t.get("days_left")
+    return None, None, None
+
+
 def assemble_from_chains(code, months, chains, iv_source):
     spot = underlying_spot(code)
     term, expiries = [], []
@@ -370,7 +402,7 @@ def assemble_from_chains(code, months, chains, iv_source):
     atm_chain_near = near_metrics["atm_chain"] if near_metrics else []
     pcr_vol = next((t["pcr_vol"] for t in term_structure if t["pcr_vol"]), None)
     pcr_oi = next((t["pcr_oi"] for t in term_structure if t["pcr_oi"]), None)
-    atm_iv = next((t["atm_iv"] for t in term_structure if t["atm_iv"]), None)
+    atm_iv, atm_iv_month, atm_iv_days = pick_atm_iv(term_structure)
     closes = load_closes(code)
     hv20, hv_pct = calc_hv(closes)
     snap = {
@@ -379,6 +411,7 @@ def assemble_from_chains(code, months, chains, iv_source):
         "spot": spot,
         "iv_source": iv_source,
         "atm_iv": atm_iv,
+        "atm_iv_month": atm_iv_month, "atm_iv_days": atm_iv_days,
         "hv20": hv20, "hv20_pct": hv_pct,
         "iv_hv_ratio": round(atm_iv / hv20, 3) if atm_iv and hv20 else None,
         "pcr_vol": pcr_vol, "pcr_oi": pcr_oi,
@@ -459,7 +492,7 @@ def append_history(code, snap):
     else:
         hist.append(entry)
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(hist[-1000:], f, ensure_ascii=False)
+        json.dump(hist, f, ensure_ascii=False)
 
 
 # ============ 主流程 ============

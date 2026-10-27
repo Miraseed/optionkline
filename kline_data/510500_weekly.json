@@ -8390,13 +8390,13 @@
   {
     "date": "2026-10-30",
     "open": 6.801,
-    "high": 6.822,
-    "low": 6.702,
-    "close": 6.75,
-    "volume": 710613717,
+    "high": 6.83,
+    "low": 6.624,
+    "close": 6.631,
+    "volume": 1116867588,
     "risk_score": -3,
-    "intraday_up": -0.005104,
-    "intraday_down": -0.022605,
-    "close_change": -0.015604
+    "intraday_up": -0.003938,
+    "intraday_down": -0.03398,
+    "close_change": -0.032959
   }
 ]
