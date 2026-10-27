@@ -410,6 +410,33 @@ def build_snapshot(code, expiries, calls_all, puts_all, greeks, iv_source):
     return snap
 
 
+# ============ IV 长期分位 ============
+IV_PCT_MIN_SAMPLE = 20   # 样本不足20个交易日时分位不参与提示(避免噪声)
+
+
+def iv_percentile(code, atm_iv, today):
+    """当前 ATM IV 在本标的 IV 历史(逐日累积)中的分位(0-100)。
+    返回 (分位 或 None, 样本天数)。样本 < IV_PCT_MIN_SAMPLE 时分位返回 None。
+    注: 历史来自 iv_history 逐日累积, 上线时间尚短, 故同时回传样本天数供前端标注。
+    """
+    if atm_iv is None:
+        return None, 0
+    path = os.path.join(HIST_DIR, f"{code}.json")
+    vals = []
+    try:
+        with open(path, encoding="utf-8") as f:
+            for r in json.load(f):
+                v = r.get("atm_iv")
+                if v is not None and r.get("date") != today:
+                    vals.append(v)
+    except Exception:
+        vals = []
+    if not vals:
+        return None, 0
+    pct = round(sum(1 for x in vals if x <= atm_iv) / len(vals) * 100, 0)
+    return (int(pct) if len(vals) >= IV_PCT_MIN_SAMPLE else None), len(vals)
+
+
 # ============ IV 历史累积 ============
 def append_history(code, snap):
     path = os.path.join(HIST_DIR, f"{code}.json")
@@ -425,7 +452,8 @@ def append_history(code, snap):
         return  # 无有效IV不写历史
     entry = {"date": today, "atm_iv": snap["atm_iv"],
              "pcr_vol": snap.get("pcr_vol"), "iv_hv_ratio": snap.get("iv_hv_ratio"),
-             "hv20": snap.get("hv20")}
+             "hv20": snap.get("hv20"), "iv_pct": snap.get("iv_pct"),
+             "iv_pct_n": snap.get("iv_pct_n")}
     if hist and hist[-1].get("date") == today:
         hist[-1] = entry  # 盘中多轮: 当日覆盖为最新
     else:
@@ -442,6 +470,9 @@ def run_one(code, cfg):
         snap = fetch_cffex_option(code)
     else:
         snap = fetch_dce_option(code)
+    # IV 长期分位: 与历史累积样本比较(样本不足时置 None, 由前端标注样本天数)
+    today = bj_now().strftime("%Y-%m-%d")
+    snap["iv_pct"], snap["iv_pct_n"] = iv_percentile(code, snap.get("atm_iv"), today)
     path = os.path.join(OPT_DIR, f"{code}_snapshot.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump(snap, f, ensure_ascii=False, separators=(",", ":"))
@@ -449,8 +480,11 @@ def run_one(code, cfg):
     size_kb = round(os.path.getsize(path) / 1024, 1)
     pcr = snap.get("pcr_vol") if snap.get("pcr_vol") else snap.get("pcr_oi")
     pcr_label = "PCR量" if snap.get("pcr_vol") else "PCR仓"
+    pct_txt = f" 分位={snap['iv_pct']}%(n={snap['iv_pct_n']})" if snap.get("iv_pct") is not None \
+        else f" 分位=样本不足(n={snap['iv_pct_n']})"
     print(f"  [{code}] IV={snap.get('atm_iv')} HV={snap.get('hv20')} {pcr_label}={pcr} "
-          f"IV/HV={snap.get('iv_hv_ratio')} 距到期={snap['expiries'][0]['days_left'] if snap.get('expiries') else '-'}天 ({size_kb}KB)")
+          f"IV/HV={snap.get('iv_hv_ratio')}{pct_txt} "
+          f"距到期={snap['expiries'][0]['days_left'] if snap.get('expiries') else '-'}天 ({size_kb}KB)")
 
 
 def main():

@@ -7,6 +7,7 @@ TRAE 沙箱内运行的 Web 服务：
 import gzip
 import json
 import os
+import re
 import shutil
 import sys
 import subprocess
@@ -100,6 +101,131 @@ def updater_loop():
             last = time.time()
 
 
+# ==================== 15:15 收盘复盘提醒 ====================
+# GitHub cron 常有滞后, 故收盘终版由沙箱服务锁存并直接推送企微, 不依赖 Actions
+CLOSE_STATE_FILE = os.path.join(LOG_DIR, "close_review.json")
+_whoami_cache = {"chat_id": None}
+_close_attempts = {}
+
+
+def _close_sent_date():
+    try:
+        with open(CLOSE_STATE_FILE, encoding="utf-8") as f:
+            return json.load(f).get("date")
+    except Exception:
+        return None
+
+
+def _mark_close_sent(date, ok):
+    try:
+        with open(CLOSE_STATE_FILE, "w", encoding="utf-8") as f:
+            json.dump({"date": date, "ok": ok,
+                       "ts": bj_now().strftime("%Y-%m-%d %H:%M:%S")}, f)
+    except Exception:
+        pass
+
+
+def _wecom_chat_id():
+    """从 wecom-cli whoami 取授权真人 ID 作 chat_id, 成功后缓存"""
+    if _whoami_cache["chat_id"]:
+        return _whoami_cache["chat_id"]
+    r = subprocess.run(["wecom-cli", "identity", "whoami"],
+                       capture_output=True, text=True, timeout=120)
+    ctx = ""
+    try:
+        ctx = json.loads(r.stdout).get("extra_identity_context", "")
+    except Exception:
+        ctx = r.stdout
+    m = re.search(r"授权真人用户身份：\s*名字：(.+?)\s*ID：([^\s\\\"]+)", ctx)
+    if not m:
+        raise RuntimeError("whoami 未解析到授权人 ID")
+    _whoami_cache["chat_id"] = m.group(2)
+    return m.group(2)
+
+
+def _close_markdown(rev):
+    lines = [f"## 收盘复盘 · {rev.get('date')} (日盘)",
+             f"> 数据锁存 {rev.get('locked_at') or rev.get('generated_at')}"
+             f" · {len(rev.get('items', []))} 标的 · {len(rev.get('alerts', []))} 条提醒", ""]
+    for it in rev.get("items", []):
+        r = it.get("ratings") or {}
+        c = it.get("changes") or {}
+        parts = ["日", "周", "月"]
+        keys = ["daily", "weekly", "monthly"]
+        rt = " ".join(f"{parts[i]}{r[keys[i]]:+d}" if r.get(keys[i]) is not None else f"{parts[i]}-"
+                      for i in range(3))
+        ch_items = []
+        for i in range(3):
+            v = c.get(keys[i])
+            if v:
+                ch_items.append(f"{parts[i]}{'↑' if v > 0 else '↓'}{abs(v)}")
+        ch = " ".join(ch_items)
+        spot = f"{it['spot']}" if it.get("spot") is not None else "--"
+        chg = f"({it['chg'] * 100:+.2f}%)" if it.get("chg") is not None else ""
+        iv = it.get("iv") or {}
+        ivs = ""
+        if iv.get("atm_iv") is not None:
+            ivs = f" · IV {iv['atm_iv']}%"
+            if iv.get("iv_pct") is not None:
+                ivs += f"(分位{iv['iv_pct']}%)"
+            if iv.get("iv_hv_ratio") is not None:
+                ivs += f"/HV {iv['iv_hv_ratio']}"
+        lines.append(f"- **{it['name']}** {spot} {chg} · {rt}{(' · ' + ch) if ch else ''}{ivs}")
+    alerts = rev.get("alerts") or []
+    if alerts:
+        lines += ["", f"**要留意（{len(alerts)}）**"]
+        lines += [f"- {a}" for a in alerts]
+    return "\n".join(lines)
+
+
+def _send_wecom(chat_id, content):
+    payload = json.dumps({"chat_id": chat_id, "msg_type": "markdown",
+                          "markdown": {"content": content}}, ensure_ascii=False)
+    r = subprocess.run(["wecom-cli", "message", "aibot", "send", "--json", payload],
+                       capture_output=True, text=True, timeout=120)
+    if r.returncode != 0:
+        raise RuntimeError(f"wecom send rc={r.returncode}: {(r.stderr or r.stdout)[:300]}")
+    return r.stdout
+
+
+def run_close_review():
+    """锁存收盘终版复盘并推送企微; 返回 True 表示成功"""
+    with open(UPDATE_LOG, "a", encoding="utf-8") as f:
+        f.write(f"\n===== 收盘复盘 {bj_now().strftime('%H:%M:%S')} =====\n")
+        f.flush()
+        r = subprocess.run([sys.executable, "update_data_pages.py", "--review-close"],
+                           cwd=BASE_DIR, stdout=f, stderr=subprocess.STDOUT)
+    if r.returncode != 0:
+        raise RuntimeError(f"review-close rc={r.returncode}")
+    with open(os.path.join(BASE_DIR, "kline_data", "review_close_latest.json"), encoding="utf-8") as f:
+        rev = json.load(f)
+    _send_wecom(_wecom_chat_id(), _close_markdown(rev))
+    print(f"[close-review] {rev.get('date')} 已锁存并推送企微", flush=True)
+    return True
+
+
+def close_review_loop():
+    """工作日 15:15-16:00 触发一次收盘提醒; 失败最多重试 3 次, 每日只成功一次"""
+    while True:
+        try:
+            now = bj_now()
+            mins = now.hour * 60 + now.minute
+            date = now.strftime("%Y-%m-%d")
+            if now.weekday() < 5 and 915 <= mins < 960 and _close_sent_date() != date \
+                    and _close_attempts.get(date, 0) < 3:
+                try:
+                    run_close_review()
+                    _mark_close_sent(date, True)
+                except Exception as e:
+                    _close_attempts[date] = _close_attempts.get(date, 0) + 1
+                    print(f"[close-review] {date} 第{_close_attempts[date]}次失败: {e}", flush=True)
+                    if _close_attempts[date] >= 3:
+                        _mark_close_sent(date, False)
+        except Exception as e:
+            print(f"[close-review] 调度异常: {e}", flush=True)
+        time.sleep(30)
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=BASE_DIR, **kwargs)
@@ -182,6 +308,7 @@ def main():
     load_status()
     prepare_static_gzip()
     threading.Thread(target=updater_loop, daemon=True).start()
+    threading.Thread(target=close_review_loop, daemon=True).start()
     httpd = ThreadingHTTPServer(("0.0.0.0", port), Handler)
     print(f"[server] listening on 0.0.0.0:{port}", flush=True)
     httpd.serve_forever()

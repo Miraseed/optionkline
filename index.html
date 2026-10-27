@@ -960,7 +960,7 @@ function renderReview() {
       return `<td><span style="background:${bg};padding:1px 6px;border-radius:4px">${riskLabel(v)}</span>${reviewDelta(c)}</td>`;
     }).join("");
     const iv = it.iv && it.iv.atm_iv != null
-      ? `IV ${it.iv.atm_iv}%${it.iv.iv_hv_ratio != null ? ` · IV/HV ${it.iv.iv_hv_ratio}` : ""}`
+      ? `IV ${it.iv.atm_iv}%${it.iv.iv_pct != null ? ` · 分位 ${it.iv.iv_pct}%` : ""}${it.iv.iv_hv_ratio != null ? ` · IV/HV ${it.iv.iv_hv_ratio}` : ""}`
       : "—";
     html += `<tr class="${it.jump ? "jump" : ""}"><td>${it.name}</td>`
       + `<td>${it.spot != null ? it.spot : "--"}</td><td>${chg}</td>${cells}`
@@ -976,7 +976,8 @@ function optCardLine(code) {
   const exp = s.expiries && s.expiries[0];
   const pcr = s.pcr_vol != null ? `PCR量 <b>${s.pcr_vol}</b>` : (s.pcr_oi != null ? `PCR仓 <b>${s.pcr_oi}</b>` : "");
   const ratio = s.iv_hv_ratio != null ? `IV/HV <b>${s.iv_hv_ratio}</b>` : "";
-  return `<div class="etf-card-opt"><span>IV <b>${s.atm_iv}</b></span>${ratio}${pcr}${exp ? `<span>距到期 <b>${exp.days_left}天</b></span>` : ""}</div>`;
+  const ivp = s.iv_pct != null ? `<span>IV分位 <b>${s.iv_pct}%</b></span>` : "";
+  return `<div class="etf-card-opt"><span>IV <b>${s.atm_iv}</b></span>${ratio}${ivp}${pcr}${exp ? `<span>距到期 <b>${exp.days_left}天</b></span>` : ""}</div>`;
 }
 
 function getOptChart(key, dom) {
@@ -1007,8 +1008,13 @@ async function renderOptionPanel(code) {
   const exp = s.expiries && s.expiries[0];
   const daysLeft = exp ? exp.days_left : null;
   const ratioCls = s.iv_hv_ratio != null ? (s.iv_hv_ratio >= 1.4 ? "warn" : s.iv_hv_ratio <= 0.8 ? "good" : "") : "";
+  // IV 长期分位: 样本不足时只显示样本天数, 不给出结论
+  const ivPctTxt = s.iv_pct != null ? `${s.iv_pct}%` : "样本不足";
+  const ivPctSub = s.iv_pct_n ? ` n=${s.iv_pct_n}天` : "";
+  const ivPctCls = s.iv_pct != null ? (s.iv_pct >= 80 ? "warn" : s.iv_pct <= 20 ? "good" : "") : "";
   const chips = [
     { label: "近月ATM IV", val: `${s.atm_iv}%`, cls: "" },
+    { label: "IV长期分位", val: ivPctTxt, sub: ivPctSub, cls: ivPctCls },
     { label: "HV20", val: hvTxt, sub: hvSub, cls: "" },
     { label: "IV/HV", val: s.iv_hv_ratio != null ? s.iv_hv_ratio : "--", cls: ratioCls, sub: s.iv_hv_ratio != null ? (s.iv_hv_ratio >= 1.4 ? " 权利金偏贵" : s.iv_hv_ratio <= 0.8 ? " 权利金偏宜" : "") : "" },
     { label: "PCR", val: pcr, cls: "" },

@@ -505,11 +505,13 @@ def save_json(path, data):
             shutil.copyfileobj(src, dst)
 
 
-def generate_review():
+def generate_review(lock=False):
     """收盘复盘报告: 各标的最新评级/较上一根变化/评级跳变/期权极端提示。
     读已落盘的K线与期权快照, 零额外网络请求。产出:
       kline_data/review_latest.json   前端展示(每轮覆盖)
       kline_data/review_archive/{date}_{session}.json  存档(每日job入库)
+    lock=True 时额外锁存一份收盘终版(review_close_latest.json + {date}_close.json),
+    供 15:15 收盘提醒使用, 不受 GitHub cron 滞后影响。
     """
     review_dir = os.path.join(DATA_DIR, "review_archive")
     os.makedirs(review_dir, exist_ok=True)
@@ -545,6 +547,7 @@ def generate_review():
             with open(opt_path, encoding="utf-8") as f:
                 snap = json.load(f)
             iv = {"atm_iv": snap.get("atm_iv"), "iv_hv_ratio": snap.get("iv_hv_ratio"),
+                  "iv_pct": snap.get("iv_pct"), "iv_pct_n": snap.get("iv_pct_n"),
                   "pcr_vol": snap.get("pcr_vol"), "pcr_oi": snap.get("pcr_oi"),
                   "days_left": (snap.get("expiries") or [{}])[0].get("days_left")}
             item["iv"] = iv
@@ -553,6 +556,11 @@ def generate_review():
                 alerts.append(f"{etf['name']} 权利金偏贵 (IV/HV {r})")
             elif r is not None and r <= 0.8:
                 alerts.append(f"{etf['name']} 权利金偏宜 (IV/HV {r})")
+            p = iv.get("iv_pct")
+            if p is not None and p >= 80:
+                alerts.append(f"{etf['name']} IV 处历史高位 (分位 {p}%, 样本{iv.get('iv_pct_n')}天)")
+            elif p is not None and p <= 20:
+                alerts.append(f"{etf['name']} IV 处历史低位 (分位 {p}%, 样本{iv.get('iv_pct_n')}天)")
             dl = iv.get("days_left")
             if dl is not None and dl <= 7:
                 alerts.append(f"{etf['name']} 期权近月 {dl} 天后到期 (末日轮, IV失真)")
@@ -579,7 +587,12 @@ def generate_review():
     }
     save_json(os.path.join(DATA_DIR, "review_latest.json"), review)
     save_json(os.path.join(review_dir, f"{review['date']}_{session}.json"), review)
-    print(f"复盘报告已生成: {len(items)} 标的, {len(alerts)} 条提醒 ({session})")
+    if lock:
+        review["locked_at"] = now.strftime("%Y-%m-%d %H:%M:%S")
+        save_json(os.path.join(DATA_DIR, "review_close_latest.json"), review)
+        save_json(os.path.join(review_dir, f"{review['date']}_close.json"), review)
+    print(f"复盘报告已生成: {len(items)} 标的, {len(alerts)} 条提醒 ({session})"
+          + (" [收盘锁存]" if lock else ""))
     return review
 
 
@@ -667,4 +680,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # 轻量入口: 只重算复盘报告(读已落盘数据), 供 server.py 的 15:15 收盘提醒调用
+    if "--review-only" in sys.argv:
+        generate_review()
+    elif "--review-close" in sys.argv:
+        generate_review(lock=True)
+    else:
+        main()
