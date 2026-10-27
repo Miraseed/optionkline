@@ -198,9 +198,9 @@
     "name": "中证1000",
     "daily": {
       "date": "2026-10-27",
-      "open": 6664.6059,
+      "open": 6664.606,
       "high": 6717.9852,
-      "low": 6427.1732,
+      "low": 6427.173,
       "close": 6427.1732,
       "volume": 195783204,
       "risk_score": -3,
@@ -212,7 +212,7 @@
       "date": "2026-10-30",
       "open": 6684.928,
       "high": 6717.9852,
-      "low": 6427.1732,
+      "low": 6427.173,
       "close": 6427.1732,
       "volume": 20609961004,
       "risk_score": -3,
@@ -241,7 +241,7 @@
       "high": 673.5,
       "low": 660.0,
       "close": 664.0,
-      "volume": 250299,
+      "volume": 331763,
       "risk_score": -2,
       "intraday_up": 0.002978,
       "intraday_down": -0.017126,
@@ -253,7 +253,7 @@
       "high": 674.0,
       "low": 660.0,
       "close": 664.0,
-      "volume": 473126,
+      "volume": 554590,
       "risk_score": -2,
       "intraday_up": -0.001481,
       "intraday_down": -0.022222,
@@ -265,7 +265,7 @@
       "high": 698.0,
       "low": 660.0,
       "close": 664.0,
-      "volume": 3827377,
+      "volume": 3908841,
       "risk_score": -3,
       "intraday_up": -0.006406,
       "intraday_down": -0.060498,
@@ -429,7 +429,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-27 16:04:04",
+    "generated_at": "2026-10-27 23:50:01",
     "failed_codes": []
   }
 }
