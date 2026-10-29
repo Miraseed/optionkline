@@ -12134,13 +12134,13 @@
   {
     "date": "2026-10-30",
     "open": 3.31,
-    "high": 3.417,
+    "high": 3.425,
     "low": 3.301,
-    "close": 3.383,
-    "volume": 698995613,
+    "close": 3.42,
+    "volume": 797236219,
     "risk_score": 0,
-    "intraday_up": 0.032326,
+    "intraday_up": 0.034743,
     "intraday_down": -0.002719,
-    "close_change": 0.022054
+    "close_change": 0.033233
   }
 ]
