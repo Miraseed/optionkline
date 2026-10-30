@@ -3651,12 +3651,12 @@
     "date": "2026-10-30",
     "open": 1.403,
     "high": 1.413,
-    "low": 1.29,
-    "close": 1.293,
-    "volume": 30793499910,
+    "low": 1.225,
+    "close": 1.228,
+    "volume": 40062648087,
     "risk_score": -3,
     "intraday_up": -0.006329,
-    "intraday_down": -0.092827,
-    "close_change": -0.090717
+    "intraday_down": -0.138537,
+    "close_change": -0.136428
   }
 ]

@@ -1959,12 +1959,12 @@
     "date": "2026-10-31",
     "open": 7.47,
     "high": 7.501,
-    "low": 6.475,
-    "close": 6.49,
-    "volume": 9698844417,
+    "low": 6.303,
+    "close": 6.305,
+    "volume": 10314974781,
     "risk_score": -3,
     "intraday_up": 0.003881,
-    "intraday_down": -0.133431,
-    "close_change": -0.131424
+    "intraday_down": -0.156451,
+    "close_change": -0.156183
   }
 ]

@@ -8391,12 +8391,12 @@
     "date": "2026-10-30",
     "open": 6.801,
     "high": 6.83,
-    "low": 6.49,
-    "close": 6.49,
-    "volume": 2669857841,
+    "low": 6.303,
+    "close": 6.305,
+    "volume": 3285988205,
     "risk_score": -3,
     "intraday_up": -0.003938,
-    "intraday_down": -0.053522,
-    "close_change": -0.053522
+    "intraday_down": -0.080793,
+    "close_change": -0.080502
   }
 ]

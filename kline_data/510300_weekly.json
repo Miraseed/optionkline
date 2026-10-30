@@ -8859,12 +8859,12 @@
     "date": "2026-10-30",
     "open": 4.155,
     "high": 4.192,
-    "low": 4.103,
-    "close": 4.111,
-    "volume": 6784376475,
+    "low": 4.046,
+    "close": 4.065,
+    "volume": 8897377885,
     "risk_score": -3,
     "intraday_up": 0.003351,
-    "intraday_down": -0.017951,
-    "close_change": -0.016036
+    "intraday_down": -0.031594,
+    "close_change": -0.027046
   }
 ]
