@@ -1,17 +1,5 @@
 [
   {
-    "date": "2024-07-12",
-    "open": 3.289529,
-    "high": 3.359113,
-    "low": 3.258073,
-    "close": 3.354347,
-    "volume": 4515610409,
-    "risk_score": 0,
-    "intraday_up": 0.019086,
-    "intraday_down": -0.011567,
-    "close_change": 0.01764
-  },
-  {
     "date": "2024-07-19",
     "open": 3.346721,
     "high": 3.437276,
@@ -1438,5 +1426,17 @@
     "intraday_up": 0.003351,
     "intraday_down": -0.031594,
     "close_change": -0.027046
+  },
+  {
+    "date": "2026-11-06",
+    "open": 4.084,
+    "high": 4.12,
+    "low": 4.065,
+    "close": 4.085,
+    "volume": 2951453077,
+    "risk_score": -2,
+    "intraday_up": 0.01353,
+    "intraday_down": 0.0,
+    "close_change": 0.00492
   }
 ]
