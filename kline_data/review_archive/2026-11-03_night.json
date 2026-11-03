@@ -1,7 +1,7 @@
 {
   "date": "2026-11-03",
   "session": "night",
-  "generated_at": "2026-11-03 16:34:14",
+  "generated_at": "2026-11-03 23:56:21",
   "items": [
     {
       "code": "510050",
@@ -153,17 +153,17 @@
     {
       "code": "I0",
       "name": "铁矿石主连",
-      "spot": 674.5,
-      "chg": 0.00372,
+      "spot": 671.0,
+      "chg": -0.005189,
       "ratings": {
-        "daily": 0,
+        "daily": 1,
         "weekly": -1,
-        "monthly": -2
+        "monthly": -3
       },
       "changes": {
-        "daily": 0,
+        "daily": 1,
         "weekly": 1,
-        "monthly": 1
+        "monthly": 0
       },
       "jump": false,
       "iv": {

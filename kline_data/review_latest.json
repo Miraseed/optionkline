@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-03",
-  "session": "night",
-  "generated_at": "2026-11-03 16:34:14",
+  "date": "2026-11-04",
+  "session": "day",
+  "generated_at": "2026-11-04 00:02:06",
   "items": [
     {
       "code": "510050",
@@ -75,10 +75,10 @@
         "atm_iv": 59.51,
         "iv_hv_ratio": 1.484,
         "iv_pct": 96,
-        "iv_pct_n": 827,
+        "iv_pct_n": 828,
         "pcr_vol": 0.919,
         "pcr_oi": null,
-        "days_left": 22
+        "days_left": 21
       }
     },
     {
@@ -141,39 +141,39 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 40.64,
-        "iv_hv_ratio": 1.327,
+        "atm_iv": 41.89,
+        "iv_hv_ratio": 1.368,
         "iv_pct": 99,
-        "iv_pct_n": 1037,
+        "iv_pct_n": 1038,
         "pcr_vol": null,
         "pcr_oi": 0.461,
-        "days_left": 17
+        "days_left": 16
       }
     },
     {
       "code": "I0",
       "name": "铁矿石主连",
-      "spot": 674.5,
-      "chg": 0.00372,
+      "spot": 671.0,
+      "chg": -0.005189,
       "ratings": {
-        "daily": 0,
+        "daily": 1,
         "weekly": -1,
-        "monthly": -2
+        "monthly": -3
       },
       "changes": {
-        "daily": 0,
+        "daily": 1,
         "weekly": 1,
-        "monthly": 1
+        "monthly": 0
       },
       "jump": false,
       "iv": {
-        "atm_iv": 17.39,
-        "iv_hv_ratio": 1.013,
-        "iv_pct": 14,
-        "iv_pct_n": 1666,
+        "atm_iv": 19.45,
+        "iv_hv_ratio": 1.141,
+        "iv_pct": 26,
+        "iv_pct_n": 1667,
         "pcr_vol": null,
-        "pcr_oi": 1.237,
-        "days_left": 14
+        "pcr_oi": 1.231,
+        "days_left": 13
       }
     },
     {
@@ -251,13 +251,12 @@
     "沪深300ETF 权利金偏贵 (IV/HV 1.59)",
     "沪深300ETF IV 处历史高位 (分位 82%, 样本1660天)",
     "科创50ETF 权利金偏贵 (IV/HV 1.484)",
-    "科创50ETF IV 处历史高位 (分位 96%, 样本827天)",
+    "科创50ETF IV 处历史高位 (分位 96%, 样本828天)",
     "科创50ETF 日+周共振机会 (日-3/周-3)",
     "创业板ETF 日+周共振机会 (日-3/周-3)",
     "中证500ETF IV 处历史高位 (分位 99%, 样本996天)",
-    "中证1000 IV 处历史高位 (分位 99%, 样本1037天)",
+    "中证1000 IV 处历史高位 (分位 99%, 样本1038天)",
     "中证1000 日+周共振机会 (日-2/周-3)",
-    "铁矿石主连 IV 处历史低位 (分位 14%, 样本1666天)",
     "标普500ETF 日评级跳变 +1→-1",
     "标普500ETF 周评级跳变 +0→-2",
     "纳指科技ETF 日评级跳变 +0→-3",
