@@ -471,12 +471,12 @@
     "date": "2026-11-30",
     "open": 3.005,
     "high": 3.014,
-    "low": 2.946,
-    "close": 3.007,
-    "volume": 516499257,
+    "low": 2.857,
+    "close": 2.869,
+    "volume": 1073363244,
     "risk_score": -1,
     "intraday_up": 0.002995,
-    "intraday_down": -0.019634,
-    "close_change": 0.000666
+    "intraday_down": -0.049251,
+    "close_change": -0.045258
   }
 ]

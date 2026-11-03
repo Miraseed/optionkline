@@ -7407,12 +7407,12 @@
     "date": "2026-11-06",
     "open": 6197.383,
     "high": 6373.939,
-    "low": 6136.5169,
-    "close": 6329.3418,
-    "volume": 251747865,
+    "low": 6136.517,
+    "close": 6221.2322,
+    "volume": 25392217156,
     "risk_score": -3,
     "intraday_up": 0.034524,
     "intraday_down": -0.004011,
-    "close_change": 0.027286
+    "close_change": 0.009739
   }
 ]
