@@ -1,7 +1,7 @@
 {
   "date": "2026-11-04",
   "session": "night",
-  "generated_at": "2026-11-04 16:33:37",
+  "generated_at": "2026-11-04 23:58:39",
   "items": [
     {
       "code": "510050",
@@ -153,19 +153,19 @@
     {
       "code": "I0",
       "name": "铁矿石主连",
-      "spot": 671.0,
-      "chg": -0.005189,
+      "spot": 682.0,
+      "chg": 0.016393,
       "ratings": {
         "daily": 1,
-        "weekly": -1,
-        "monthly": -3
+        "weekly": 0,
+        "monthly": -2
       },
       "changes": {
-        "daily": 1,
-        "weekly": 1,
-        "monthly": 0
+        "daily": 0,
+        "weekly": 2,
+        "monthly": 1
       },
-      "jump": false,
+      "jump": true,
       "iv": {
         "atm_iv": 18.8,
         "iv_hv_ratio": 1.103,
@@ -254,6 +254,7 @@
     "创业板ETF 日+周共振机会 (日-2/周-3)",
     "中证500ETF IV 处历史高位 (分位 98%, 样本997天)",
     "中证1000 IV 处历史高位 (分位 97%, 样本1038天)",
+    "铁矿石主连 周评级跳变 -2→+0",
     "纳指科技ETF 月评级跳变 +3→-1",
     "纳指科技ETF 日+周共振机会 (日-2/周-2)"
   ]

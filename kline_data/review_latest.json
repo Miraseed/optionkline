@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-04",
-  "session": "night",
-  "generated_at": "2026-11-04 16:33:37",
+  "date": "2026-11-05",
+  "session": "day",
+  "generated_at": "2026-11-05 00:02:40",
   "items": [
     {
       "code": "510050",
@@ -49,7 +49,7 @@
         "atm_iv": 18.66,
         "iv_hv_ratio": 1.212,
         "iv_pct": 67,
-        "iv_pct_n": 1661,
+        "iv_pct_n": 1662,
         "pcr_vol": 0.681,
         "pcr_oi": null,
         "days_left": 21
@@ -75,10 +75,10 @@
         "atm_iv": 52.03,
         "iv_hv_ratio": 0.931,
         "iv_pct": 93,
-        "iv_pct_n": 828,
+        "iv_pct_n": 829,
         "pcr_vol": 0.734,
         "pcr_oi": null,
-        "days_left": 21
+        "days_left": 20
       }
     },
     {
@@ -118,10 +118,10 @@
         "atm_iv": 33.54,
         "iv_hv_ratio": 0.999,
         "iv_pct": 98,
-        "iv_pct_n": 997,
+        "iv_pct_n": 998,
         "pcr_vol": 0.863,
         "pcr_oi": null,
-        "days_left": 21
+        "days_left": 20
       }
     },
     {
@@ -141,39 +141,39 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 35.87,
-        "iv_hv_ratio": 1.001,
-        "iv_pct": 97,
-        "iv_pct_n": 1038,
+        "atm_iv": 34.13,
+        "iv_hv_ratio": 0.952,
+        "iv_pct": 95,
+        "iv_pct_n": 1039,
         "pcr_vol": null,
         "pcr_oi": 0.525,
-        "days_left": 16
+        "days_left": 15
       }
     },
     {
       "code": "I0",
       "name": "铁矿石主连",
-      "spot": 671.0,
-      "chg": -0.005189,
+      "spot": 682.0,
+      "chg": 0.016393,
       "ratings": {
         "daily": 1,
-        "weekly": -1,
-        "monthly": -3
+        "weekly": 0,
+        "monthly": -2
       },
       "changes": {
-        "daily": 1,
-        "weekly": 1,
-        "monthly": 0
+        "daily": 0,
+        "weekly": 2,
+        "monthly": 1
       },
-      "jump": false,
+      "jump": true,
       "iv": {
-        "atm_iv": 18.8,
-        "iv_hv_ratio": 1.103,
-        "iv_pct": 22,
-        "iv_pct_n": 1667,
+        "atm_iv": 17.69,
+        "iv_hv_ratio": 0.98,
+        "iv_pct": 16,
+        "iv_pct_n": 1668,
         "pcr_vol": null,
-        "pcr_oi": 1.257,
-        "days_left": 13
+        "pcr_oi": 1.327,
+        "days_left": 12
       }
     },
     {
@@ -249,11 +249,13 @@
     "上证50ETF 权利金偏贵 (IV/HV 1.433)",
     "上证50ETF IV 处历史低位 (分位 19%, 样本2849天)",
     "上证50ETF 月评级跳变 -3→+0",
-    "科创50ETF IV 处历史高位 (分位 93%, 样本828天)",
+    "科创50ETF IV 处历史高位 (分位 93%, 样本829天)",
     "科创50ETF 日评级跳变 -3→-1",
     "创业板ETF 日+周共振机会 (日-2/周-3)",
-    "中证500ETF IV 处历史高位 (分位 98%, 样本997天)",
-    "中证1000 IV 处历史高位 (分位 97%, 样本1038天)",
+    "中证500ETF IV 处历史高位 (分位 98%, 样本998天)",
+    "中证1000 IV 处历史高位 (分位 95%, 样本1039天)",
+    "铁矿石主连 IV 处历史低位 (分位 16%, 样本1668天)",
+    "铁矿石主连 周评级跳变 -2→+0",
     "纳指科技ETF 月评级跳变 +3→-1",
     "纳指科技ETF 日+周共振机会 (日-2/周-2)"
   ]

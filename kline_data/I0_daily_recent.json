@@ -1,17 +1,5 @@
 [
   {
-    "date": "2025-08-06",
-    "open": 799.5,
-    "high": 801.5,
-    "low": 788.0,
-    "close": 794.5,
-    "volume": 208804,
-    "risk_score": 0,
-    "intraday_up": 0.003757,
-    "intraday_down": -0.01315,
-    "close_change": -0.005009
-  },
-  {
     "date": "2025-08-07",
     "open": 795.5,
     "high": 799.0,
@@ -3598,5 +3586,17 @@
     "intraday_up": 0.001483,
     "intraday_down": -0.009637,
     "close_change": -0.005189
+  },
+  {
+    "date": "2026-11-04",
+    "open": 671.5,
+    "high": 685.0,
+    "low": 671.5,
+    "close": 682.0,
+    "volume": 310183,
+    "risk_score": 1,
+    "intraday_up": 0.020864,
+    "intraday_down": 0.000745,
+    "close_change": 0.016393
   }
 ]
