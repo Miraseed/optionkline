@@ -8402,13 +8402,13 @@
   {
     "date": "2026-11-06",
     "open": 6.352,
-    "high": 6.519,
+    "high": 6.688,
     "low": 6.293,
-    "close": 6.38,
-    "volume": 3046906400,
-    "risk_score": -3,
-    "intraday_up": 0.033941,
+    "close": 6.661,
+    "volume": 4566818568,
+    "risk_score": -2,
+    "intraday_up": 0.060745,
     "intraday_down": -0.001903,
-    "close_change": 0.011895
+    "close_change": 0.056463
   }
 ]

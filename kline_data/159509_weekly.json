@@ -1995,12 +1995,12 @@
     "date": "2026-11-06",
     "open": 3.005,
     "high": 3.014,
-    "low": 2.857,
-    "close": 2.869,
-    "volume": 1073363244,
+    "low": 2.822,
+    "close": 2.946,
+    "volume": 1918452905,
     "risk_score": -2,
     "intraday_up": 0.002995,
-    "intraday_down": -0.049251,
-    "close_change": -0.045258
+    "intraday_down": -0.060899,
+    "close_change": -0.019634
   }
 ]

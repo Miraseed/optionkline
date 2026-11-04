@@ -9158,13 +9158,13 @@
   {
     "date": "2026-11-06",
     "open": 2.451,
-    "high": 2.518,
+    "high": 2.578,
     "low": 2.392,
-    "close": 2.403,
-    "volume": 13313866987,
+    "close": 2.561,
+    "volume": 21448379529,
     "risk_score": -3,
-    "intraday_up": 0.034086,
+    "intraday_up": 0.058727,
     "intraday_down": -0.017659,
-    "close_change": -0.013142
+    "close_change": 0.051745
   }
 ]
