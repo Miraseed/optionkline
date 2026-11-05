@@ -43,9 +43,10 @@ jobs:
       - name: Install deps
         run: pip install -r requirements.txt
       - name: Fetch latest kline data
-        run: python update_data_pages.py
-      - name: Fetch options data (IV/PCR/微笑, 失败不阻断)
-        run: python update_options.py || true
+        run: timeout 300 python update_data_pages.py
+      - name: Fetch options data (IV/PCR/微笑, 失败/超时均不阻断部署)
+        # akshare 的部分请求没有超时, 遇到对方服务卡住会一直挂着, 必须外层强制限时
+        run: timeout 240 python update_options.py || true
       - name: Annotate schedule delay into summary
         run: |
           python3 - <<'EOF'
