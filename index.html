@@ -440,6 +440,31 @@ let refreshStopped = false;   // 人工"停止刷新": 收盘复盘时暂停一�
 // 服务端数据新鲜度: 由沙箱内 server.py 的 /api/status 提供(静态托管时为空)
 let serverStatus = null;
 let statusReceivedAt = 0;
+// 实时数据源(GitHub Pages 上仅按 Actions 部署节奏更新, 交易时段常滞后数十分钟):
+// 优先从沙箱 server.py 的隧道域名取 kline_data, 服务不可达时回退到当前站点自带的 JSON。
+const LIVE_BASES = ["https://gqujdndm6vzewmkl3o6xj6l7yi.srv.us"];
+let liveBase = null;        // 探测成功后的源前缀(无尾斜杠)
+let liveProbeAt = 0;        // 上次探测时间, 60 秒内不重复探测
+let liveProbed = false;
+async function probeLiveBase() {
+  if (liveProbed && Date.now() - liveProbeAt < 60000) return liveBase;
+  liveProbeAt = Date.now();
+  liveProbed = true;
+  for (const base of LIVE_BASES) {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 2500);
+      const r = await fetch(base + "/api/status?_=" + Date.now(),
+                            { cache: "no-store", signal: ctrl.signal });
+      clearTimeout(timer);
+      if (!r.ok) continue;
+      const j = await r.json();
+      if (j && j.server_time) { liveBase = base; return liveBase; }
+    } catch (e) { /* 隧道不可达: 继续尝试下一个源 */ }
+  }
+  liveBase = null;
+  return null;
+}
 function isRealtimeMode() { return refreshMs <= REALTIME_MS; }
 
 const RISK_COLORS = {"-3":"risk3","-2":"risk2","-1":"risk1","0":"risk0","1":"risk-1","2":"risk-2","3":"risk-3"};
@@ -528,14 +553,23 @@ function calcPELatest() {
 }
 
 async function loadJSON(url, noCache) {
-  let full = url;
-  // 仅刷新时绕过缓存; 首次加载允许用 HTTP 缓存(max-age=600), 大幅加快重复访问
-  if (noCache) full += (url.includes("?") ? "&" : "?") + "_t=" + Date.now();
-  const resp = await fetch(full, noCache
+  let q = "";
+  if (noCache) q = (url.includes("?") ? "&" : "?") + "_t=" + Date.now();
+  const opts = noCache
     ? { cache: "no-store", headers: { "Cache-Control": "no-cache", "Pragma": "no-cache", "Expires": "0" } }
-    : { cache: "default" });
-  if (!resp.ok) throw new Error(`${resp.status}`);
-  return resp.json();
+    : { cache: "default" };
+  const doFetch = async (base) => {
+    const resp = await fetch((base ? base + "/" : "") + url + q, opts);
+    if (!resp.ok) throw new Error(`${resp.status}`);
+    return resp.json();
+  };
+  if (url.startsWith("kline_data/")) {
+    const base = await probeLiveBase();
+    if (base) {
+      try { return await doFetch(base); } catch (e) { /* 实时源失败: 回退静态站 */ }
+    }
+  }
+  return await doFetch("");
 }
 
 // ==================== 实时行情（腾讯财经API） ====================
@@ -1708,12 +1742,14 @@ async function autoRefreshTask() {
 // 数据新鲜度: 每 15 秒问一次服务端"上次刷新到现在多久", 不必靠猜
 async function fetchServerStatus() {
   try {
-    const r = await fetch("api/status?_=" + Date.now(), { cache: "no-store" });
+    const base = await probeLiveBase();
+    if (!base) return;   // 实时源不可达: 退回用 summary.json 的生成时间
+    const r = await fetch(base + "/api/status?_=" + Date.now(), { cache: "no-store" });
     if (!r.ok) return;
     serverStatus = await r.json();
     statusReceivedAt = Date.now();
   } catch (e) {
-    // 静态托管(GitHub Pages)没有该接口, 保持为空, 退回显示本页加载时间
+    serverStatus = null;
   }
 }
 

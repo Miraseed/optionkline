@@ -8,13 +8,13 @@ LOG=logs/keepalive.log
 
 echo "=== keepalive start $(date '+%F %T') ===" >> "$LOG"
 while true; do
-  # 1) 数据服务
-  if ! pgrep -f "python3 server.py" >/dev/null 2>&1; then
+  # 1) 数据服务 (用 [p] 防止 pgrep 匹配到自身命令行)
+  if ! pgrep -f "[p]ython3 server.py" >/dev/null 2>&1; then
     echo "[$(date '+%F %T')] restart server.py" >> "$LOG"
     setsid nohup python3 server.py 8000 >> logs/server.log 2>&1 &
   fi
   # 2) 公网隧道(tunnel.sh 自带断线重连, 仅在整个循环脚本不在时拉起)
-  if ! pgrep -f "bash tunnel.sh" >/dev/null 2>&1; then
+  if ! pgrep -f "[b]ash tunnel.sh" >/dev/null 2>&1; then
     if ! pgrep -f "nokey@srv.us" >/dev/null 2>&1; then
       echo "[$(date '+%F %T')] restart tunnel.sh" >> "$LOG"
       setsid nohup bash tunnel.sh >> /dev/null 2>&1 &

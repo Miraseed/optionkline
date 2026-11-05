@@ -281,10 +281,18 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.end_headers()
+
     def end_headers(self):
         # K线数据与页面都禁用缓存，保证刷新即最新
         self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
         self.send_header("Pragma", "no-cache")
+        # GitHub Pages 上的页面跨域读取本服务的实时数据(隧道域名与 github.io 不同源)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "*")
         super().end_headers()
 
     def log_message(self, fmt, *args):
