@@ -12147,12 +12147,12 @@
     "date": "2026-11-06",
     "open": 3.442,
     "high": 3.488,
-    "low": 3.369,
-    "close": 3.423,
-    "volume": 582324010,
+    "low": 3.337,
+    "close": 3.348,
+    "volume": 987224675,
     "risk_score": 0,
     "intraday_up": 0.008092,
-    "intraday_down": -0.026301,
-    "close_change": -0.010694
+    "intraday_down": -0.035549,
+    "close_change": -0.03237
   }
 ]
