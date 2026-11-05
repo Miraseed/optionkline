@@ -198,7 +198,7 @@
     "name": "中证1000",
     "daily": {
       "date": "2026-11-05",
-      "open": 6462.2897,
+      "open": 6462.29,
       "high": 6700.8442,
       "low": 6460.4519,
       "close": 6650.1383,
@@ -236,40 +236,40 @@
   "I0": {
     "name": "铁矿石主连",
     "daily": {
-      "date": "2026-11-04",
-      "open": 671.5,
-      "high": 685.0,
-      "low": 671.5,
-      "close": 682.0,
-      "volume": 310183,
+      "date": "2026-11-05",
+      "open": 681.5,
+      "high": 692.0,
+      "low": 680.0,
+      "close": 691.0,
+      "volume": 329014,
       "risk_score": 1,
-      "intraday_up": 0.020864,
-      "intraday_down": 0.000745,
-      "close_change": 0.016393
+      "intraday_up": 0.014663,
+      "intraday_down": -0.002933,
+      "close_change": 0.013196
     },
     "weekly": {
       "date": "2026-11-06",
       "open": 672.0,
-      "high": 685.0,
+      "high": 692.0,
       "low": 668.0,
-      "close": 682.0,
-      "volume": 800529,
-      "risk_score": 0,
-      "intraday_up": 0.019345,
+      "close": 691.0,
+      "volume": 1129543,
+      "risk_score": 1,
+      "intraday_up": 0.029762,
       "intraday_down": -0.005952,
-      "close_change": 0.014881
+      "close_change": 0.028274
     },
     "monthly": {
       "date": "2026-11-30",
       "open": 672.0,
-      "high": 685.0,
+      "high": 692.0,
       "low": 668.0,
-      "close": 682.0,
-      "volume": 800529,
-      "risk_score": -2,
-      "intraday_up": 0.019345,
+      "close": 691.0,
+      "volume": 1129543,
+      "risk_score": -1,
+      "intraday_up": 0.029762,
       "intraday_down": -0.005952,
-      "close_change": 0.014881
+      "close_change": 0.028274
     }
   },
   "510880": {
@@ -429,7 +429,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-05 16:30:20",
+    "generated_at": "2026-11-06 00:04:05",
     "failed_codes": []
   }
 }
