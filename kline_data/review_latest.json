@@ -1,7 +1,7 @@
 {
   "date": "2026-11-06",
   "session": "night",
-  "generated_at": "2026-11-06 16:31:56",
+  "generated_at": "2026-11-06 20:46:26",
   "items": [
     {
       "code": "510050",
@@ -211,38 +211,38 @@
       "jump": false
     },
     {
-      "code": "513650",
-      "name": "标普500ETF",
-      "spot": 1.934,
-      "chg": -0.030576,
+      "code": "SPX",
+      "name": "标普500指数",
+      "spot": 7353.73,
+      "chg": -0.043557,
       "ratings": {
-        "daily": -1,
+        "daily": -2,
         "weekly": -2,
         "monthly": -1
       },
       "changes": {
-        "daily": -1,
-        "weekly": -2,
+        "daily": -2,
+        "weekly": -1,
         "monthly": -1
       },
       "jump": true
     },
     {
-      "code": "159509",
-      "name": "纳指科技ETF",
-      "spot": 2.813,
-      "chg": -0.036974,
+      "code": "NDX",
+      "name": "纳斯达克100指数",
+      "spot": 26629.81,
+      "chg": -0.063556,
       "ratings": {
-        "daily": -3,
-        "weekly": -2,
-        "monthly": -2
+        "daily": -2,
+        "weekly": -3,
+        "monthly": -3
       },
       "changes": {
-        "daily": -1,
+        "daily": 0,
         "weekly": -1,
-        "monthly": -5
+        "monthly": -1
       },
-      "jump": true
+      "jump": false
     }
   ],
   "alerts": [
@@ -255,8 +255,8 @@
     "铁矿石主连 IV 处历史低位 (分位 11%, 样本1669天)",
     "铁矿石主连 周评级跳变 -2→+1",
     "铁矿石主连 月评级跳变 -3→-1",
-    "标普500ETF 周评级跳变 +0→-2",
-    "纳指科技ETF 月评级跳变 +3→-2",
-    "纳指科技ETF 日+周共振机会 (日-3/周-2)"
+    "标普500指数 日评级跳变 +0→-2",
+    "标普500指数 日+周共振机会 (日-2/周-2)",
+    "纳斯达克100指数 日+周共振机会 (日-2/周-3)"
   ]
 }
