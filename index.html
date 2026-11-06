@@ -131,6 +131,7 @@
   .detail { background: white; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
   .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
   .detail-header h2 { font-size: 15px; color: #2c5282; }
+  .detail-title-select { font-size: 15px; font-weight: bold; color: #2c5282; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 6px; padding: 3px 6px; max-width: 70vw; cursor: pointer; }
   .period-tabs { display: flex; gap: 4px; }
   .tab {
     padding: 5px 14px; border: 1px solid #cbd5e0; background: #edf2f7;
@@ -222,6 +223,7 @@
     .summary-grid .stat-box .stat-value { font-size: 13px; }
     .detail { padding: 6px 8px; margin-bottom: 4px; border-radius: 6px; }
     .detail-header { padding: 4px 0; margin-bottom: 4px; }
+    .detail-title-select { font-size: 13px; max-width: 62vw; }
     .detail-title { font-size: 13px; }
     .detail-tabs { padding: 2px; gap: 3px; }
     .period-btn { padding: 3px 8px; font-size: 11px; }
@@ -294,7 +296,7 @@
 
   <div class="detail" id="detail-section" style="display:none;">
     <div class="detail-header">
-      <h2 id="detail-title">标的详情</h2>
+      <select id="detail-title" class="detail-title-select" onchange="selectETF(this.value)" title="切换标的"></select>
       <div class="period-tabs">
         <div class="tab active" data-period="daily" onclick="switchPeriod('daily')">日K</div>
         <div class="tab" data-period="weekly" onclick="switchPeriod('weekly')">周K</div>
@@ -1240,10 +1242,17 @@ function switchPeriod(period) {
   applyStatsVisibility();
 }
 
+function initSymbolSelect() {
+  const sel = document.getElementById("detail-title");
+  if (!sel) return;
+  sel.innerHTML = UNDERLYINGS.map(u => `<option value="${u.code}">${u.name} (${u.code})</option>`).join("");
+}
+
 function renderDetail() {
   const u = UNDERLYINGS.find(x => x.code === currentCode);
   if (!u) return;
-  document.getElementById("detail-title").textContent = `${u.name} (${currentCode}) · K线数据`;
+  const sel = document.getElementById("detail-title");
+  if (sel) sel.value = currentCode;
   const records = (allData[currentCode] && allData[currentCode][currentPeriod]) || [];
   const tbody = document.getElementById("data-tbody");
   const reversed = [...records].reverse();
@@ -1860,6 +1869,7 @@ function startAutoRefresh() {
 
 // ==================== 初始化 ====================
 async function initApp() {
+  initSymbolSelect();
   try {
     // 实时行情与数据并行启动, 互不阻塞
     const rtPromise = fetchAllRealtime();
