@@ -2211,12 +2211,12 @@
     "date": "2026-11-06",
     "open": 1.966,
     "high": 2.0,
-    "low": 1.934,
-    "close": 1.995,
-    "volume": 1344387643,
-    "risk_score": 0,
+    "low": 1.896,
+    "close": 1.934,
+    "volume": 1789030912,
+    "risk_score": -2,
     "intraday_up": 0.009082,
-    "intraday_down": -0.024218,
-    "close_change": 0.006559
+    "intraday_down": -0.043391,
+    "close_change": -0.024218
   }
 ]

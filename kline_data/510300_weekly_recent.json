@@ -1432,11 +1432,11 @@
     "open": 4.084,
     "high": 4.216,
     "low": 4.041,
-    "close": 4.195,
-    "volume": 12451017399,
-    "risk_score": -1,
+    "close": 4.124,
+    "volume": 13713954439,
+    "risk_score": -2,
     "intraday_up": 0.037146,
     "intraday_down": -0.005904,
-    "close_change": 0.03198
+    "close_change": 0.014514
   }
 ]
