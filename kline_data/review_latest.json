@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-06",
-  "session": "night",
-  "generated_at": "2026-11-06 20:46:26",
+  "date": "2026-11-07",
+  "session": "day",
+  "generated_at": "2026-11-07 04:57:08",
   "items": [
     {
       "code": "510050",
@@ -20,13 +20,13 @@
       },
       "jump": true,
       "iv": {
-        "atm_iv": 14.79,
-        "iv_hv_ratio": 1.453,
-        "iv_pct": 25,
-        "iv_pct_n": 2851,
+        "atm_iv": 15.2,
+        "iv_hv_ratio": 1.493,
+        "iv_pct": 29,
+        "iv_pct_n": 2852,
         "pcr_vol": 0.908,
         "pcr_oi": null,
-        "days_left": 19
+        "days_left": 18
       }
     },
     {
@@ -46,13 +46,13 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 20.79,
-        "iv_hv_ratio": 1.282,
-        "iv_pct": 81,
-        "iv_pct_n": 1663,
+        "atm_iv": 21.36,
+        "iv_hv_ratio": 1.317,
+        "iv_pct": 84,
+        "iv_pct_n": 1664,
         "pcr_vol": 0.671,
         "pcr_oi": null,
-        "days_left": 19
+        "days_left": 18
       }
     },
     {
@@ -72,13 +72,13 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 56.95,
-        "iv_hv_ratio": 1.043,
-        "iv_pct": 95,
-        "iv_pct_n": 830,
+        "atm_iv": 58.5,
+        "iv_hv_ratio": 1.072,
+        "iv_pct": 96,
+        "iv_pct_n": 831,
         "pcr_vol": 1.059,
         "pcr_oi": null,
-        "days_left": 19
+        "days_left": 18
       }
     },
     {
@@ -115,13 +115,13 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 35.39,
-        "iv_hv_ratio": 1.031,
-        "iv_pct": 98,
-        "iv_pct_n": 999,
+        "atm_iv": 36.34,
+        "iv_hv_ratio": 1.059,
+        "iv_pct": 99,
+        "iv_pct_n": 1000,
         "pcr_vol": 1.145,
         "pcr_oi": null,
-        "days_left": 19
+        "days_left": 18
       }
     },
     {
@@ -141,39 +141,39 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 35.24,
-        "iv_hv_ratio": 0.954,
-        "iv_pct": 96,
-        "iv_pct_n": 1040,
+        "atm_iv": 35.67,
+        "iv_hv_ratio": 0.966,
+        "iv_pct": 97,
+        "iv_pct_n": 1041,
         "pcr_vol": null,
         "pcr_oi": 0.55,
-        "days_left": 14
+        "days_left": 13
       }
     },
     {
       "code": "I0",
       "name": "铁矿石主连",
-      "spot": 691.0,
-      "chg": 0.013196,
+      "spot": 687.5,
+      "chg": -0.005065,
       "ratings": {
         "daily": 1,
-        "weekly": 1,
+        "weekly": 0,
         "monthly": -1
       },
       "changes": {
         "daily": 0,
-        "weekly": 3,
+        "weekly": 2,
         "monthly": 2
       },
       "jump": true,
       "iv": {
-        "atm_iv": 16.96,
-        "iv_hv_ratio": 1.08,
-        "iv_pct": 11,
-        "iv_pct_n": 1669,
+        "atm_iv": 17.76,
+        "iv_hv_ratio": 1.122,
+        "iv_pct": 17,
+        "iv_pct_n": 1670,
         "pcr_vol": null,
-        "pcr_oi": 1.132,
-        "days_left": 11
+        "pcr_oi": 1.043,
+        "days_left": 10
       }
     },
     {
@@ -213,25 +213,25 @@
     {
       "code": "SPX",
       "name": "标普500指数",
-      "spot": 7353.73,
-      "chg": -0.043557,
+      "spot": 7384.04,
+      "chg": 0.004122,
       "ratings": {
-        "daily": -2,
+        "daily": -1,
         "weekly": -2,
         "monthly": -1
       },
       "changes": {
-        "daily": -2,
+        "daily": 1,
         "weekly": -1,
         "monthly": -1
       },
-      "jump": true
+      "jump": false
     },
     {
       "code": "NDX",
       "name": "纳斯达克100指数",
-      "spot": 26629.81,
-      "chg": -0.063556,
+      "spot": 27001.15,
+      "chg": 0.013945,
       "ratings": {
         "daily": -2,
         "weekly": -3,
@@ -246,17 +246,15 @@
     }
   ],
   "alerts": [
-    "上证50ETF 权利金偏贵 (IV/HV 1.453)",
+    "上证50ETF 权利金偏贵 (IV/HV 1.493)",
     "上证50ETF 月评级跳变 -3→-1",
-    "沪深300ETF IV 处历史高位 (分位 81%, 样本1663天)",
-    "科创50ETF IV 处历史高位 (分位 95%, 样本830天)",
-    "中证500ETF IV 处历史高位 (分位 98%, 样本999天)",
-    "中证1000 IV 处历史高位 (分位 96%, 样本1040天)",
-    "铁矿石主连 IV 处历史低位 (分位 11%, 样本1669天)",
-    "铁矿石主连 周评级跳变 -2→+1",
+    "沪深300ETF IV 处历史高位 (分位 84%, 样本1664天)",
+    "科创50ETF IV 处历史高位 (分位 96%, 样本831天)",
+    "中证500ETF IV 处历史高位 (分位 99%, 样本1000天)",
+    "中证1000 IV 处历史高位 (分位 97%, 样本1041天)",
+    "铁矿石主连 IV 处历史低位 (分位 17%, 样本1670天)",
+    "铁矿石主连 周评级跳变 -2→+0",
     "铁矿石主连 月评级跳变 -3→-1",
-    "标普500指数 日评级跳变 +0→-2",
-    "标普500指数 日+周共振机会 (日-2/周-2)",
     "纳斯达克100指数 日+周共振机会 (日-2/周-3)"
   ]
 }
