@@ -165,7 +165,7 @@ def fetch_us_index_daily(symbol):
                 "high": float(b[3]), "low": float(b[4]),
                 "volume": float(b[5] or 0),
             })
-        if len(bars) < 1000:
+        if len(bars) < 1000 or bars[0][0] <= START_DATE:
             break
         nxt = (pd.Timestamp(bars[0][0]) - pd.Timedelta(days=1)).strftime("%Y-%m-%d")
         if nxt == end:
