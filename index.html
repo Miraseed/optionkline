@@ -343,8 +343,8 @@ const UNDERLYINGS = [
   { code: "I0",     name: "铁矿石主连", decimal_places: 1, tencent: "", sinaFutures: "I0" },
   { code: "510880", name: "红利ETF",    decimal_places: 3, tencent: "sh510880" },
   { code: "513530", name: "港股通红利ETF", decimal_places: 3, tencent: "sh513530" },
-  { code: "513650", name: "标普500ETF", decimal_places: 3, tencent: "sh513650" },
-  { code: "159509", name: "纳指科技ETF", decimal_places: 3, tencent: "sz159509" },
+  { code: "SPX", name: "标普500指数", decimal_places: 2, tencent: "usINX", usIndex: true },
+  { code: "NDX", name: "纳斯达克100指数", decimal_places: 2, tencent: "usNDX", usIndex: true },
 ];
 // 密码 option2024 的 base64 编码（基础门禁，非安全加密）
 const PASSWORD_ENC = "b3B0aW9uMjAyNA==";
@@ -602,7 +602,7 @@ function fetchTencentRealtime(tencentCodes, results) {
             const price = parseFloat(fields[3]);
             const prevClose = parseFloat(fields[4]);
             const open = parseFloat(fields[5]);
-            const volume = parseFloat(fields[6]) * 100;   // 手 -> 股
+            const volume = parseFloat(fields[6]) * (u.usIndex ? 1 : 100);   // A股单位为手, 美股指数为股
             const high = parseFloat(fields[33]);
             const low = parseFloat(fields[34]);
             const changePct = parseFloat(fields[32]);

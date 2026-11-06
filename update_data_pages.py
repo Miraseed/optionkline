@@ -31,14 +31,14 @@ UNDERLYINGS = [
     {"code": "I0", "name": "铁矿石主连", "symbol": "nf_I0", "type": "futures"},
     {"code": "510880", "name": "红利ETF", "symbol": "sh510880", "type": "etf"},
     {"code": "513530", "name": "港股通红利ETF", "symbol": "sh513530", "type": "etf"},
-    {"code": "513650", "name": "标普500ETF", "symbol": "sh513650", "type": "etf"},
-    {"code": "159509", "name": "纳指科技ETF", "symbol": "sz159509", "type": "etf"},
+    {"code": "SPX", "name": "标普500指数", "symbol": "usINX", "type": "us_index"},
+    {"code": "NDX", "name": "纳斯达克100指数", "symbol": "usNDX", "type": "us_index"},
 ]
 
 PE_INDEX_MAP = {
     "510050": "000016.SH", "510300": "000300.SH", "588000": "000688.SH",
     "159915": "399006.SZ", "510500": "000905.SH", "000852": "000852.SH",
-    "510880": None, "513530": None, "513650": None, "159509": None,
+    "510880": None, "513530": None, "SPX": None, "NDX": None,
     "I0": None,
 }
 
@@ -141,6 +141,69 @@ def fetch_realtime_quote(symbol):
         return {"date": today, "open": open_p, "high": high, "low": low, "close": close, "volume": volume}
     except Exception as e:
         print(f"  [实时行情获取失败] {symbol}: {e}")
+        return None
+
+
+def fetch_us_index_daily(symbol):
+    """腾讯美股指数日线: 单次最多返回 1000 根, 按结束日期向前翻页补齐全历史。
+    SPX 可回溯到 1982 年, NDX 约从 2000 年起。字段顺序: [日期, 开, 收, 高, 低, 量]。
+    """
+    import requests
+    url = "https://web.ifzq.gtimg.cn/appstock/app/usfqkline/get"
+    rows, end = [], ""
+    for _ in range(30):
+        param = f"{symbol},day,,{end},1000,qfq" if end else f"{symbol},day,,,1000,qfq"
+        r = requests.get(url, params={"param": param}, timeout=20)
+        data = r.json().get("data", {}).get(symbol, {})
+        bars = (data.get("qfqday") or data.get("day") or []) if isinstance(data, dict) else []
+        if not bars:
+            break
+        for b in bars:
+            rows.append({
+                "date": b[0],
+                "open": float(b[1]), "close": float(b[2]),
+                "high": float(b[3]), "low": float(b[4]),
+                "volume": float(b[5] or 0),
+            })
+        if len(bars) < 1000:
+            break
+        nxt = (pd.Timestamp(bars[0][0]) - pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+        if nxt == end:
+            break
+        end = nxt
+    df = pd.DataFrame(rows).drop_duplicates(subset=["date"]).sort_values("date").reset_index(drop=True)
+    return df
+
+
+def fetch_us_index_realtime_quote(symbol):
+    """腾讯美股指数实时报价。字段: [3]最新价 [4]昨收 [5]今开 [6]成交量(股)
+    [30]美国时间 [33]最高 [34]最低。日期用美东日期, 与日K口径一致。"""
+    import requests
+    try:
+        r = requests.get(f"https://qt.gtimg.cn/q={symbol}", timeout=10)
+        r.encoding = "gbk"
+        raw = r.text.split('"')[1] if '"' in r.text else ""
+        fields = raw.split("~")
+        if len(fields) < 35:
+            return None
+        price = float(fields[3])
+        open_p = float(fields[5])
+        high = float(fields[33])
+        low = float(fields[34])
+        volume = float(fields[6] or 0)
+        dt = fields[30].strip()
+        if price <= 0 or not dt:
+            return None
+        return {
+            "date": dt[:10],
+            "open": open_p if open_p > 0 else price,
+            "high": high if high > 0 else price,
+            "low": low if low > 0 else price,
+            "close": price,
+            "volume": volume,
+        }
+    except Exception as e:
+        print(f"  [美股指数实时行情获取失败] {symbol}: {e}")
         return None
 
 
@@ -308,18 +371,21 @@ def apply_qfq_adjustment(df, dividends):
 
 
 def fetch_kline_data(etf):
-    import akshare as ak
     code = etf["code"]
     symbol = etf["symbol"]
     etf_type = etf["type"]
     print(f"  获取 {etf['name']} ({code}) 数据...", end=" ")
 
-    if etf_type == "index":
-        df = ak.stock_zh_index_daily(symbol=symbol)
-    elif etf_type == "futures":
-        df = ak.futures_zh_daily_sina(symbol=etf["code"])
+    if etf_type == "us_index":
+        df = fetch_us_index_daily(symbol)
     else:
-        df = ak.fund_etf_hist_sina(symbol=symbol)
+        import akshare as ak
+        if etf_type == "index":
+            df = ak.stock_zh_index_daily(symbol=symbol)
+        elif etf_type == "futures":
+            df = ak.futures_zh_daily_sina(symbol=etf["code"])
+        else:
+            df = ak.fund_etf_hist_sina(symbol=symbol)
 
     print(f"共{len(df)}条历史数据", end="")
     df["date"] = pd.to_datetime(df["date"])
@@ -331,6 +397,8 @@ def fetch_kline_data(etf):
 
     if etf_type == "futures":
         rt = fetch_futures_realtime_quote(symbol)
+    elif etf_type == "us_index":
+        rt = fetch_us_index_realtime_quote(symbol)
     else:
         rt = fetch_realtime_quote(symbol)
     if etf_type == "futures" and rt:
