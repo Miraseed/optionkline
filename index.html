@@ -303,6 +303,7 @@
       </div>
     </div>
     <div class="chart-container" id="kline-chart"></div>
+    <div class="stats-panel" id="stats-panel" style="display:none;"></div>
     <div id="option-panel" style="display:none;">
       <h3>期权仪表盘 <span id="opt-updated" style="font-size:11px;color:#a0aec0;font-weight:normal"></span></h3>
       <div class="opt-chips" id="opt-chips"></div>
@@ -312,7 +313,6 @@
         <div class="opt-chart-box"><div class="opt-chart-title">ATM IV 历史</div><div class="opt-chart" id="opt-hist"></div></div>
       </div>
     </div>
-    <div class="stats-panel" id="stats-panel" style="display:none;"></div>
     <div class="table-container">
       <table id="data-table">
         <thead>
@@ -945,7 +945,7 @@ async function loadOptHist(code) {
 // ==================== 收盘复盘 ====================
 // 服务端每轮更新后生成 review_latest.json: 各标的评级/较上一根变化 + 异常提醒
 let reviewData = null;
-let reviewCollapsed = false;
+let reviewCollapsed = true;
 
 async function loadReview(noCache) {
   try {
@@ -969,6 +969,8 @@ function renderReview() {
   const panel = document.getElementById("review-panel");
   if (!panel || !reviewData || !reviewData.items || !reviewData.items.length) return;
   panel.style.display = "block";
+  document.getElementById("review-body").style.display = reviewCollapsed ? "none" : "block";
+  document.getElementById("review-toggle").textContent = reviewCollapsed ? "展开" : "收起";
   const r = reviewData;
   document.getElementById("review-meta").textContent =
     `${r.date} ${r.session === "night" ? "夜盘" : "日盘"} · 生成于 ${r.generated_at}`;
@@ -1207,25 +1209,26 @@ function selectETF(code) {
   }
 }
 
-// 切换统计面板显示/隐藏（手机端节省屏幕空间）
+// 切换统计面板显示/隐藏（手机端节省屏幕空间; 默认收起, 仅本次会话内保持展开状态）
+let statsExpanded = false;
+
 function toggleStats() {
   const panel = document.getElementById("stats-panel");
   const btn = document.getElementById("stats-toggle-btn");
   if (!panel || !btn) return;
   const willShow = panel.style.display === "none";
+  statsExpanded = willShow;
   panel.style.display = willShow ? "block" : "none";
   btn.classList.toggle("active", willShow);
-  localStorage.setItem("statsExpanded", willShow ? "1" : "0");
 }
 
-// 根据 localStorage 应用统计面板的可见性
+// 应用统计面板的可见性(刷新页面回到默认收起)
 function applyStatsVisibility() {
   const panel = document.getElementById("stats-panel");
   const btn = document.getElementById("stats-toggle-btn");
   if (!panel || !btn) return;
-  const expanded = localStorage.getItem("statsExpanded") === "1";
-  panel.style.display = expanded ? "block" : "none";
-  btn.classList.toggle("active", expanded);
+  panel.style.display = statsExpanded ? "block" : "none";
+  btn.classList.toggle("active", statsExpanded);
 }
 
 function switchPeriod(period) {
