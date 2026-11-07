@@ -148,16 +148,30 @@
   .stats-panel .stats-row { display: flex; flex-wrap: wrap; gap: 6px 24px; }
   .stats-panel .risk-high { color: #c53030; font-weight: bold; }
   .stats-panel .risk-low { color: #22543d; font-weight: bold; }
-  /* ===== 评级历史胜率表 ===== */
-  .rating-stats-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 6px; }
-  .stats-panel table.rating-stats { border-collapse: collapse; margin-top: 6px; width: 100%; max-width: 760px; }
-  .stats-panel table.rating-stats th, .stats-panel table.rating-stats td {
-    border: 1px solid #e2e8f0; padding: 3px 8px; text-align: right; font-variant-numeric: tabular-nums;
+  /* ===== 评级历史胜率(卡片式) ===== */
+  .rating-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 6px; margin-top: 8px; max-width: 760px; }
+  .rc {
+    background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #cbd5e0;
+    border-radius: 8px; padding: 7px 10px;
   }
-  .stats-panel table.rating-stats th { background: #edf2f7; font-weight: bold; white-space: nowrap; }
-  .stats-panel table.rating-stats td:first-child, .stats-panel table.rating-stats th:first-child { text-align: left; white-space: nowrap; }
-  .stats-panel table.rating-stats tr.hl td { background: #fffbeb; }
-  .stats-panel table.rating-stats .tag { display: inline-block; padding: 0 6px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 11px; }
+  .rc.chance { border-left-color: #38a169; }
+  .rc.risk { border-left-color: #e53e3e; }
+  .rc.base { grid-column: 1 / -1; background: #f7fafc; border-left-color: #2b6cb0; }
+  .rc-head { display: flex; align-items: center; gap: 8px; }
+  .rc .tag { display: inline-block; padding: 1px 7px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 11px; white-space: nowrap; }
+  .rc-n { font-size: 11px; color: #718096; white-space: nowrap; }
+  .rc-badge { margin-left: auto; font-size: 11px; font-weight: bold; padding: 1px 7px; border-radius: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .rc-badge.pos { background: #fff5f5; color: #c53030; }
+  .rc-badge.neg { background: #f0fff4; color: #22543d; }
+  .rc-badge.zero { background: #f1f5f9; color: #718096; }
+  .rc-sub { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; margin-top: 5px; color: #4a5568; }
+  .rc-sub b { font-variant-numeric: tabular-nums; }
+  .rc-acc { display: flex; align-items: center; gap: 7px; margin-top: 6px; font-size: 11px; color: #718096; }
+  .rc-acc .bar { position: relative; flex: 1; height: 9px; background: #edf2f7; border-radius: 5px; overflow: hidden; }
+  .rc-acc .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: linear-gradient(90deg, #63b3ed, #2b6cb0); }
+  .rc-acc .bar u { position: absolute; top: 0; bottom: 0; width: 1px; background: #a0aec0; }
+  .rc-acc b { min-width: 40px; text-align: right; font-variant-numeric: tabular-nums; color: #2d3748; }
+  .rc-empty { font-size: 11px; color: #a0aec0; margin-top: 5px; }
   .rating-hz-btns { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
   .rating-hz-btns button { padding: 1px 8px; font-size: 11px; border: 1px solid #cbd5e0; background: white; border-radius: 4px; cursor: pointer; }
   .rating-hz-btns button.active { background: #2b6cb0; color: white; border-color: #2b6cb0; }
@@ -208,9 +222,9 @@
     .stats-toggle-btn { padding: 4px 8px; font-size: 11px; }
     .stats-panel { padding: 8px; }
     .stats-panel table { font-size: 11px; }
-    .stats-panel table.rating-stats { font-size: 10px; }
-    .stats-panel table.rating-stats th, .stats-panel table.rating-stats td { padding: 2px 3px; }
-    .stats-panel table.rating-stats .tag { font-size: 9px; padding: 0 3px; }
+    .rating-cards { grid-template-columns: 1fr; gap: 5px; }
+    .rc { padding: 6px 8px; }
+    .rc-sub { font-size: 11px; }
   }
   @media (max-width: 900px) and (orientation: landscape) {
     body { padding: 4px; }
@@ -233,7 +247,7 @@
     .period-btn { padding: 3px 8px; font-size: 11px; }
     .stats-toggle-btn { padding: 3px 6px; font-size: 10px; }
     .chart-container { height: 70vh; min-height: 240px; max-height: 480px; margin-bottom: 4px; }
-    .stats-panel { padding: 6px; max-height: 28vh; }
+    .stats-panel { padding: 6px; max-height: 34vh; overflow-y: auto; }
     .stats-panel table { font-size: 10px; }
     .stats-panel thead th, .stats-panel tbody td { padding: 2px 3px; }
     .table-container { max-height: 180px; }
@@ -1577,40 +1591,42 @@ function buildRatingStatsHTML() {
   const bAll = statsOf(base.rets);
   if (!bAll || bAll.n < 20) return "";
   const periodName = { daily: "日K", weekly: "周K", monthly: "月K" }[currentPeriod];
-  const unit = { daily: "天", weekly: "周", monthly: "月" }[currentPeriod];
   const pct = (v, signed) => (signed && v > 0 ? "+" : "") + (v * 100).toFixed(2) + "%";
-  const labelCls = s => s >= 2 ? "risk-high" : s <= -2 ? "risk-low" : "";
-  let rows = "";
+  let cards = "";
   for (let s = -3; s <= 3; s++) {
     const st = statsOf(buckets[s].rets);
+    const side = s < 0 ? "chance" : s > 0 ? "risk" : "neutral";
+    const tag = `<span class="tag" style="background:${RISK_BG[String(s)] || "#a0aec0"}">${riskLabel(s)}</span>`;
     if (!st || st.n < 5) {
-      rows += `<tr><td><span class="tag" style="background:${RISK_BG[String(s)] || "#a0aec0"}">${riskLabel(s)}</span></td><td>${st ? st.n : 0}</td><td colspan="4" style="color:#a0aec0">样本不足</td></tr>`;
+      cards += `<div class="rc ${side}">
+        <div class="rc-head">${tag}<span class="rc-n">样本 ${st ? st.n : 0}</span></div>
+        <div class="rc-empty">样本不足, 暂不统计</div>
+      </div>`;
       continue;
     }
     // 方向正确率: 负分(机会档)→正收益占比; 正分(风险档)→负收益占比
     const acc = s < 0 ? st.up : s > 0 ? 1 - st.up : null;
     const excess = st.mean - bAll.mean;
-    const accCls = acc === null ? "" : acc >= 0.55 ? "pct-pos" : acc <= 0.45 ? "pct-neg" : "";
-    const isHl = s !== 0 && Math.abs(s) >= 2;
-    rows += `<tr${isHl ? ' class="hl"' : ""}>
-      <td><span class="tag" style="background:${RISK_BG[String(s)] || "#a0aec0"}">${riskLabel(s)}</span></td>
-      <td>${st.n}</td>
-      <td class="${st.mean > 0 ? "pct-pos" : "pct-neg"}">${pct(st.mean, true)}</td>
-      <td class="${st.med > 0 ? "pct-pos" : "pct-neg"}">${pct(st.med, true)}</td>
-      <td class="${accCls}">${acc === null ? "--" : (acc * 100).toFixed(1) + "%"}</td>
-      <td class="${excess > 0 ? "pct-pos" : "pct-neg"}">${pct(excess, true)}</td>
-    </tr>`;
+    const exCls = excess > 0 ? "pos" : excess < 0 ? "neg" : "zero";
+    const accBar = acc === null
+      ? `<div class="rc-acc"><span>正确率</span><span class="rc-empty" style="margin:0">中性档不适用</span></div>`
+      : `<div class="rc-acc">
+          <span>正确率</span>
+          <div class="bar"><i style="width:${Math.max(0, Math.min(1, acc)) * 100}%"></i><u style="left:50%"></u></div>
+          <b>${(acc * 100).toFixed(1)}%</b>
+        </div>`;
+    cards += `<div class="rc ${side}">
+      <div class="rc-head">
+        ${tag}<span class="rc-n">样本 ${st.n}</span>
+        <span class="rc-badge ${exCls}" title="超额收益 = 该档平均收益 - 全样本平均收益">超额 ${pct(excess, true)}</span>
+      </div>
+      <div class="rc-sub">
+        <span>平均 <b class="${st.mean > 0 ? "pct-pos" : "pct-neg"}">${pct(st.mean, true)}</b></span>
+        <span>中位 <b class="${st.med > 0 ? "pct-pos" : "pct-neg"}">${pct(st.med, true)}</b></span>
+      </div>
+      ${accBar}
+    </div>`;
   }
-  // 基准行
-  const baseAcc = "";
-  rows += `<tr style="background:#f1f5f9">
-    <td style="color:#718096" title="全部K线(基准)">全样本</td>
-    <td>${bAll.n}</td>
-    <td class="${bAll.mean > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.mean, true)}</td>
-    <td class="${bAll.med > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.med, true)}</td>
-    <td>${(bAll.up * 100).toFixed(1)}%↑</td>
-    <td>--</td>
-  </tr>`;
   const hzBtns = horizons.map(h =>
     `<button class="${h === hz ? "active" : ""}" onclick="setRatingHorizon(${h})">${h}</button>`).join("");
   const range = `${arr[0].date} ~ ${arr[arr.length - 1].date}`;
@@ -1618,14 +1634,23 @@ function buildRatingStatsHTML() {
     <div class="stats-title">【评级历史胜率】未来 ${hz} 根${periodName}
       <span class="rating-hz-btns">${hzBtns}</span>
     </div>
-    <div class="rating-stats-wrap">
-    <table class="rating-stats">
-      <thead><tr><th>评级</th><th>样本</th><th title="平均收益">平均</th><th title="收益中位数">中位</th><th title="方向正确率">正确率</th><th title="超额收益(vs全样本基准)">超额</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
+    <div class="rating-cards">
+      ${cards}
+      <div class="rc base">
+        <div class="rc-head">
+          <span class="tag" style="background:#2b6cb0">全样本</span>
+          <span class="rc-n">样本 ${bAll.n}</span>
+          <span class="rc-badge zero">基准</span>
+        </div>
+        <div class="rc-sub">
+          <span>平均 <b class="${bAll.mean > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.mean, true)}</b></span>
+          <span>中位 <b class="${bAll.med > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.med, true)}</b></span>
+          <span>未来上涨占比 <b>${(bAll.up * 100).toFixed(1)}%</b></span>
+        </div>
+      </div>
     </div>
-    <div style="font-size:11px;color:#718096;margin-top:4px">
-      样本区间 ${range} · 方向正确率: 机会档=未来上涨占比, 风险档=未来下跌占比 · 超额=该档平均收益-全样本平均收益 · 现价/临时柱不参与(未评级)
+    <div style="font-size:11px;color:#718096;margin-top:6px;line-height:1.7">
+      样本区间 ${range} · 正确率: 机会档=未来上涨占比, 风险档=未来下跌占比, 竖线为 50% 分界 · 超额=该档平均收益-全样本平均收益 · 现价/临时柱不参与(未评级)
     </div>`;
 }
 
