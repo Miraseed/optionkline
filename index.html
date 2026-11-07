@@ -149,6 +149,7 @@
   .stats-panel .risk-high { color: #c53030; font-weight: bold; }
   .stats-panel .risk-low { color: #22543d; font-weight: bold; }
   /* ===== 评级历史胜率表 ===== */
+  .rating-stats-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 6px; }
   .stats-panel table.rating-stats { border-collapse: collapse; margin-top: 6px; width: 100%; max-width: 760px; }
   .stats-panel table.rating-stats th, .stats-panel table.rating-stats td {
     border: 1px solid #e2e8f0; padding: 3px 8px; text-align: right; font-variant-numeric: tabular-nums;
@@ -207,6 +208,9 @@
     .stats-toggle-btn { padding: 4px 8px; font-size: 11px; }
     .stats-panel { padding: 8px; }
     .stats-panel table { font-size: 11px; }
+    .stats-panel table.rating-stats { font-size: 10px; }
+    .stats-panel table.rating-stats th, .stats-panel table.rating-stats td { padding: 2px 3px; }
+    .stats-panel table.rating-stats .tag { font-size: 9px; padding: 0 3px; }
   }
   @media (max-width: 900px) and (orientation: landscape) {
     body { padding: 4px; }
@@ -1600,7 +1604,7 @@ function buildRatingStatsHTML() {
   // 基准行
   const baseAcc = "";
   rows += `<tr style="background:#f1f5f9">
-    <td style="color:#718096">全部K线(基准)</td>
+    <td style="color:#718096" title="全部K线(基准)">全样本</td>
     <td>${bAll.n}</td>
     <td class="${bAll.mean > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.mean, true)}</td>
     <td class="${bAll.med > 0 ? "pct-pos" : "pct-neg"}">${pct(bAll.med, true)}</td>
@@ -1614,10 +1618,12 @@ function buildRatingStatsHTML() {
     <div class="stats-title">【评级历史胜率】未来 ${hz} 根${periodName}
       <span class="rating-hz-btns">${hzBtns}</span>
     </div>
+    <div class="rating-stats-wrap">
     <table class="rating-stats">
-      <thead><tr><th>评级</th><th>样本</th><th>平均收益</th><th>中位数</th><th>方向正确率</th><th>超额(vs基准)</th></tr></thead>
+      <thead><tr><th>评级</th><th>样本</th><th title="平均收益">平均</th><th title="收益中位数">中位</th><th title="方向正确率">正确率</th><th title="超额收益(vs全样本基准)">超额</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
+    </div>
     <div style="font-size:11px;color:#718096;margin-top:4px">
       样本区间 ${range} · 方向正确率: 机会档=未来上涨占比, 风险档=未来下跌占比 · 超额=该档平均收益-全样本平均收益 · 现价/临时柱不参与(未评级)
     </div>`;
