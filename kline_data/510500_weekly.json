@@ -8415,12 +8415,12 @@
     "date": "2026-11-13",
     "open": 6.693,
     "high": 6.739,
-    "low": 6.631,
-    "close": 6.651,
-    "volume": 265767668,
+    "low": 6.612,
+    "close": 6.612,
+    "volume": 506522642,
     "risk_score": -2,
     "intraday_up": 0.016594,
-    "intraday_down": 0.000302,
-    "close_change": 0.003319
+    "intraday_down": -0.002564,
+    "close_change": -0.002564
   }
 ]

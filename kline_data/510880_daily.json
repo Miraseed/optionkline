@@ -57734,13 +57734,13 @@
   {
     "date": "2026-11-09",
     "open": 3.356,
-    "high": 3.406,
+    "high": 3.415,
     "low": 3.353,
-    "close": 3.401,
-    "volume": 160107034,
+    "close": 3.402,
+    "volume": 278395134,
     "risk_score": 0,
-    "intraday_up": 0.010383,
+    "intraday_up": 0.013053,
     "intraday_down": -0.00534,
-    "close_change": 0.008899
+    "close_change": 0.009196
   }
 ]

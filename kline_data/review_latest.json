@@ -1,13 +1,13 @@
 {
-  "date": "2026-11-09",
+  "date": "2026-11-10",
   "session": "day",
-  "generated_at": "2026-11-09 12:30:57",
+  "generated_at": "2026-11-10 01:43:48",
   "items": [
     {
       "code": "510050",
       "name": "上证50ETF",
-      "spot": 2.91,
-      "chg": 0.002757,
+      "spot": 2.909,
+      "chg": 0.002412,
       "ratings": {
         "daily": 1,
         "weekly": 0,
@@ -20,46 +20,46 @@
       },
       "jump": true,
       "iv": {
-        "atm_iv": 15.2,
-        "iv_hv_ratio": 1.493,
-        "iv_pct": 29,
-        "iv_pct_n": 2852,
-        "pcr_vol": 0.908,
+        "atm_iv": 15.0,
+        "iv_hv_ratio": 1.488,
+        "iv_pct": 27,
+        "iv_pct_n": 2853,
+        "pcr_vol": 0.748,
         "pcr_oi": null,
-        "days_left": 18
+        "days_left": 15
       }
     },
     {
       "code": "510300",
       "name": "沪深300ETF",
-      "spot": 4.139,
-      "chg": 0.003637,
+      "spot": 4.13,
+      "chg": 0.001455,
       "ratings": {
         "daily": 1,
-        "weekly": -1,
+        "weekly": -2,
         "monthly": -3
       },
       "changes": {
         "daily": 0,
-        "weekly": 1,
+        "weekly": 0,
         "monthly": 0
       },
       "jump": false,
       "iv": {
-        "atm_iv": 21.36,
-        "iv_hv_ratio": 1.317,
-        "iv_pct": 84,
-        "iv_pct_n": 1664,
-        "pcr_vol": 0.671,
+        "atm_iv": 19.32,
+        "iv_hv_ratio": 1.188,
+        "iv_pct": 72,
+        "iv_pct_n": 1665,
+        "pcr_vol": 0.855,
         "pcr_oi": null,
-        "days_left": 18
+        "days_left": 15
       }
     },
     {
       "code": "588000",
       "name": "科创50ETF",
-      "spot": 1.334,
-      "chg": 0.006033,
+      "spot": 1.327,
+      "chg": 0.000754,
       "ratings": {
         "daily": 1,
         "weekly": -3,
@@ -72,20 +72,20 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 58.5,
-        "iv_hv_ratio": 1.072,
-        "iv_pct": 96,
-        "iv_pct_n": 831,
-        "pcr_vol": 1.059,
+        "atm_iv": 49.52,
+        "iv_hv_ratio": 0.911,
+        "iv_pct": 91,
+        "iv_pct_n": 832,
+        "pcr_vol": 0.887,
         "pcr_oi": null,
-        "days_left": 18
+        "days_left": 15
       }
     },
     {
       "code": "159915",
       "name": "创业板ETF",
-      "spot": 2.496,
-      "chg": 0.006452,
+      "spot": 2.472,
+      "chg": -0.003226,
       "ratings": {
         "daily": -1,
         "weekly": -3,
@@ -101,8 +101,8 @@
     {
       "code": "510500",
       "name": "中证500ETF",
-      "spot": 6.651,
-      "chg": 0.003319,
+      "spot": 6.612,
+      "chg": -0.002564,
       "ratings": {
         "daily": 1,
         "weekly": -2,
@@ -115,20 +115,20 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 36.34,
-        "iv_hv_ratio": 1.059,
-        "iv_pct": 99,
-        "iv_pct_n": 1000,
-        "pcr_vol": 1.145,
+        "atm_iv": 31.72,
+        "iv_hv_ratio": 0.94,
+        "iv_pct": 96,
+        "iv_pct_n": 1001,
+        "pcr_vol": 1.082,
         "pcr_oi": null,
-        "days_left": 18
+        "days_left": 15
       }
     },
     {
       "code": "000852",
       "name": "中证1000",
-      "spot": 6537.8797,
-      "chg": 0.005001,
+      "spot": 6499.7429,
+      "chg": -0.000861,
       "ratings": {
         "daily": 1,
         "weekly": -2,
@@ -141,20 +141,20 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 35.67,
-        "iv_hv_ratio": 0.966,
-        "iv_pct": 97,
-        "iv_pct_n": 1041,
+        "atm_iv": 33.37,
+        "iv_hv_ratio": 0.912,
+        "iv_pct": 94,
+        "iv_pct_n": 1042,
         "pcr_vol": null,
-        "pcr_oi": 0.55,
-        "days_left": 13
+        "pcr_oi": 0.551,
+        "days_left": 10
       }
     },
     {
       "code": "I0",
       "name": "铁矿石主连",
       "spot": 687.5,
-      "chg": -0.005065,
+      "chg": 0.0,
       "ratings": {
         "daily": 1,
         "weekly": 0,
@@ -162,42 +162,42 @@
       },
       "changes": {
         "daily": 0,
-        "weekly": 2,
+        "weekly": 0,
         "monthly": 2
       },
       "jump": true,
       "iv": {
-        "atm_iv": 17.76,
-        "iv_hv_ratio": 1.122,
-        "iv_pct": 17,
-        "iv_pct_n": 1670,
+        "atm_iv": 18.48,
+        "iv_hv_ratio": 1.167,
+        "iv_pct": 21,
+        "iv_pct_n": 1671,
         "pcr_vol": null,
-        "pcr_oi": 1.043,
-        "days_left": 10
+        "pcr_oi": 1.017,
+        "days_left": 7
       }
     },
     {
       "code": "510880",
       "name": "红利ETF",
-      "spot": 3.401,
-      "chg": 0.008899,
+      "spot": 3.402,
+      "chg": 0.009196,
       "ratings": {
         "daily": 0,
         "weekly": 1,
-        "monthly": 0
+        "monthly": 1
       },
       "changes": {
         "daily": 1,
         "weekly": 1,
-        "monthly": -1
+        "monthly": 0
       },
       "jump": false
     },
     {
       "code": "513530",
       "name": "港股通红利ETF",
-      "spot": 1.552,
-      "chg": 0.000645,
+      "spot": 1.553,
+      "chg": 0.001289,
       "ratings": {
         "daily": 1,
         "weekly": 2,
@@ -213,49 +213,47 @@
     {
       "code": "SPX",
       "name": "标普500指数",
-      "spot": 7376.86,
-      "chg": 0.003145,
+      "spot": 7546.78,
+      "chg": 0.023034,
       "ratings": {
-        "daily": -1,
-        "weekly": -2,
-        "monthly": -1
+        "daily": 0,
+        "weekly": 0,
+        "monthly": 0
       },
       "changes": {
         "daily": 1,
-        "weekly": -1,
-        "monthly": -1
+        "weekly": 2,
+        "monthly": 0
       },
-      "jump": false
+      "jump": true
     },
     {
       "code": "NDX",
       "name": "纳斯达克100指数",
-      "spot": 26989.99,
-      "chg": 0.013525,
+      "spot": 27854.28,
+      "chg": 0.032023,
       "ratings": {
-        "daily": -2,
-        "weekly": -3,
-        "monthly": -3
+        "daily": -1,
+        "weekly": -2,
+        "monthly": -2
       },
       "changes": {
-        "daily": 0,
-        "weekly": -1,
-        "monthly": -1
+        "daily": 1,
+        "weekly": 1,
+        "monthly": 0
       },
       "jump": false
     }
   ],
   "alerts": [
-    "上证50ETF 权利金偏贵 (IV/HV 1.493)",
+    "上证50ETF 权利金偏贵 (IV/HV 1.488)",
     "上证50ETF 月评级跳变 -3→+0",
-    "沪深300ETF IV 处历史高位 (分位 84%, 样本1664天)",
-    "科创50ETF IV 处历史高位 (分位 96%, 样本831天)",
-    "中证500ETF IV 处历史高位 (分位 99%, 样本1000天)",
-    "中证1000 IV 处历史高位 (分位 97%, 样本1041天)",
-    "铁矿石主连 IV 处历史低位 (分位 17%, 样本1670天)",
-    "铁矿石主连 周评级跳变 -2→+0",
+    "科创50ETF IV 处历史高位 (分位 91%, 样本832天)",
+    "中证500ETF IV 处历史高位 (分位 96%, 样本1001天)",
+    "中证1000 IV 处历史高位 (分位 94%, 样本1042天)",
+    "铁矿石主连 期权近月 7 天后到期 (末日轮, IV失真)",
     "铁矿石主连 月评级跳变 -3→-1",
     "港股通红利ETF 周评级跳变 +0→+2",
-    "纳斯达克100指数 日+周共振机会 (日-2/周-3)"
+    "标普500指数 周评级跳变 -2→+0"
   ]
 }

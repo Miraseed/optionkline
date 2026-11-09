@@ -7417,14 +7417,14 @@
   },
   {
     "date": "2026-11-13",
-    "open": 6580.1662,
+    "open": 6580.166,
     "high": 6612.0241,
-    "low": 6516.6376,
-    "close": 6537.8797,
-    "volume": 128359753,
+    "low": 6499.7429,
+    "close": 6499.7429,
+    "volume": 192334138,
     "risk_score": -2,
     "intraday_up": 0.016399,
-    "intraday_down": 0.001736,
-    "close_change": 0.005001
+    "intraday_down": -0.000861,
+    "close_change": -0.000861
   }
 ]
