@@ -101,6 +101,7 @@ def updater_loop():
             last = time.time()
             if in_trading_session() and _last_update.get("ok"):
                 dispatch_github_deploy()
+        maybe_dispatch_archive()
 
 
 # ==================== 触发 GitHub Pages 部署 ====================
@@ -121,27 +122,54 @@ def repo_pat():
         return None
 
 
-def dispatch_github_deploy():
+def dispatch_workflow(workflow_file, ref="main"):
     token = repo_pat()
     if not token:
-        return
-    if time.time() - _dispatch_state["last"] < 600:
-        return
-    _dispatch_state["last"] = time.time()
+        return None
     try:
         r = subprocess.run([
             "curl", "-s", "-m", "20", "-o", "/dev/null", "-w", "%{http_code}",
             "-X", "POST",
             "-H", f"Authorization: token {token}",
             "-H", "Accept: application/vnd.github+json",
-            f"https://api.github.com/repos/{GH_REPO}/actions/workflows/deploy-site.yml/dispatches",
-            "-d", '{"ref":"main"}',
+            f"https://api.github.com/repos/{GH_REPO}/actions/workflows/{workflow_file}/dispatches",
+            "-d", f'{{"ref":"{ref}"}}',
         ], capture_output=True, text=True, timeout=30)
-        _dispatch_state["last_result"] = r.stdout.strip()
-        print(f"[dispatch] GitHub Pages 部署触发 http={r.stdout.strip()}", flush=True)
+        return r.stdout.strip()
     except Exception as e:
-        _dispatch_state["last_result"] = f"err {e}"
-        print(f"[dispatch] 触发失败: {e}", flush=True)
+        print(f"[dispatch] {workflow_file} 触发失败: {e}", flush=True)
+        return None
+
+
+def dispatch_github_deploy():
+    if time.time() - _dispatch_state["last"] < 600:
+        return
+    _dispatch_state["last"] = time.time()
+    code = dispatch_workflow("deploy-site.yml")
+    if code:
+        _dispatch_state["last_result"] = code
+        print(f"[dispatch] GitHub Pages 部署触发 http={code}", flush=True)
+
+
+# 收盘归档: update-data.yml 也是 cron 驱动, 同样会被 GitHub 节流,
+# 收盘后由本服务补一次 dispatch, 把当日数据提交进仓库作为兜底。
+_archive_state = {"date": None}
+
+
+def maybe_dispatch_archive():
+    now = bj_now()
+    if now.weekday() >= 5:
+        return
+    mins = now.hour * 60 + now.minute
+    # 15:30-16:00 日盘归档; 23:10-23:40 夜盘归档
+    if not (930 <= mins <= 960 or 1390 <= mins <= 1420):
+        return
+    d = now.strftime("%Y-%m-%d")
+    if _archive_state["date"] == d:
+        return
+    _archive_state["date"] = d
+    code = dispatch_workflow("update-data.yml")
+    print(f"[dispatch] 收盘归档触发 http={code}", flush=True)
 
 
 # ==================== 15:15 收盘复盘提醒 ====================
