@@ -99,6 +99,49 @@ def updater_loop():
         if time.time() - last >= interval:
             run_update()
             last = time.time()
+            if in_trading_session() and _last_update.get("ok"):
+                dispatch_github_deploy()
+
+
+# ==================== 触发 GitHub Pages 部署 ====================
+# GitHub 的 schedule 事件被严重节流(实测数小时不触发, 数据会停在上一交易日),
+# 这里在本地数据刷新成功后主动 dispatch deploy-site, 让 Pages 跟上最新数据。
+GH_REPO = "Miraseed/optionkline"
+_dispatch_state = {"last": 0, "last_result": ""}
+
+
+def repo_pat():
+    """从 git remote 里取出带 PAT 的地址(格式 https://user:token@github.com/...)"""
+    try:
+        url = subprocess.run(["git", "remote", "get-url", "origin"],
+                             cwd=BASE_DIR, capture_output=True, text=True, timeout=10).stdout.strip()
+        m = re.search(r"https://([^@/]+)@github\.com", url)
+        return m.group(1).split(":")[-1] if m else None
+    except Exception:
+        return None
+
+
+def dispatch_github_deploy():
+    token = repo_pat()
+    if not token:
+        return
+    if time.time() - _dispatch_state["last"] < 600:
+        return
+    _dispatch_state["last"] = time.time()
+    try:
+        r = subprocess.run([
+            "curl", "-s", "-m", "20", "-o", "/dev/null", "-w", "%{http_code}",
+            "-X", "POST",
+            "-H", f"Authorization: token {token}",
+            "-H", "Accept: application/vnd.github+json",
+            f"https://api.github.com/repos/{GH_REPO}/actions/workflows/deploy-site.yml/dispatches",
+            "-d", '{"ref":"main"}',
+        ], capture_output=True, text=True, timeout=30)
+        _dispatch_state["last_result"] = r.stdout.strip()
+        print(f"[dispatch] GitHub Pages 部署触发 http={r.stdout.strip()}", flush=True)
+    except Exception as e:
+        _dispatch_state["last_result"] = f"err {e}"
+        print(f"[dispatch] 触发失败: {e}", flush=True)
 
 
 # ==================== 15:15 收盘复盘提醒 ====================

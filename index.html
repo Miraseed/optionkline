@@ -69,6 +69,7 @@
     border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;
   }
   .countdown { font-size: 11px; color: #cbd5e0; }
+  .data-lag { margin-top: 8px; background: #feebc8; color: #9c4221; border: 1px solid #f6ad55; border-radius: 6px; padding: 6px 10px; font-size: 12px; line-height: 1.5; }
 
   .summary {
     background: white; border-radius: 10px; padding: 14px; margin-bottom: 12px;
@@ -290,6 +291,7 @@
       </select>
       <button class="logout-btn" onclick="doLogout()">退出</button>
     </div>
+    <div id="data-lag" class="data-lag" style="display:none;"></div>
   </div>
 
   <div class="summary">
@@ -460,9 +462,9 @@ let refreshStopped = false;   // 人工"停止刷新": 收盘复盘时暂停一�
 // 服务端数据新鲜度: 由沙箱内 server.py 的 /api/status 提供(静态托管时为空)
 let serverStatus = null;
 let statusReceivedAt = 0;
-// 实时数据源(GitHub Pages 上仅按 Actions 部署节奏更新, 交易时段常滞后数十分钟):
-// 优先从沙箱 server.py 的隧道域名取 kline_data, 服务不可达时回退到当前站点自带的 JSON。
-const LIVE_BASES = ["https://gqujdndm6vzewmkl3o6xj6l7yi.srv.us"];
+// 备用实时数据源(可选): 沙箱隧道地址会随重启变化, 原来固定的 srv.us 域名已失效,
+// 故默认留空; 页面直接读站点自带 JSON, 并用腾讯行情在本地补齐当日K线。
+const LIVE_BASES = [];
 let liveBase = null;        // 探测成功后的源前缀(无尾斜杠)
 let liveProbeAt = 0;        // 上次探测时间, 60 秒内不重复探测
 let liveProbed = false;
@@ -627,8 +629,12 @@ function fetchTencentRealtime(tencentCodes, results) {
             const low = parseFloat(fields[34]);
             const changePct = parseFloat(fields[32]);
             if (price > 0) {
+              // 行情自带日期: 美股指数在北京时间白天对应的是上一美东交易日,
+              // 直接按"今天"补K线会凭空多出一根错误K柱
+              const dt = (fields[30] || "").slice(0, 10);
               results[u.code] = {
                 price: price,
+                date: /^\d{4}-\d{2}-\d{2}$/.test(dt) ? dt : null,
                 open: open || price,
                 high: high > 0 ? high : price,
                 low: low > 0 ? low : price,
@@ -1663,6 +1669,7 @@ async function manualRefresh() {
     // 数据与实时行情并行拉取, 缩短总耗时
     const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
     applyRealtimeToData(rtData);
+    updateDataLagBanner(rtData);
     dataUpdatedAt = new Date();
     renderSummary();
     if (currentCode) { renderDetail(); renderChart(); }
@@ -1756,6 +1763,7 @@ async function autoRefreshTask() {
       }
       const rtData = await fetchAllRealtime();
       applyRealtimeToData(rtData);
+      updateDataLagBanner(rtData);
       dataUpdatedAt = new Date();
       renderSummary();
       if (currentCode && isCodeLoaded(currentCode)) { renderDetail(); renderChart(); }
@@ -1764,6 +1772,7 @@ async function autoRefreshTask() {
       // 数据与实时行情并行拉取
       const [, rtData] = await Promise.all([refreshData(true), fetchAllRealtime()]);
       applyRealtimeToData(rtData);
+      updateDataLagBanner(rtData);
       dataUpdatedAt = new Date();
       lastDataSyncAt = Date.now();
       const newHash = dataHash();
@@ -1800,6 +1809,26 @@ function fmtAge(sec) {
   if (sec < 60) return `${sec}秒前`;
   if (sec < 3600) return `${Math.floor(sec / 60)}分钟前`;
   return `${Math.floor(sec / 3600)}小时前`;
+}
+
+// 数据滞后提示: 实时行情已到新交易日, 但站点 JSON 还停在上一交易日时明确告知,
+// 避免"页面看着正常、其实少了一天的K线"(2026-11-09 曾出现数据停在 11-06)。
+function updateDataLagBanner(rt) {
+  const el = document.getElementById("data-lag");
+  if (!el) return;
+  let worst = null;
+  for (const u of UNDERLYINGS) {
+    const q = rt && rt[u.code];
+    const s = summaryData && summaryData[u.code] && summaryData[u.code].daily;
+    if (!q || !q.date || !s || !s.date) continue;
+    if (q.date > s.date && (!worst || s.date < worst.have)) {
+      worst = { have: s.date, quote: q.date };
+    }
+  }
+  if (!worst) { el.style.display = "none"; return; }
+  el.style.display = "block";
+  el.innerHTML = `⚠ 后台K线数据只到 <b>${worst.have}</b>，行情已到 <b>${worst.quote}</b>：`
+    + `当日K线暂由浏览器用实时价补齐，评级待后台数据更新后生成。`;
 }
 
 // 每秒更新头部状态：北京时间、交易时段徽标、下次刷新倒计时
@@ -1926,11 +1955,17 @@ async function initApp() {
     loadReview();
 
     // 3) 实时行情到达后叠加并刷新视图
-    const rtData = await rtPromise;
+    let rtData = await rtPromise;
+    // 首次拉取失败(脚本被拦/网络抖动)时重试一次, 否则页面会一直停在上一交易日收盘
+    if (!Object.keys(rtData).length) {
+      await new Promise(r => setTimeout(r, 1500));
+      try { rtData = await fetchAllRealtime(); } catch (e) {}
+    }
     if (applyRealtimeToData(rtData)) {
       renderSummary();
       if (currentCode && isCodeLoaded(currentCode)) { renderDetail(); renderChart(); }
     }
+    updateDataLagBanner(rtData);
 
     startAutoRefresh();
   } catch (e) {
