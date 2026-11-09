@@ -80918,13 +80918,13 @@
   {
     "date": "2026-11-09",
     "open": 27263.43,
-    "high": 27903.61,
+    "high": 28025.77,
     "low": 27227.53,
-    "close": 27854.28,
-    "volume": 885513006,
+    "close": 27907.63,
+    "volume": 1813321113,
     "risk_score": -1,
-    "intraday_up": 0.03385,
+    "intraday_up": 0.038376,
     "intraday_down": 0.008801,
-    "close_change": 0.032023
+    "close_change": 0.033999
   }
 ]
