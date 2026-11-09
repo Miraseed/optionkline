@@ -277,7 +277,7 @@
     <h1>📈 期权时空容错交易系统 · K线数据与风险评级</h1>
     <div class="header-info">
       <span>北京: <span id="server-time">--</span></span>
-      <span>数据: <span id="last-update">--</span></span>
+      <span>行情: <span id="last-update">--</span></span>
       <span id="status-badge" class="status-badge status-closed">加载中...</span>
       <span class="countdown" id="countdown">--</span>
       <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">🔄 刷新</button>
@@ -1851,16 +1851,23 @@ function updateStatusUI() {
         + `${serverStatus.in_trading_session ? "交易时段" : "非交易时段"}`
         + (serverStatus.ok === false ? "\n⚠ 上次刷新返回异常" : "");
     } else {
-      // 静态托管(GitHub Pages): 用 summary.json 里的数据生成时间, 比页面加载时间真实
+      // 静态托管(GitHub Pages): 优先显示浏览器实时行情的刷新时间(价格已实时),
+      // 数据文件生成时间放到悬停提示; 只有行情本身超出刷新间隔才标黄。
       const meta = summaryData && summaryData._meta && summaryData._meta.generated_at;
-      if (meta) {
+      if (dataUpdatedAt) {
+        const age = Math.max(0, Math.round((Date.now() - dataUpdatedAt) / 1000));
+        const stale = trading && age > 300;
+        const hms = dataUpdatedAt.toLocaleTimeString("zh-CN", { hour12: false, timeZone: "Asia/Shanghai" });
+        lu.textContent = (stale ? "⚠ " : "") + `${hms} (${fmtAge(age)})`;
+        lu.title = `浏览器实时行情刷新于 ${hms}（腾讯行情）`
+          + (meta ? `\n后台数据文件生成于 ${meta}（北京时间）` : "");
+      } else if (meta) {
         const gen = new Date(meta.replace(" ", "T") + "+08:00").getTime();
         const age = Math.max(0, Math.round((Date.now() - gen) / 1000));
-        const stale = trading && age > 480;   // 5分钟部署节奏, 超8分钟视为滞后
-        lu.textContent = (stale ? "⚠ " : "") + `${meta.slice(11, 19)} (${fmtAge(age)})`;
-        lu.title = `数据生成时间: ${meta}（北京时间）\n静态站交易时段每5分钟自动部署`;
+        lu.textContent = `${meta.slice(11, 19)} (${fmtAge(age)})`;
+        lu.title = `数据文件生成时间: ${meta}（北京时间）`;
       } else {
-        lu.textContent = dataUpdatedAt ? fmtBJ(dataUpdatedAt) : "--";
+        lu.textContent = "--";
       }
     }
   }
