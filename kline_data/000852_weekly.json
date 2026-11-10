@@ -7418,13 +7418,13 @@
   {
     "date": "2026-11-13",
     "open": 6580.166,
-    "high": 6612.0241,
-    "low": 6499.7429,
-    "close": 6499.7429,
-    "volume": 192334138,
-    "risk_score": -2,
-    "intraday_up": 0.016399,
+    "high": 6625.5223,
+    "low": 6499.743,
+    "close": 6579.3558,
+    "volume": 19429201505,
+    "risk_score": -1,
+    "intraday_up": 0.018473,
     "intraday_down": -0.000861,
-    "close_change": -0.000861
+    "close_change": 0.011377
   }
 ]
