@@ -80942,13 +80942,13 @@
   {
     "date": "2026-11-11",
     "open": 28267.33,
-    "high": 28323.08,
+    "high": 28593.52,
     "low": 28102.75,
-    "close": 28213.49,
-    "volume": 431466400,
+    "close": 28374.25,
+    "volume": 1529012893,
     "risk_score": 0,
-    "intraday_up": 0.02099,
+    "intraday_up": 0.030739,
     "intraday_down": 0.013048,
-    "close_change": 0.01704
+    "close_change": 0.022835
   }
 ]
