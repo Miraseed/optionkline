@@ -1381,11 +1381,12 @@ function renderChart() {
   const hasPE = false;
   const decimals = getDecimals(currentCode);
 
-  // 极端评级(±3)在K线上打竖虚线: 红色=巨大风险, 绿色=巨大机会
-  const riskIdx = [], chanceIdx = [];
+  // 极端评级(±3): 三角形标记(风险在最高价上方/机会在最低价下方) + 竖虚线
+  const riskIdx = [], chanceIdx = [], riskMarkers = [], chanceMarkers = [];
   for (let i = 0; i < values.length; i++) {
-    if (riskScores[i] === 3) riskIdx.push(i);
-    else if (riskScores[i] === -3) chanceIdx.push(i);
+    const [, , l, h] = values[i];
+    if (riskScores[i] === 3) { riskIdx.push(i); riskMarkers.push([i, h * 1.01]); }
+    else if (riskScores[i] === -3) { chanceIdx.push(i); chanceMarkers.push([i, l * 0.99]); }
   }
   const crossLine = (idx, color) => ({
     silent: true, symbol: "none", animation: false,
@@ -1411,12 +1412,12 @@ function renderChart() {
         { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
         { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
         { name: "PE(TTM)", icon: "circle" },
-        { name: "巨大风险", icon: "line" }, { name: "巨大机会", icon: "line" }
+        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
       ] : [
         { name: "K线", icon: "roundRect" },
         { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
         { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
-        { name: "巨大风险", icon: "line" }, { name: "巨大机会", icon: "line" }
+        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
       ],
       textStyle: { fontSize: 9 }
     },
@@ -1556,15 +1557,14 @@ function renderChart() {
       { name: "MA10", type: "line", data: ma10, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#3b82f6" } },
       { name: "MA20", type: "line", data: ma20, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#a855f7" } },
       { name: "MA60", type: "line", data: ma60, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#64748b" } },
-      // 空数据线仅用于承载竖虚线与图例(点图例可开关该类标注)
-      { name: "巨大风险", type: "line", data: dates.map(() => null), symbol: "none",
-        itemStyle: { color: "#e53e3e" },
-        lineStyle: { width: 0, color: "#e53e3e", type: "dashed" },
-        markLine: crossLine(riskIdx, "#e53e3e"), z: 9 },
-      { name: "巨大机会", type: "line", data: dates.map(() => null), symbol: "none",
-        itemStyle: { color: "#38a169" },
-        lineStyle: { width: 0, color: "#38a169", type: "dashed" },
-        markLine: crossLine(chanceIdx, "#38a169"), z: 9 }
+      // 三角形标记 + 贯穿全图的竖虚线共用一个序列
+      // 图例点一次即可同时开关两者, 便于与综合评级标注对照复盘
+      { name: "巨大风险", type: "scatter", data: riskMarkers, symbol: "triangle", symbolSize: 10,
+        symbolRotate: 180, itemStyle: { color: "#e53e3e" }, z: 10,
+        markLine: crossLine(riskIdx, "#e53e3e") },
+      { name: "巨大机会", type: "scatter", data: chanceMarkers, symbol: "triangle", symbolSize: 10,
+        itemStyle: { color: "#38a169" }, z: 10,
+        markLine: crossLine(chanceIdx, "#38a169") }
     ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
   };
   chart.setOption(option, true);
