@@ -88,6 +88,7 @@
   .etf-card-rating { display: flex; gap: 6px; font-size: 9px; justify-content: space-between; align-items: center; }
   .rating-left { display: flex; gap: 4px; flex: 1; min-width: 0; }
   .rating-right { display: flex; align-items: center; gap: 3px; flex-shrink: 0; white-space: nowrap; }
+  .composite-wrap { margin-left: 3px; }
   .rating-tag { padding: 1px 5px; border-radius: 4px; color: white; font-weight: bold; }
   .pe-tag { padding: 1px 5px; border-radius: 4px; color: #333; font-weight: bold; font-size: 9px; white-space: nowrap; }
 
@@ -331,7 +332,7 @@
         <thead>
           <tr>
             <th>日期</th><th>开盘</th><th>最高</th><th>最低</th><th>收盘</th>
-            <th>成交量</th><th>评分</th><th>评级</th><th>期中涨幅</th><th>期中跌幅</th><th>收盘涨跌</th>
+            <th>成交量</th><th>评分</th><th>评级</th><th>综合评级</th><th>期中涨幅</th><th>期中跌幅</th><th>收盘涨跌</th>
           </tr>
         </thead>
         <tbody id="data-tbody"></tbody>
@@ -911,6 +912,48 @@ function lastRec(code, period) {
   const s = summaryData[code];
   return (s && s[period]) ? s[period] : null;
 }
+// ---- 综合评级: 日0.2 + 周0.3 + 月0.5 ----
+const COMPOSITE_WEIGHTS = { daily: 0.2, weekly: 0.3, monthly: 0.5 };
+// 取某周期"覆盖该日"的那根K线评分: 周K/月K的日期是周期末(可能晚于当日),
+// 故取第一根 date >= 目标日的bar(即包含该日的周/月), 找不到则用最后一根。
+// 这样明细表最新一行的综合评级与顶部卡片(用最新bar计算)保持一致。
+function scoreAtDate(code, period, dateStr) {
+  const arr = allData[code] && allData[code][period];
+  if (!arr || !arr.length) {
+    const s = summaryData[code] && summaryData[code][period];
+    return s && s.risk_score != null && s.date >= dateStr ? s.risk_score : null;
+  }
+  // 日期为 ISO 字符串可直接比较; 二分查找第一根 date >= dateStr
+  let lo = 0, hi = arr.length - 1, hit = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (arr[mid].date >= dateStr) { hit = mid; hi = mid - 1; } else { lo = mid + 1; }
+  }
+  const r = hit < 0 ? arr[arr.length - 1] : arr[hit];
+  // 覆盖校验: 周K最多跨7天、月K最多跨31天; 超过说明该日尚无对应周期数据(或历史未加载完)
+  const maxGap = period === "weekly" ? 10 : period === "monthly" ? 40 : 0;
+  if (maxGap) {
+    const gap = (new Date(r.date) - new Date(dateStr)) / 86400000;
+    if (gap > maxGap) return null;
+  }
+  return r.risk_score == null ? null : r.risk_score;
+}
+// 加权综合评分; 任一周期缺数据则返回 null(避免用 0 冒充中性)
+function compositeScore(code, dateStr) {
+  const parts = ["daily", "weekly", "monthly"].map(p => [COMPOSITE_WEIGHTS[p], scoreAtDate(code, p, dateStr)]);
+  if (parts.some(([, s]) => s == null)) return null;
+  const raw = parts.reduce((acc, [w, s]) => acc + w * s, 0);
+  // 对称四舍五入(避免 Math.round(-1.5)=-1 与 Math.round(1.5)=2 的方向偏差)
+  const rounded = Math.sign(raw) * Math.round(Math.abs(raw));
+  return Math.max(-3, Math.min(3, rounded));
+}
+function compositeTagHtml(code, dateStr) {
+  const s = compositeScore(code, dateStr);
+  if (s == null) return '<span class="rating-tag" style="background:#a0aec0">--</span>';
+  const bg = RISK_BG[String(s)] || "#a0aec0";
+  const color = s >= 2 ? "#c53030" : s <= -2 ? "#22543d" : "#333";
+  return `<span class="rating-tag" style="background:${bg};color:${color}">${riskLabel(s)}</span>`;
+}
 // 该标的完整K线是否已加载(有预览即可)
 function isCodeLoaded(code) {
   const d = allData[code];
@@ -1175,23 +1218,33 @@ function renderSummary() {
     const chg = latest && latest.close_change !== null ? fmtPct(latest.close_change) : "--";
     const chgCls = latest && latest.close_change !== null ? (latest.close_change >= 0 ? "pct-pos" : "pct-neg") : "";
     function ratingTag(code, period, rec) {
-      // 盘中临时柱 risk_score 为空(待服务端数据补齐): 回退到最近一个已评级K线,
-      // 避免日评级在数据更新前一直显示"—"(GitHub Pages 上要 15:20 才有当日评级)
-      if (!rec || rec.risk_score == null || rec.risk_score === "") {
-        const arr = allData[code] && allData[code][period];
-        if (arr && arr.length) {
-          for (let i = arr.length - 1; i >= 0 && i >= arr.length - 10; i--) {
-            const r = arr[i];
-            if (r && r.risk_score !== null && r.risk_score !== undefined && r.risk_score !== "") { rec = r; break; }
-          }
-        }
-        if (!rec || rec.risk_score == null || rec.risk_score === "") {
-          const s2 = summaryData[code] && summaryData[code][period];
-          if (s2 && s2.risk_score !== null && s2.risk_score !== undefined) rec = s2;
+      const s = effectiveScore(code, period, rec);
+      if (s == null) return '<span class="rating-tag" style="background:#a0aec0">--</span>';
+      const bg = RISK_BG[String(s)] || "#a0aec0";
+      const color = s >= 2 ? "#c53030" : s <= -2 ? "#22543d" : "#333";
+      return `<span class="rating-tag" style="background:${bg};color:${color}">${riskLabel(s)}</span>`;
+    }
+    // 盘中临时柱 risk_score 为空(待服务端数据补齐): 回退到最近一个已评级K线,
+    // 避免日评级在数据更新前一直显示"—"(GitHub Pages 上要 15:20 才有当日评级)
+    function effectiveScore(code, period, rec) {
+      if (rec && rec.risk_score != null && rec.risk_score !== "") return rec.risk_score;
+      const arr = allData[code] && allData[code][period];
+      if (arr && arr.length) {
+        for (let i = arr.length - 1; i >= 0 && i >= arr.length - 10; i--) {
+          const r = arr[i];
+          if (r && r.risk_score !== null && r.risk_score !== undefined && r.risk_score !== "") return r.risk_score;
         }
       }
-      if (!rec) return '<span class="rating-tag" style="background:#a0aec0">--</span>';
-      const s = rec.risk_score;
+      const s2 = summaryData[code] && summaryData[code][period];
+      if (s2 && s2.risk_score !== null && s2.risk_score !== undefined) return s2.risk_score;
+      return null;
+    }
+    function compositeFromLast() {
+      const parts = [["daily", lastDaily], ["weekly", lastWeekly], ["monthly", lastMonthly]]
+        .map(([p, rec]) => [COMPOSITE_WEIGHTS[p], effectiveScore(code, p, rec)]);
+      if (parts.some(([, s]) => s == null)) return '<span class="rating-tag" style="background:#a0aec0">--</span>';
+      const raw = parts.reduce((acc, [w, s]) => acc + w * s, 0);
+      const s = Math.max(-3, Math.min(3, Math.sign(raw) * Math.round(Math.abs(raw))));
       const bg = RISK_BG[String(s)] || "#a0aec0";
       const color = s >= 2 ? "#c53030" : s <= -2 ? "#22543d" : "#333";
       return `<span class="rating-tag" style="background:${bg};color:${color}">${riskLabel(s)}</span>`;
@@ -1207,7 +1260,7 @@ function renderSummary() {
           <span class="card-right"><span class="${chgCls}">${close} ${chg}</span></span>
         </div>
         <div class="etf-card-rating">
-          <span class="rating-left">日:${ratingTag(code,"daily",lastDaily)} 周:${ratingTag(code,"weekly",lastWeekly)} 月:${ratingTag(code,"monthly",lastMonthly)}</span>
+          <span class="rating-left">日:${ratingTag(code,"daily",lastDaily)} 周:${ratingTag(code,"weekly",lastWeekly)} 月:${ratingTag(code,"monthly",lastMonthly)} <span class="composite-wrap">综 ${compositeFromLast()}</span></span>
           ${peTag()}
         </div>
         ${optCardLine(code)}
@@ -1228,7 +1281,7 @@ function selectETF(code) {
   } else {
     // 首次选中: 先出加载态, 再按需拉取该标的(最近N根秒出, 后台补全历史)
     const tb = document.getElementById("data-tbody");
-    if (tb) tb.innerHTML = '<tr><td colspan="11" class="loading">K线加载中...</td></tr>';
+    if (tb) tb.innerHTML = '<tr><td colspan="12" class="loading">K线加载中...</td></tr>';
     const el = document.getElementById("kline-chart");
     if (el && !chart) el.innerHTML = '<div class="loading"><div class="spinner"></div><p>加载K线...</p></div>';
     loadCodeData(code).catch(e => showToast("K线加载失败: " + e.message, "error"));
@@ -1286,16 +1339,19 @@ function renderDetail() {
     const iuCls = r.intraday_up !== null ? (r.intraday_up >= 0 ? "pct-pos" : "pct-neg") : "";
     const idCls = r.intraday_down !== null ? (r.intraday_down >= 0 ? "pct-pos" : "pct-neg") : "";
     const ccCls = r.close_change !== null ? (r.close_change >= 0 ? "pct-pos" : "pct-neg") : "";
+    const cs = compositeScore(currentCode, r.date);
+    const compHtml = cs == null ? "—" : riskLabel(cs);
     html += `<tr class="${cls}">
       <td>${r.date}</td><td>${fmtNum(r.open)}</td><td>${fmtNum(r.high)}</td>
       <td>${fmtNum(r.low)}</td><td>${fmtNum(r.close)}</td><td>${fmtVol(r.volume)}</td>
       <td>${r.risk_score ?? "—"}</td><td class="label-cell">${riskLabel(r.risk_score)}</td>
+      <td class="label-cell">${compHtml}</td>
       <td class="${iuCls}">${fmtPct(r.intraday_up)}</td>
       <td class="${idCls}">${fmtPct(r.intraday_down)}</td>
       <td class="${ccCls}">${fmtPct(r.close_change)}</td>
     </tr>`;
   }
-  tbody.innerHTML = html || `<tr><td colspan="11" class="loading">暂无数据</td></tr>`;
+  tbody.innerHTML = html || `<tr><td colspan="12" class="loading">暂无数据</td></tr>`;
 }
 
 function renderChart() {
@@ -1325,12 +1381,18 @@ function renderChart() {
   const hasPE = false;
   const decimals = getDecimals(currentCode);
 
-  const riskMarkers = [], chanceMarkers = [];
+  // 极端评级(±3)在K线上打竖虚线: 红色=巨大风险, 绿色=巨大机会
+  const riskIdx = [], chanceIdx = [];
   for (let i = 0; i < values.length; i++) {
-    const [o, c, l, h] = values[i];
-    if (riskScores[i] === 3) riskMarkers.push([i, h * 1.01]);
-    else if (riskScores[i] === -3) chanceMarkers.push([i, l * 0.99]);
+    if (riskScores[i] === 3) riskIdx.push(i);
+    else if (riskScores[i] === -3) chanceIdx.push(i);
   }
+  const crossLine = (idx, color) => ({
+    silent: true, symbol: "none", animation: false,
+    label: { show: false },
+    lineStyle: { color, type: "dashed", width: 1, opacity: 0.9 },
+    data: idx.map(i => ({ xAxis: i })),
+  });
 
   const totalBars = dates.length;
   const visibleBars = Math.min(120, totalBars);
@@ -1349,12 +1411,12 @@ function renderChart() {
         { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
         { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
         { name: "PE(TTM)", icon: "circle" },
-        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
+        { name: "巨大风险", icon: "line" }, { name: "巨大机会", icon: "line" }
       ] : [
         { name: "K线", icon: "roundRect" },
         { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
         { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
-        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
+        { name: "巨大风险", icon: "line" }, { name: "巨大机会", icon: "line" }
       ],
       textStyle: { fontSize: 9 }
     },
@@ -1494,8 +1556,15 @@ function renderChart() {
       { name: "MA10", type: "line", data: ma10, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#3b82f6" } },
       { name: "MA20", type: "line", data: ma20, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#a855f7" } },
       { name: "MA60", type: "line", data: ma60, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#64748b" } },
-      { name: "巨大风险", type: "scatter", data: riskMarkers, symbol: "triangle", symbolSize: 10, symbolRotate: 180, itemStyle: { color: "#e53e3e" }, z: 10 },
-      { name: "巨大机会", type: "scatter", data: chanceMarkers, symbol: "triangle", symbolSize: 10, itemStyle: { color: "#38a169" }, z: 10 }
+      // 空数据线仅用于承载竖虚线与图例(点图例可开关该类标注)
+      { name: "巨大风险", type: "line", data: dates.map(() => null), symbol: "none",
+        itemStyle: { color: "#e53e3e" },
+        lineStyle: { width: 0, color: "#e53e3e", type: "dashed" },
+        markLine: crossLine(riskIdx, "#e53e3e"), z: 9 },
+      { name: "巨大机会", type: "line", data: dates.map(() => null), symbol: "none",
+        itemStyle: { color: "#38a169" },
+        lineStyle: { width: 0, color: "#38a169", type: "dashed" },
+        markLine: crossLine(chanceIdx, "#38a169"), z: 9 }
     ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
   };
   chart.setOption(option, true);
