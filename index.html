@@ -914,29 +914,36 @@ function lastRec(code, period) {
 }
 // ---- 综合评级: 日0.2 + 周0.3 + 月0.5 ----
 const COMPOSITE_WEIGHTS = { daily: 0.2, weekly: 0.3, monthly: 0.5 };
-// 取某周期"覆盖该日"的那根K线评分: 周K/月K的日期是周期末(可能晚于当日),
-// 故取第一根 date >= 目标日的bar(即包含该日的周/月), 找不到则用最后一根。
-// 这样明细表最新一行的综合评级与顶部卡片(用最新bar计算)保持一致。
+// 周期bar的"有效结束日": 周K/月K的日期是周期标签(周五/月末, 可能是非交易日或尚未走完),
+// 该评分真正可知的时点是"标签日当天或之前最近的交易日"。
+// 例: 月K 2026-10-31(周六)实际于 2026-10-30 收盘后生效; 本周周K 2026-11-13 生效于最新交易日。
+function barEffDate(daily, period, barDate) {
+  if (period === "daily" || !daily || !daily.length) return barDate;
+  let lo = 0, hi = daily.length - 1, hit = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (daily[mid].date <= barDate) { hit = mid; lo = mid + 1; } else { hi = mid - 1; }
+  }
+  return hit < 0 ? barDate : daily[hit].date;
+}
+// 取某周期在目标日"当时已知"的评分: 最后一个有效结束日 <= 目标日的bar。
+// 这样历史行不会混入目标日之后才产生的数据(前视/未来数据)。
 function scoreAtDate(code, period, dateStr) {
   const arr = allData[code] && allData[code][period];
+  const daily = allData[code] && allData[code].daily;
   if (!arr || !arr.length) {
     const s = summaryData[code] && summaryData[code][period];
-    return s && s.risk_score != null && s.date >= dateStr ? s.risk_score : null;
+    return s && s.risk_score != null && s.date <= dateStr ? s.risk_score : null;
   }
-  // 日期为 ISO 字符串可直接比较; 二分查找第一根 date >= dateStr
+  // 有效结束日随bar日期单调不减, 可二分: 找最后一个 eff <= dateStr
   let lo = 0, hi = arr.length - 1, hit = -1;
   while (lo <= hi) {
     const mid = (lo + hi) >> 1;
-    if (arr[mid].date >= dateStr) { hit = mid; hi = mid - 1; } else { lo = mid + 1; }
+    if (barEffDate(daily, period, arr[mid].date) <= dateStr) { hit = mid; lo = mid + 1; } else { hi = mid - 1; }
   }
-  const r = hit < 0 ? arr[arr.length - 1] : arr[hit];
-  // 覆盖校验: 周K最多跨7天、月K最多跨31天; 超过说明该日尚无对应周期数据(或历史未加载完)
-  const maxGap = period === "weekly" ? 10 : period === "monthly" ? 40 : 0;
-  if (maxGap) {
-    const gap = (new Date(r.date) - new Date(dateStr)) / 86400000;
-    if (gap > maxGap) return null;
-  }
-  return r.risk_score == null ? null : r.risk_score;
+  if (hit < 0) return null;
+  const s = arr[hit].risk_score;
+  return s == null ? null : s;
 }
 // 加权综合评分; 任一周期缺数据则返回 null(避免用 0 冒充中性)
 function compositeScore(code, dateStr) {
@@ -948,33 +955,32 @@ function compositeScore(code, dateStr) {
   return Math.max(-3, Math.min(3, rounded));
 }
 // 整段综合评级序列(供K线竖虚线用): 一次线性扫描, 三个周期各维护一个
-// "包含当日"的指针(日期升序推进), 避免逐bar二分查找与重复日期解析。
+// "有效结束日 <= 当日"的指针(日期升序推进), 与明细表 scoreAtDate 口径一致。
 function computeCompositeSeries(code, period) {
   const arr = allData[code] && allData[code][period];
   if (!arr || !arr.length) return [];
   const src = allData[code] || {};
+  const daily = src.daily || [];
   const periods = ["daily", "weekly", "monthly"];
-  const arrs = {}, ts = {}, idx = {};
+  const arrs = {}, effs = {}, idx = {};
   for (const p of periods) {
     arrs[p] = src[p] && src[p].length ? src[p] : (summaryData[code] && summaryData[code][p] ? [summaryData[code][p]] : []);
-    ts[p] = arrs[p].map(r => new Date(r.date).getTime());
+    effs[p] = arrs[p].map(r => barEffDate(daily, p, r.date));
     idx[p] = 0;
   }
-  const maxGap = { weekly: 10, monthly: 40 };
   const out = [];
   for (let i = 0; i < arr.length; i++) {
-    const t = new Date(arr[i].date).getTime();
+    const t = arr[i].date;                 // ISO 字符串可直接比较
     let raw = 0, ok = true;
     for (const p of periods) {
-      const A = arrs[p], T = ts[p];
+      const A = arrs[p], E = effs[p];
       if (!A.length) { ok = false; break; }
-      let k = idx[p];                       // 单调推进到"包含该日"的那根
-      while (k < T.length && T[k] < t) k++;
+      let k = idx[p];                      // 单调推进到"最后一个 eff <= 当日"的下一根
+      while (k < E.length && E[k] <= t) k++;
       idx[p] = k;
-      const use = k < T.length ? k : T.length - 1;
-      const gap = (T[use] - t) / 86400000;
+      const use = k - 1;
+      if (use < 0) { ok = false; break; }  // 该日尚无任何已生效的周期bar
       const s = A[use].risk_score;
-      if (maxGap[p] && gap > maxGap[p]) { ok = false; break; }   // 历史未覆盖, 不做臆测
       if (s == null) { ok = false; break; }
       raw += COMPOSITE_WEIGHTS[p] * s;
     }
