@@ -947,12 +947,40 @@ function compositeScore(code, dateStr) {
   const rounded = Math.sign(raw) * Math.round(Math.abs(raw));
   return Math.max(-3, Math.min(3, rounded));
 }
-function compositeTagHtml(code, dateStr) {
-  const s = compositeScore(code, dateStr);
-  if (s == null) return '<span class="rating-tag" style="background:#a0aec0">--</span>';
-  const bg = RISK_BG[String(s)] || "#a0aec0";
-  const color = s >= 2 ? "#c53030" : s <= -2 ? "#22543d" : "#333";
-  return `<span class="rating-tag" style="background:${bg};color:${color}">${riskLabel(s)}</span>`;
+// 整段综合评级序列(供K线竖虚线用): 一次线性扫描, 三个周期各维护一个
+// "包含当日"的指针(日期升序推进), 避免逐bar二分查找与重复日期解析。
+function computeCompositeSeries(code, period) {
+  const arr = allData[code] && allData[code][period];
+  if (!arr || !arr.length) return [];
+  const src = allData[code] || {};
+  const periods = ["daily", "weekly", "monthly"];
+  const arrs = {}, ts = {}, idx = {};
+  for (const p of periods) {
+    arrs[p] = src[p] && src[p].length ? src[p] : (summaryData[code] && summaryData[code][p] ? [summaryData[code][p]] : []);
+    ts[p] = arrs[p].map(r => new Date(r.date).getTime());
+    idx[p] = 0;
+  }
+  const maxGap = { weekly: 10, monthly: 40 };
+  const out = [];
+  for (let i = 0; i < arr.length; i++) {
+    const t = new Date(arr[i].date).getTime();
+    let raw = 0, ok = true;
+    for (const p of periods) {
+      const A = arrs[p], T = ts[p];
+      if (!A.length) { ok = false; break; }
+      let k = idx[p];                       // 单调推进到"包含该日"的那根
+      while (k < T.length && T[k] < t) k++;
+      idx[p] = k;
+      const use = k < T.length ? k : T.length - 1;
+      const gap = (T[use] - t) / 86400000;
+      const s = A[use].risk_score;
+      if (maxGap[p] && gap > maxGap[p]) { ok = false; break; }   // 历史未覆盖, 不做臆测
+      if (s == null) { ok = false; break; }
+      raw += COMPOSITE_WEIGHTS[p] * s;
+    }
+    out.push(ok ? Math.max(-3, Math.min(3, Math.sign(raw) * Math.round(Math.abs(raw)))) : null);
+  }
+  return out;
 }
 // 该标的完整K线是否已加载(有预览即可)
 function isCodeLoaded(code) {
@@ -1381,12 +1409,19 @@ function renderChart() {
   const hasPE = false;
   const decimals = getDecimals(currentCode);
 
-  // 极端评级(±3): 三角形标记(风险在最高价上方/机会在最低价下方) + 竖虚线
-  const riskIdx = [], chanceIdx = [], riskMarkers = [], chanceMarkers = [];
+  // 单周期极端评级(±3): 三角标记(风险在最高价上方/机会在最低价下方)
+  const riskMarkers = [], chanceMarkers = [];
   for (let i = 0; i < values.length; i++) {
     const [, , l, h] = values[i];
-    if (riskScores[i] === 3) { riskIdx.push(i); riskMarkers.push([i, h * 1.01]); }
-    else if (riskScores[i] === -3) { chanceIdx.push(i); chanceMarkers.push([i, l * 0.99]); }
+    if (riskScores[i] === 3) riskMarkers.push([i, h * 1.01]);
+    else if (riskScores[i] === -3) chanceMarkers.push([i, l * 0.99]);
+  }
+  // 综合评级(日0.2/周0.3/月0.5)取到 ±3 时打竖虚线: 与单周期三角区分, 专指共振极值
+  const compScores = computeCompositeSeries(currentCode, currentPeriod);
+  const compRiskIdx = [], compChanceIdx = [];
+  for (let i = 0; i < compScores.length; i++) {
+    if (compScores[i] === 3) compRiskIdx.push(i);
+    else if (compScores[i] === -3) compChanceIdx.push(i);
   }
   const crossLine = (idx, color) => ({
     silent: true, symbol: "none", animation: false,
@@ -1412,12 +1447,14 @@ function renderChart() {
         { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
         { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
         { name: "PE(TTM)", icon: "circle" },
-        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
+        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" },
+        { name: "综合风险", icon: "line" }, { name: "综合机会", icon: "line" }
       ] : [
         { name: "K线", icon: "roundRect" },
         { name: "MA5", icon: "circle" }, { name: "MA10", icon: "circle" },
         { name: "MA20", icon: "circle" }, { name: "MA60", icon: "circle" },
-        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" }
+        { name: "巨大风险", icon: "triangle" }, { name: "巨大机会", icon: "triangle" },
+        { name: "综合风险", icon: "line" }, { name: "综合机会", icon: "line" }
       ],
       textStyle: { fontSize: 9 }
     },
@@ -1557,14 +1594,20 @@ function renderChart() {
       { name: "MA10", type: "line", data: ma10, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#3b82f6" } },
       { name: "MA20", type: "line", data: ma20, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#a855f7" } },
       { name: "MA60", type: "line", data: ma60, smooth: true, symbol: "none", lineStyle: { width: 1, color: "#64748b" } },
-      // 三角形标记 + 贯穿全图的竖虚线共用一个序列
-      // 图例点一次即可同时开关两者, 便于与综合评级标注对照复盘
+      // 单周期极值: 仅三角标记(与综合评级的虚线区分)
       { name: "巨大风险", type: "scatter", data: riskMarkers, symbol: "triangle", symbolSize: 10,
-        symbolRotate: 180, itemStyle: { color: "#e53e3e" }, z: 10,
-        markLine: crossLine(riskIdx, "#e53e3e") },
+        symbolRotate: 180, itemStyle: { color: "#e53e3e" }, z: 10 },
       { name: "巨大机会", type: "scatter", data: chanceMarkers, symbol: "triangle", symbolSize: 10,
-        itemStyle: { color: "#38a169" }, z: 10,
-        markLine: crossLine(chanceIdx, "#38a169") }
+        itemStyle: { color: "#38a169" }, z: 10 },
+      // 综合评级极值: 仅竖虚线(空数据线承载, 便于图例单独开关)
+      { name: "综合风险", type: "line", data: dates.map(() => null), symbol: "none",
+        itemStyle: { color: "#e53e3e" },
+        lineStyle: { width: 0, color: "#e53e3e", type: "dashed" },
+        markLine: crossLine(compRiskIdx, "#e53e3e"), z: 9 },
+      { name: "综合机会", type: "line", data: dates.map(() => null), symbol: "none",
+        itemStyle: { color: "#38a169" },
+        lineStyle: { width: 0, color: "#38a169", type: "dashed" },
+        markLine: crossLine(compChanceIdx, "#38a169"), z: 9 }
     ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
   };
   chart.setOption(option, true);
