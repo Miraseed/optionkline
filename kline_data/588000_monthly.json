@@ -866,13 +866,13 @@
   {
     "date": "2026-11-30",
     "open": 1.243,
-    "high": 1.405,
+    "high": 1.442,
     "low": 1.197,
-    "close": 1.375,
-    "volume": 87867404071,
+    "close": 1.381,
+    "volume": 98305420936,
     "risk_score": -2,
-    "intraday_up": 0.144137,
+    "intraday_up": 0.174267,
     "intraday_down": -0.025244,
-    "close_change": 0.119707
+    "close_change": 0.124593
   }
 ]

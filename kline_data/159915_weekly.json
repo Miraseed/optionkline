@@ -9170,13 +9170,13 @@
   {
     "date": "2026-11-13",
     "open": 2.51,
-    "high": 2.597,
+    "high": 2.638,
     "low": 2.472,
-    "close": 2.59,
-    "volume": 11104319675,
+    "close": 2.524,
+    "volume": 15662819808,
     "risk_score": -3,
-    "intraday_up": 0.047177,
+    "intraday_up": 0.06371,
     "intraday_down": -0.003226,
-    "close_change": 0.044355
+    "close_change": 0.017742
   }
 ]

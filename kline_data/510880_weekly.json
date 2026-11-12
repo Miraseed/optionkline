@@ -12159,12 +12159,12 @@
     "date": "2026-11-13",
     "open": 3.356,
     "high": 3.415,
-    "low": 3.353,
-    "close": 3.373,
-    "volume": 519623019,
+    "low": 3.34,
+    "close": 3.357,
+    "volume": 673257419,
     "risk_score": 1,
     "intraday_up": 0.013053,
-    "intraday_down": -0.00534,
-    "close_change": 0.000593
+    "intraday_down": -0.009196,
+    "close_change": -0.004153
   }
 ]
