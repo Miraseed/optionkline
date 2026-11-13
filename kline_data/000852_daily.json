@@ -35212,11 +35212,23 @@
     "open": 6662.666,
     "high": 6723.796,
     "low": 6537.839,
-    "close": 6537.8392,
-    "volume": 230493280,
+    "close": 6537.839,
+    "volume": 23049328000,
     "risk_score": 0,
     "intraday_up": 0.008134,
     "intraday_down": -0.019748,
     "close_change": -0.019748
+  },
+  {
+    "date": "2026-11-13",
+    "open": 6554.058,
+    "high": 6581.347,
+    "low": 6341.4528,
+    "close": 6357.2582,
+    "volume": 203129669,
+    "risk_score": -1,
+    "intraday_up": 0.006655,
+    "intraday_down": -0.030038,
+    "close_change": -0.027621
   }
 ]
