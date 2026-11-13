@@ -80967,12 +80967,12 @@
     "date": "2026-11-13",
     "open": 28265.54,
     "high": 28295.8,
-    "low": 27639.75,
-    "close": 27737.96,
-    "volume": 475905029,
+    "low": 27609.71,
+    "close": 27943.74,
+    "volume": 1503823676,
     "risk_score": 1,
     "intraday_up": 0.000234,
-    "intraday_down": -0.022957,
-    "close_change": -0.019486
+    "intraday_down": -0.024019,
+    "close_change": -0.012211
   }
 ]
