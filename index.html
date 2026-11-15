@@ -1057,6 +1057,15 @@ async function loadReview(noCache) {
   } catch (e) { /* 尚未生成时静默隐藏 */ }
 }
 
+// ==================== 主力合约换月(仅铁矿石主连日K) ====================
+// 服务端 update_contract_map.py 依据 I0 连续行情与各月合约 OHLC 逐日比对生成
+let contractMap = null;
+async function loadContractMap() {
+  try { contractMap = await loadJSON("kline_data/I0_contracts.json"); }
+  catch (e) { contractMap = { segments: [] }; }
+  if (currentCode === "I0" && currentPeriod === "daily" && isCodeLoaded("I0")) renderChart();
+}
+
 function toggleReview() {
   reviewCollapsed = !reviewCollapsed;
   document.getElementById("review-body").style.display = reviewCollapsed ? "none" : "block";
@@ -1436,6 +1445,45 @@ function renderChart() {
     data: idx.map(i => ({ xAxis: i })),
   });
 
+  // 主力合约换月标注(学同花顺期货通): 仅铁矿石主连日K, 在横轴标尺上方分段标注合约名称,
+  // 换月日画竖虚线, 便于复盘区分真信号与换月升贴水跳空造成的假信号。
+  let contractSeries = null;
+  if (currentCode === "I0" && currentPeriod === "daily" && contractMap && contractMap.segments && contractMap.segments.length) {
+    const segs = contractMap.segments;
+    // 段起点 = 第一根 date >= start 的K线索引
+    const idxOfStart = s => {
+      let lo = 0, hi = dates.length - 1, hit = dates.length;
+      while (lo <= hi) { const mid = (lo + hi) >> 1; if (dates[mid] >= s) { hit = mid; hi = mid - 1; } else lo = mid + 1; }
+      return hit;
+    };
+    const areas = [], switchLines = [];
+    for (let k = 0; k < segs.length; k++) {
+      const from = idxOfStart(segs[k].start);
+      if (from >= dates.length) break;
+      const to = k + 1 < segs.length ? idxOfStart(segs[k + 1].start) - 1 : dates.length - 1;
+      if (to < from) continue;
+      areas.push([{ xAxis: from, name: segs[k].name }, { xAxis: to }]);
+      if (k > 0) switchLines.push({ xAxis: from });
+    }
+    if (areas.length) {
+      contractSeries = {
+        name: "主力合约", type: "line", data: dates.map(() => null), symbol: "none",
+        silent: true, z: 3, tooltip: { show: false },
+        markArea: {
+          silent: true, itemStyle: { color: "transparent" },
+          label: { show: true, position: "insideBottom", distance: 2, fontSize: 10, color: "#5b6b82", formatter: p => p.name || "" },
+          data: areas
+        },
+        markLine: {
+          silent: true, symbol: "none", animation: false,
+          label: { show: false },
+          lineStyle: { color: "#94a3b8", type: [4, 4], width: 1, opacity: 0.75 },
+          data: switchLines
+        }
+      };
+    }
+  }
+
   const totalBars = dates.length;
   const visibleBars = Math.min(120, totalBars);
   const startPercent = totalBars > visibleBars ? (1 - visibleBars / totalBars) * 100 : 0;
@@ -1615,6 +1663,7 @@ function renderChart() {
         lineStyle: { width: 0, color: "#38a169", type: "dashed" },
         markLine: crossLine(compChanceIdx, "#38a169"), z: 9 }
     ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
+     .concat(contractSeries ? [contractSeries] : [])
   };
   chart.setOption(option, true);
   // 光标离开图表时恢复横轴标签全部显示 (Y轴始终保持左侧)
@@ -2078,6 +2127,8 @@ async function initApp() {
     preloadOptions();
     // 2.6) 收盘复盘报告(服务端生成, 小文件, 不阻塞)
     loadReview();
+    // 2.7) 铁矿石主力合约换月区间(小文件, 不阻塞)
+    loadContractMap();
 
     // 3) 实时行情到达后叠加并刷新视图
     let rtData = await rtPromise;

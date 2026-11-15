@@ -37,6 +37,9 @@ jobs:
       - name: Run options update (IV/PCR/微笑/期限结构, 失败不阻断)
         run: python update_options.py || true
 
+      - name: Run main contract map update (铁矿石主力换月, 失败不阻断)
+        run: python update_contract_map.py || true
+
       - name: Commit and push changes
         run: |
           git config --local user.email "actions@github.com"
