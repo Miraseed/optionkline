@@ -370,6 +370,40 @@ def apply_qfq_adjustment(df, dividends):
     return df
 
 
+def apply_roll_adjustment(df):
+    """铁矿石主连换月比例复权(仅用于评级计算)。
+
+    主力换月时新老合约存在升贴水, 主连价格会跳空(历史平均 6.3%, 最大 16.7%),
+    假跳空会污染 ROC/MA/RSI, 制造"假机会/假风险"。
+    用 I0_contracts.json 中每次换月的 新/老合约前一日收盘价之比(ratio),
+    把换月之前的价格折算到新合约口径, 跳空消失且保留新合约自身涨跌。
+    结果写入 adj_close 列: 展示仍用真实主连价格, 评级用 adj_close。
+    """
+    try:
+        with open(os.path.join(DATA_DIR, "I0_contracts.json"), encoding="utf-8") as f:
+            segs = json.load(f).get("segments", [])
+    except Exception as e:
+        print(f"  [换月复权] 合约映射缺失, 按不复权: {e}", end="")
+        return df
+    rolls = {s["start"]: float(s["ratio"]) for s in segs if s.get("ratio")}
+    if not rolls:
+        return df
+    dates = [str(x)[:10] for x in df["date"]]
+    fac = [1.0] * len(df)
+    cum = 1.0
+    n_used = 0
+    for i in range(len(dates) - 1, -1, -1):
+        fac[i] = cum
+        r = rolls.get(dates[i])
+        if r and 0.2 < r < 5:   # 比例异常(数据错误)时忽略, 避免污染整段历史
+            cum *= r
+            n_used += 1
+    df = df.copy()
+    df["adj_close"] = [round(v * f, 6) for v, f in zip(df["close"].tolist(), fac)]
+    print(f" [换月复权:{n_used}次]", end="")
+    return df
+
+
 def fetch_kline_data(etf):
     code = etf["code"]
     symbol = etf["symbol"]
@@ -461,6 +495,9 @@ def fetch_kline_data(etf):
         if divs:
             df = apply_qfq_adjustment(df, divs)
             print(f" [前复权:{len(divs)}次分红]", end="")
+    if etf_type == "futures" and code == "I0":
+        # 换月复权: 消除升贴水跳空对评级的污染(展示价格不变)
+        df = apply_roll_adjustment(df)
     print(f" → 最终{len(df)}条")
 
     result = {}
@@ -471,13 +508,17 @@ def fetch_kline_data(etf):
             df_p = df.tail(max_bars).copy()
         else:
             df_idx = df.set_index("date")
+            agg = {"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum"}
+            if "adj_close" in df_idx.columns:
+                agg["adj_close"] = "last"
             if period == "weekly":
-                df_p = df_idx.resample("W-FRI").agg({"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum"}).dropna().tail(max_bars).reset_index()
+                df_p = df_idx.resample("W-FRI").agg(agg).dropna().tail(max_bars).reset_index()
             else:
-                df_p = df_idx.resample("ME").agg({"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum"}).dropna().tail(max_bars).reset_index()
+                df_p = df_idx.resample("ME").agg(agg).dropna().tail(max_bars).reset_index()
 
         closes = df_p["close"].tolist()
-        scores = calc_risk_score(closes, period)
+        score_closes = df_p["adj_close"].tolist() if "adj_close" in df_p.columns else closes
+        scores = calc_risk_score(score_closes, period)
         records = []
         for i in range(len(df_p)):
             row = df_p.iloc[i]

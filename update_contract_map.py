@@ -79,6 +79,25 @@ def to_segments(mapping):
     return segs
 
 
+def add_roll_ratios(segs, i0_rows, contracts):
+    """换月日的前一交易日, 新/老合约收盘价之比。
+
+    历史价格乘以该比例即可把老合约价格折算到新合约口径, 跨合约升贴水跳空随之消失,
+    而换月当天仍保留新合约自身的真实涨跌(收益率连续)。
+    """
+    dates = [r["d"] for r in i0_rows]
+    prev_date = {d: dates[i - 1] for i, d in enumerate(dates) if i > 0}
+    close_map = {c: {r["d"]: float(r["c"]) for r in rows} for c, rows in contracts.items()}
+    for k, s in enumerate(segs):
+        if k == 0 or "ratio" in s:
+            continue
+        p = prev_date.get(s["start"])
+        a = close_map.get(segs[k - 1]["contract"], {}).get(p)
+        b = close_map.get(s["contract"], {}).get(p)
+        if a and b:
+            s["ratio"] = round(b / a, 6)
+
+
 def main():
     full = "--full" in sys.argv
     _, i0 = fetch("I0")
@@ -112,6 +131,7 @@ def main():
         if merged and merged[-1]["contract"] == s["contract"]:
             continue
         merged.append(s)
+    add_roll_ratios(merged, i0, contracts)
 
     out = {
         "symbol": "I0",

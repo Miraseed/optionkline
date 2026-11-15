@@ -31,14 +31,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements_actions.txt -q
 
-      - name: Run data update
+      - name: Run main contract map update (铁矿石主力换月, 失败不阻断)
+        run: python update_contract_map.py || true
+
+      - name: Run data update (需在换月映射之后, 评级按换月复权计算)
         run: python update_data_pages.py
 
       - name: Run options update (IV/PCR/微笑/期限结构, 失败不阻断)
         run: python update_options.py || true
-
-      - name: Run main contract map update (铁矿石主力换月, 失败不阻断)
-        run: python update_contract_map.py || true
 
       - name: Commit and push changes
         run: |
