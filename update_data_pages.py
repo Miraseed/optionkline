@@ -69,14 +69,17 @@ def slim_records(records):
     """精简记录以减小传输体积: risk_label 可由 risk_score 推导故删除; 浮点保留 6 位"""
     out = []
     for r in records:
-        out.append({
+        rec = {
             "date": r["date"],
             "open": r["open"], "high": r["high"], "low": r["low"], "close": r["close"],
             "volume": r["volume"], "risk_score": r["risk_score"],
             "intraday_up": None if r["intraday_up"] is None else round(r["intraday_up"], 6),
             "intraday_down": None if r["intraday_down"] is None else round(r["intraday_down"], 6),
             "close_change": None if r["close_change"] is None else round(r["close_change"], 6),
-        })
+        }
+        if "adj_close" in r:
+            rec["adj_close"] = r["adj_close"]
+        out.append(rec)
     return out
 
 
