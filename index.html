@@ -1445,9 +1445,9 @@ function renderChart() {
     data: idx.map(i => ({ xAxis: i })),
   });
 
-  // 主力合约换月标注(学同花顺期货通): 仅铁矿石主连日K, 在横轴标尺上方分段标注合约名称,
-  // 换月日画短竖线刻度(不用通高虚线, 避免与综合评级的极端信号竖虚线混淆)。
-  let contractSeries = null, contractTickSeries = null;
+  // 主力合约换月标注(学同花顺期货通): 仅铁矿石主连日K, 换月日画短竖线刻度,
+  // 合约名左对齐紧跟刻度右侧(只显示 2609 这样的月份代码), 避免与综合评级的整幅竖虚线混淆。
+  let contractSeries = null;
   if (currentCode === "I0" && currentPeriod === "daily" && contractMap && contractMap.segments && contractMap.segments.length) {
     const segs = contractMap.segments;
     // 段起点 = 第一根 date >= start 的K线索引
@@ -1456,35 +1456,32 @@ function renderChart() {
       while (lo <= hi) { const mid = (lo + hi) >> 1; if (dates[mid] >= s) { hit = mid; hi = mid - 1; } else lo = mid + 1; }
       return hit;
     };
-    const areas = [], switchIdx = [];
+    const ticks = [];
     for (let k = 0; k < segs.length; k++) {
       const from = idxOfStart(segs[k].start);
       if (from >= dates.length) break;
-      const to = k + 1 < segs.length ? idxOfStart(segs[k + 1].start) - 1 : dates.length - 1;
-      if (to < from) continue;
-      areas.push([{ xAxis: from, name: segs[k].name }, { xAxis: to }]);
-      if (k > 0) switchIdx.push(from);
+      ticks.push({ idx: from, label: segs[k].contract.replace(/^I/, ""), tick: k > 0 });
     }
-    if (areas.length) {
+    if (ticks.length) {
       contractSeries = {
-        name: "主力合约", type: "line", data: dates.map(() => null), symbol: "none",
+        name: "主力合约", type: "custom", data: ticks.map(t => [t.idx]),
         silent: true, z: 3, tooltip: { show: false },
-        markArea: {
-          silent: true, itemStyle: { color: "transparent" },
-          label: { show: true, position: "insideBottom", distance: 2, fontSize: 10, color: "#5b6b82", formatter: p => p.name || "" },
-          data: areas
-        }
-      };
-      // 换月刻度: 网格下沿的短竖线(像素长度固定, 不随缩放变形)
-      contractTickSeries = {
-        name: "主力换月", type: "custom", data: switchIdx.map(i => [i]), silent: true, z: 3,
-        tooltip: { show: false },
         renderItem: function(params, api) {
+          const t = ticks[params.dataIndex];
+          if (!t) return;
           const x = api.coord([api.value(0), 0])[0];
           const yb = params.coordSys.y + params.coordSys.height;
-          return { type: "line",
+          if (params.coordSys.x > x + 40 || x > params.coordSys.x + params.coordSys.width) return;
+          const children = [];
+          // 换月短刻度(约8px, 像素长度固定, 不随缩放变形)
+          if (t.tick) children.push({ type: "line",
             shape: { x1: x, y1: yb - 9, x2: x, y2: yb - 1 },
-            style: { stroke: "#8a99ad", lineWidth: 1 } };
+            style: { stroke: "#8a99ad", lineWidth: 1 } });
+          // 合约名: 刻度右侧左对齐
+          children.push({ type: "text",
+            style: { text: t.label, x: x + 2, y: yb - 1, fill: "#5b6b82", fontSize: 10,
+                     align: "left", verticalAlign: "bottom" } });
+          return { type: "group", children: children };
         }
       };
     }
@@ -1670,7 +1667,6 @@ function renderChart() {
         markLine: crossLine(compChanceIdx, "#38a169"), z: 9 }
     ].concat(hasPE ? [{ name: "PE(TTM)", type: "line", data: peTtm, yAxisIndex: 1, smooth: true, symbol: "none", lineStyle: { width: 1.5, color: "#f97316", type: "dashed" }, z: 5 }] : [])
      .concat(contractSeries ? [contractSeries] : [])
-     .concat(contractTickSeries ? [contractTickSeries] : [])
   };
   chart.setOption(option, true);
   // 光标离开图表时恢复横轴标签全部显示 (Y轴始终保持左侧)
