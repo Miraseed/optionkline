@@ -245,7 +245,8 @@
       "risk_score": -1,
       "intraday_up": 0.003726,
       "intraday_down": -0.005961,
-      "close_change": -0.002235
+      "close_change": -0.002235,
+      "adj_close": 669.5
     },
     "weekly": {
       "date": "2026-11-13",
@@ -257,7 +258,8 @@
       "risk_score": -1,
       "intraday_up": 0.006545,
       "intraday_down": -0.029818,
-      "close_change": -0.026182
+      "close_change": -0.026182,
+      "adj_close": 669.5
     },
     "monthly": {
       "date": "2026-11-30",
@@ -269,7 +271,8 @@
       "risk_score": -3,
       "intraday_up": 0.033482,
       "intraday_down": -0.00744,
-      "close_change": -0.00372
+      "close_change": -0.00372,
+      "adj_close": 669.5
     }
   },
   "510880": {
@@ -429,7 +432,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-15 20:39:23",
+    "generated_at": "2026-11-15 20:49:23",
     "failed_codes": []
   }
 }
