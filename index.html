@@ -1740,7 +1740,9 @@ function computeRatingStats(records, horizon) {
     const r = records[i];
     if (r.risk_score === null || r.risk_score === undefined || r.risk_score === "") continue;
     if (i + horizon >= records.length) break;
-    const c0 = r.close, c1 = records[i + horizon].close;
+    // 铁矿石含换月复权价时优先用它算未来收益, 避免跨合约升贴水跳空污染胜率
+    const px = k => (records[k].adj_close != null ? records[k].adj_close : records[k].close);
+    const c0 = px(i), c1 = px(i + horizon);
     if (!c0 || !c1) continue;
     const ret = c1 / c0 - 1;
     const b = buckets[r.risk_score];

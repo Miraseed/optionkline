@@ -529,14 +529,18 @@ def fetch_kline_data(etf):
                 close_change = (float(row["close"]) - prev_close) / prev_close
             else:
                 intraday_up = intraday_down = close_change = None
-            records.append({
+            rec = {
                 "date": row["date"].strftime("%Y-%m-%d"),
                 "open": float(row["open"]), "high": float(row["high"]),
                 "low": float(row["low"]), "close": float(row["close"]),
                 "volume": int(row["volume"]), "risk_score": scores[i],
                 "risk_label": RISK_LABELS[scores[i]],
                 "intraday_up": intraday_up, "intraday_down": intraday_down, "close_change": close_change,
-            })
+            }
+            if "adj_close" in df_p.columns:
+                # 换月复权收盘价: 评级与胜率统计用它, 避免跨合约跳空混入未来收益
+                rec["adj_close"] = round(float(row["adj_close"]), 4)
+            records.append(rec)
         result[period] = records
         risk_n = sum(1 for r in records if r["risk_score"] == 3)
         opp_n = sum(1 for r in records if r["risk_score"] == -3)
