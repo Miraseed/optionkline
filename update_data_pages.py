@@ -505,6 +505,21 @@ def fetch_kline_data(etf):
         today_ts = pd.Timestamp(rt["date"])
         last_ts = df.iloc[-1]["date"] if len(df) > 0 else None
         if last_ts is None or today_ts > last_ts:
+            # 夜盘会直接写入下一交易日bar; 若行情源日线尚未发布"已收盘的当日bar",
+            # 先用本地保留的末根补齐, 避免 K 线从 11-13 直接跳到 11-17 缺失一整天
+            if prev_tail and last_ts is not None:
+                try:
+                    prev_ts = pd.Timestamp(prev_tail["date"])
+                    if last_ts < prev_ts < today_ts:
+                        df = pd.concat([df, pd.DataFrame([{
+                            "date": prev_ts,
+                            "open": prev_tail["open"], "high": prev_tail["high"],
+                            "low": prev_tail["low"], "close": prev_tail["close"],
+                            "volume": prev_tail.get("volume", 0),
+                        }])], ignore_index=True)
+                        print(f" =补齐[{prev_tail['date']}]", end="")
+                except Exception:
+                    pass
             open_p, high, low, close_p, volume = rt["open"], rt["high"], rt["low"], rt["close"], rt["volume"]
             # 期货特殊处理3: 同日K线已由夜盘写入时, 保留夜盘开盘价与高低点,
             # 避免白天首轮更新(数据源日线尚未含夜盘)把夜盘区间丢掉
