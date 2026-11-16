@@ -2044,13 +2044,13 @@
     "date": "2026-11-30",
     "open": 672.0,
     "high": 694.5,
-    "low": 667.0,
-    "close": 669.5,
-    "volume": 2636424,
+    "low": 647.5,
+    "close": 648.0,
+    "volume": 3008793,
     "risk_score": -3,
     "intraday_up": 0.033482,
-    "intraday_down": -0.00744,
-    "close_change": -0.00372,
-    "adj_close": 669.5
+    "intraday_down": -0.036458,
+    "close_change": -0.035714,
+    "adj_close": 648.0
   }
 ]

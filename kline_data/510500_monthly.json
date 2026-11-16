@@ -1972,11 +1972,11 @@
     "open": 6.352,
     "high": 6.853,
     "low": 6.293,
-    "close": 6.495,
-    "volume": 8839272346,
-    "risk_score": -2,
+    "close": 6.334,
+    "volume": 9248892723,
+    "risk_score": -3,
     "intraday_up": 0.086915,
     "intraday_down": -0.001903,
-    "close_change": 0.030135
+    "close_change": 0.0046
   }
 ]
