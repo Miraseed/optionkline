@@ -198,9 +198,9 @@
     "name": "中证1000",
     "daily": {
       "date": "2026-11-16",
-      "open": 6310.5815,
-      "high": 6310.5815,
-      "low": 6136.8262,
+      "open": 6310.582,
+      "high": 6310.582,
+      "low": 6136.826,
       "close": 6164.6227,
       "volume": 183984406,
       "risk_score": -2,
@@ -210,9 +210,9 @@
     },
     "weekly": {
       "date": "2026-11-20",
-      "open": 6310.5815,
-      "high": 6310.5815,
-      "low": 6136.8262,
+      "open": 6310.582,
+      "high": 6310.582,
+      "low": 6136.826,
       "close": 6164.6227,
       "volume": 183984406,
       "risk_score": -1,
@@ -356,83 +356,83 @@
   "SPX": {
     "name": "标普500指数",
     "daily": {
-      "date": "2026-11-13",
-      "open": 7616.85,
-      "high": 7621.78,
-      "low": 7499.4,
-      "close": 7561.67,
-      "volume": 2727332784,
-      "risk_score": 1,
-      "intraday_up": 0.00387,
-      "intraday_down": -0.012249,
-      "close_change": -0.004047
+      "date": "2026-11-16",
+      "open": 7513.98,
+      "high": 7515.6,
+      "low": 7451.8,
+      "close": 7462.8,
+      "volume": 1025561220,
+      "risk_score": 0,
+      "intraday_up": -0.006093,
+      "intraday_down": -0.01453,
+      "close_change": -0.013075
     },
     "weekly": {
-      "date": "2026-11-13",
-      "open": 7422.24,
-      "high": 7652.76,
-      "low": 7422.24,
-      "close": 7561.67,
-      "volume": 15222047630,
-      "risk_score": 0,
-      "intraday_up": 0.037401,
-      "intraday_down": 0.006152,
-      "close_change": 0.025053
+      "date": "2026-11-20",
+      "open": 7513.98,
+      "high": 7515.6,
+      "low": 7451.8,
+      "close": 7462.8,
+      "volume": 1025561220,
+      "risk_score": -1,
+      "intraday_up": -0.006093,
+      "intraday_down": -0.01453,
+      "close_change": -0.013075
     },
     "monthly": {
       "date": "2026-11-30",
       "open": 7610.83,
       "high": 7715.57,
       "low": 7350.35,
-      "close": 7561.67,
-      "volume": 34900476884,
+      "close": 7462.8,
+      "volume": 35926038104,
       "risk_score": 0,
       "intraday_up": 0.017876,
       "intraday_down": -0.030306,
-      "close_change": -0.002427
+      "close_change": -0.015471
     }
   },
   "NDX": {
     "name": "纳斯达克100指数",
     "daily": {
-      "date": "2026-11-13",
-      "open": 28265.54,
-      "high": 28295.8,
-      "low": 27609.71,
-      "close": 27943.74,
-      "volume": 1517679827,
-      "risk_score": 1,
-      "intraday_up": 0.000234,
-      "intraday_down": -0.024019,
-      "close_change": -0.012211
+      "date": "2026-11-16",
+      "open": 27543.64,
+      "high": 27621.64,
+      "low": 27256.84,
+      "close": 27402.55,
+      "volume": 615668389,
+      "risk_score": -1,
+      "intraday_up": -0.011527,
+      "intraday_down": -0.024582,
+      "close_change": -0.019367
     },
     "weekly": {
-      "date": "2026-11-13",
-      "open": 27263.43,
-      "high": 28593.52,
-      "low": 27227.53,
-      "close": 27943.74,
-      "volume": 8327687957,
+      "date": "2026-11-20",
+      "open": 27543.64,
+      "high": 27621.64,
+      "low": 27256.84,
+      "close": 27402.55,
+      "volume": 615668389,
       "risk_score": -2,
-      "intraday_up": 0.059412,
-      "intraday_down": 0.008801,
-      "close_change": 0.035337
+      "intraday_up": -0.011527,
+      "intraday_down": -0.024582,
+      "close_change": -0.019367
     },
     "monthly": {
       "date": "2026-11-30",
       "open": 28561.17,
       "high": 28829.66,
       "low": 26606.43,
-      "close": 27943.74,
-      "volume": 17392659261,
-      "risk_score": -2,
+      "close": 27402.55,
+      "volume": 18008327650,
+      "risk_score": -3,
       "intraday_up": 0.015671,
       "intraday_down": -0.062654,
-      "close_change": -0.01554
+      "close_change": -0.034606
     }
   },
   "_meta": {
-    "generated_at": "2026-11-16 16:12:57",
+    "generated_at": "2026-11-17 01:11:16",
     "failed_codes": []
   }
 }

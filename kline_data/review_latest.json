@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-16",
-  "session": "night",
-  "generated_at": "2026-11-16 16:18:22",
+  "date": "2026-11-17",
+  "session": "day",
+  "generated_at": "2026-11-17 01:17:59",
   "items": [
     {
       "code": "510050",
@@ -23,10 +23,10 @@
         "atm_iv": 13.82,
         "iv_hv_ratio": 1.504,
         "iv_pct": 17,
-        "iv_pct_n": 2859,
+        "iv_pct_n": 2860,
         "pcr_vol": 0.744,
         "pcr_oi": null,
-        "days_left": 9
+        "days_left": 8
       }
     },
     {
@@ -49,10 +49,10 @@
         "atm_iv": 17.84,
         "iv_hv_ratio": 1.113,
         "iv_pct": 59,
-        "iv_pct_n": 1671,
+        "iv_pct_n": 1672,
         "pcr_vol": 0.884,
         "pcr_oi": null,
-        "days_left": 9
+        "days_left": 8
       }
     },
     {
@@ -75,10 +75,10 @@
         "atm_iv": 51.2,
         "iv_hv_ratio": 0.887,
         "iv_pct": 92,
-        "iv_pct_n": 838,
+        "iv_pct_n": 839,
         "pcr_vol": 1.006,
         "pcr_oi": null,
-        "days_left": 9
+        "days_left": 8
       }
     },
     {
@@ -118,10 +118,10 @@
         "atm_iv": 29.9,
         "iv_hv_ratio": 0.868,
         "iv_pct": 95,
-        "iv_pct_n": 1007,
+        "iv_pct_n": 1008,
         "pcr_vol": 1.055,
         "pcr_oi": null,
-        "days_left": 9
+        "days_left": 8
       }
     },
     {
@@ -141,13 +141,13 @@
       },
       "jump": true,
       "iv": {
-        "atm_iv": 32.66,
-        "iv_hv_ratio": 0.853,
+        "atm_iv": 33.19,
+        "iv_hv_ratio": 0.867,
         "iv_pct": 94,
-        "iv_pct_n": 1048,
+        "iv_pct_n": 1049,
         "pcr_vol": null,
         "pcr_oi": 0.47,
-        "days_left": 4
+        "days_left": 3
       }
     },
     {
@@ -167,13 +167,13 @@
       },
       "jump": false,
       "iv": {
-        "atm_iv": 18.52,
-        "iv_hv_ratio": 0.959,
-        "iv_pct": 21,
-        "iv_pct_n": 1677,
+        "atm_iv": 19.28,
+        "iv_hv_ratio": 0.998,
+        "iv_pct": 25,
+        "iv_pct_n": 1678,
         "pcr_vol": null,
-        "pcr_oi": 0.513,
-        "days_left": 1
+        "pcr_oi": 0.56,
+        "days_left": 0
       }
     },
     {
@@ -213,55 +213,55 @@
     {
       "code": "SPX",
       "name": "标普500指数",
-      "spot": 7561.67,
-      "chg": -0.004047,
+      "spot": 7462.8,
+      "chg": -0.013075,
       "ratings": {
-        "daily": 1,
-        "weekly": 0,
+        "daily": 0,
+        "weekly": -1,
         "monthly": 0
       },
       "changes": {
-        "daily": 0,
-        "weekly": 2,
+        "daily": -1,
+        "weekly": -1,
         "monthly": 0
       },
-      "jump": true
+      "jump": false
     },
     {
       "code": "NDX",
       "name": "纳斯达克100指数",
-      "spot": 27943.74,
-      "chg": -0.012211,
+      "spot": 27402.55,
+      "chg": -0.019367,
       "ratings": {
-        "daily": 1,
+        "daily": -1,
         "weekly": -2,
-        "monthly": -2
+        "monthly": -3
       },
       "changes": {
-        "daily": -1,
-        "weekly": 1,
-        "monthly": 0
+        "daily": -2,
+        "weekly": 0,
+        "monthly": -1
       },
-      "jump": false
+      "jump": true
     }
   ],
   "alerts": [
     "上证50ETF 权利金偏贵 (IV/HV 1.504)",
-    "上证50ETF IV 处历史低位 (分位 17%, 样本2859天)",
+    "上证50ETF IV 处历史低位 (分位 17%, 样本2860天)",
     "上证50ETF 月评级跳变 -3→-1",
-    "科创50ETF IV 处历史高位 (分位 92%, 样本838天)",
+    "科创50ETF IV 处历史高位 (分位 92%, 样本839天)",
     "科创50ETF 日评级跳变 +1→-2",
     "科创50ETF 周评级跳变 -3→+0",
     "创业板ETF 日+周共振机会 (日-2/周-3)",
-    "中证500ETF IV 处历史高位 (分位 95%, 样本1007天)",
+    "中证500ETF IV 处历史高位 (分位 95%, 样本1008天)",
     "中证500ETF 周评级跳变 -3→-1",
     "中证500ETF 日+周共振机会 (日-2/周-1)",
-    "中证1000 IV 处历史高位 (分位 94%, 样本1048天)",
-    "中证1000 期权近月 4 天后到期 (末日轮, IV失真)",
+    "中证1000 IV 处历史高位 (分位 94%, 样本1049天)",
+    "中证1000 期权近月 3 天后到期 (末日轮, IV失真)",
     "中证1000 周评级跳变 -3→-1",
     "中证1000 日+周共振机会 (日-2/周-1)",
-    "铁矿石主连 期权近月 1 天后到期 (末日轮, IV失真)",
+    "铁矿石主连 期权近月 0 天后到期 (末日轮, IV失真)",
     "铁矿石主连 日+周共振机会 (日-2/周-2)",
-    "标普500指数 周评级跳变 -2→+0"
+    "纳斯达克100指数 日评级跳变 +1→-1"
   ]
 }
