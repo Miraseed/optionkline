@@ -210,10 +210,39 @@ def fetch_us_index_realtime_quote(symbol):
         return None
 
 
+def fetch_futures_quote_sina(symbol="nf_I0"):
+    """新浪期货主连实时报价(akshare 失败时兜底)。
+    字段: [1]时间 [2]开 [3]高 [4]低 [5]最新 [9]结算 [10]昨结算 [13]成交量 [17]日期
+    """
+    import requests
+    try:
+        r = requests.get(f"https://hq.sinajs.cn/list={symbol}",
+                         headers={"Referer": "https://finance.sina.com.cn"}, timeout=10)
+        r.encoding = "gbk"
+        body = r.text.split('"')[1] if '"' in r.text else ""
+        f = body.split(",")
+        if len(f) < 18:
+            return None
+        close = float(f[5])
+        open_p = float(f[2])
+        high = float(f[3])
+        low = float(f[4])
+        dt = f[17].strip()
+        if close <= 0 or open_p <= 0 or not dt:
+            return None
+        return {
+            "date": dt, "open": open_p, "high": high, "low": low,
+            "close": close, "volume": float(f[13] or 0), "ticktime": str(f[1]),
+        }
+    except Exception as e:
+        print(f"  [期货实时行情(新浪)获取失败] {symbol}: {e}")
+        return None
+
+
 def fetch_futures_realtime_quote(symbol):
     """获取期货主连实时行情（通过 akshare.futures_zh_realtime）
     注意：futures_zh_realtime 返回的 close 字段在盘中为 0（结算后才填），
-    实时价格应使用 trade 字段（最新成交价）。
+    实时价格应使用 trade 字段（最新成交价）。失败时回退到新浪接口。
     """
     import akshare as ak
     try:
@@ -228,8 +257,8 @@ def fetch_futures_realtime_quote(symbol):
         latest_price = float(row["trade"]) if float(row.get("trade", 0) or 0) > 0 else float(row["close"])
         # 如果 trade 和 close 都为 0，说明数据完全无效，返回 None
         if latest_price <= 0:
-            print(f"  [期货实时行情获取失败] {symbol}: 价格数据无效 trade={row.get('trade')} close={row.get('close')}")
-            return None
+            print(f"  [期货实时行情获取失败] {symbol}: 价格数据无效 trade={row.get('trade')} close={row.get('close')} → 回退新浪")
+            return fetch_futures_quote_sina(symbol)
         # open/high/low 用 trade 兜底（防止某些时段字段为 0）
         open_p = float(row["open"]) if float(row.get("open", 0) or 0) > 0 else latest_price
         high = float(row["high"]) if float(row.get("high", 0) or 0) > 0 else latest_price
@@ -248,8 +277,8 @@ def fetch_futures_realtime_quote(symbol):
             "ticktime": str(row.get("ticktime", "") or ""),
         }
     except Exception as e:
-        print(f"  [期货实时行情获取失败] {symbol}: {e}")
-        return None
+        print(f"  [期货实时行情(akshare)获取失败] {symbol}: {e} → 回退新浪", end="")
+        return fetch_futures_quote_sina(symbol)
 
 
 # ============ 期货交易时段(北京时间) ============
@@ -302,6 +331,24 @@ def futures_quote_is_live(rt, max_age_min=20):
         except ValueError:
             return False
     return True
+
+
+def futures_quote_day_usable(rt):
+    """交易日 09:00-21:00(含午休与收盘后)可用当日报价合成当日K线。
+
+    新浪/akshare 的期货日线在收盘后常延迟数小时才发布当日bar(实测 16:00 仍缺),
+    而实时接口此时已给出当日完整 OHLC(收盘价为最终价)。
+    仅当报价日期==今天(非交易日/节假日报价仍是上一交易日, 会被排除)时放行。
+    """
+    try:
+        rd = pd.Timestamp(rt["date"]).date()
+    except Exception:
+        return False
+    now = bj_now()
+    if now.weekday() >= 5 or rd != now.date():
+        return False
+    mins = now.hour * 60 + now.minute
+    return 540 <= mins < 1260      # 09:00-21:00
 
 
 def load_last_record(code, period="daily"):
@@ -439,11 +486,14 @@ def fetch_kline_data(etf):
     else:
         rt = fetch_realtime_quote(symbol)
     if etf_type == "futures" and rt:
-        # 期货特殊处理1: 只接受当前交易时段(含夜盘)内的新鲜报价。
-        # 开盘前/收盘后数据源仍返回上一时段旧价, 直接写入会把旧价当成当日K线
+        # 期货特殊处理1: 接受当前交易时段(含夜盘)内的新鲜报价;
+        # 收盘后/午休时数据源日线尚无当日bar, 用当日实时报价补当日K线。
         if not futures_quote_is_live(rt):
-            print(" [非交易时段/行情过期, 跳过实时]", end="")
-            rt = None
+            if futures_quote_day_usable(rt):
+                print(" [收盘后采用当日报价]", end="")
+            else:
+                print(" [非交易时段/行情过期, 跳过实时]", end="")
+                rt = None
     if rt and etf_type == "futures" and futures_session() == "night":
         # 期货特殊处理2: 夜盘归属下一交易日(交易所口径), 避免把夜盘价写进当日已收盘K线
         try:
