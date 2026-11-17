@@ -9,7 +9,8 @@
     "risk_score": -1,
     "intraday_up": 0.002265,
     "intraday_down": -0.042513,
-    "close_change": -0.000449
+    "close_change": -0.000449,
+    "pct5y": 96.7
   },
   {
     "date": "2024-08-16",
@@ -21,7 +22,8 @@
     "risk_score": 1,
     "intraday_up": 0.040759,
     "intraday_down": -0.003703,
-    "close_change": 0.039312
+    "close_change": 0.039312,
+    "pct5y": 99.1
   },
   {
     "date": "2024-08-23",
@@ -33,7 +35,8 @@
     "risk_score": 2,
     "intraday_up": 0.016018,
     "intraday_down": -0.000632,
-    "close_change": 0.014468
+    "close_change": 0.014468,
+    "pct5y": 99.9
   },
   {
     "date": "2024-08-30",
@@ -45,7 +48,8 @@
     "risk_score": 2,
     "intraday_up": 0.003019,
     "intraday_down": -0.013073,
-    "close_change": 0.002447
+    "close_change": 0.002447,
+    "pct5y": 99.9
   },
   {
     "date": "2024-09-06",
@@ -57,7 +61,8 @@
     "risk_score": -1,
     "intraday_up": -0.004339,
     "intraday_down": -0.043513,
-    "close_change": -0.042486
+    "close_change": -0.042486,
+    "pct5y": 95.9
   },
   {
     "date": "2024-09-13",
@@ -69,7 +74,8 @@
     "risk_score": 1,
     "intraday_up": 0.042129,
     "intraday_down": -0.00027,
-    "close_change": 0.040234
+    "close_change": 0.040234,
+    "pct5y": 99.6
   },
   {
     "date": "2024-09-20",
@@ -81,7 +87,8 @@
     "risk_score": 1,
     "intraday_up": 0.019117,
     "intraday_down": -0.00382,
-    "close_change": 0.013603
+    "close_change": 0.013603,
+    "pct5y": 99.9
   },
   {
     "date": "2024-09-27",
@@ -93,7 +100,8 @@
     "risk_score": 2,
     "intraday_up": 0.011367,
     "intraday_down": -0.000624,
-    "close_change": 0.006246
+    "close_change": 0.006246,
+    "pct5y": 99.9
   },
   {
     "date": "2024-10-04",
@@ -105,7 +113,8 @@
     "risk_score": 1,
     "intraday_up": 0.0047,
     "intraday_down": -0.011183,
-    "close_change": 0.002248
+    "close_change": 0.002248,
+    "pct5y": 99.9
   },
   {
     "date": "2024-10-11",
@@ -117,7 +126,8 @@
     "risk_score": 2,
     "intraday_up": 0.012356,
     "intraday_down": -0.011167,
-    "close_change": 0.011121
+    "close_change": 0.011121,
+    "pct5y": 100.0
   },
   {
     "date": "2024-10-18",
@@ -129,7 +139,8 @@
     "risk_score": 2,
     "intraday_up": 0.010908,
     "intraday_down": -0.001814,
-    "close_change": 0.008536
+    "close_change": 0.008536,
+    "pct5y": 100.0
   },
   {
     "date": "2024-10-25",
@@ -141,7 +152,8 @@
     "risk_score": 0,
     "intraday_up": 0.000384,
     "intraday_down": -0.017437,
-    "close_change": -0.009642
+    "close_change": -0.009642,
+    "pct5y": 99.3
   },
   {
     "date": "2024-11-01",
@@ -153,7 +165,8 @@
     "risk_score": 0,
     "intraday_up": 0.007372,
     "intraday_down": -0.018123,
-    "close_change": -0.013657
+    "close_change": -0.013657,
+    "pct5y": 98.3
   },
   {
     "date": "2024-11-08",
@@ -165,7 +178,8 @@
     "risk_score": 2,
     "intraday_up": 0.049513,
     "intraday_down": -0.005636,
-    "close_change": 0.046561
+    "close_change": 0.046561,
+    "pct5y": 100.0
   },
   {
     "date": "2024-11-15",
@@ -177,7 +191,8 @@
     "risk_score": 1,
     "intraday_up": 0.003631,
     "intraday_down": -0.023773,
-    "close_change": -0.020835
+    "close_change": -0.020835,
+    "pct5y": 99.4
   },
   {
     "date": "2024-11-22",
@@ -189,7 +204,8 @@
     "risk_score": 2,
     "intraday_up": 0.017422,
     "intraday_down": -0.002611,
-    "close_change": 0.016816
+    "close_change": 0.016816,
+    "pct5y": 99.6
   },
   {
     "date": "2024-11-29",
@@ -201,7 +217,8 @@
     "risk_score": 1,
     "intraday_up": 0.012536,
     "intraday_down": -0.00091,
-    "close_change": 0.010561
+    "close_change": 0.010561,
+    "pct5y": 100.0
   },
   {
     "date": "2024-12-06",
@@ -213,7 +230,8 @@
     "risk_score": 2,
     "intraday_up": 0.011205,
     "intraday_down": 0.000167,
-    "close_change": 0.009597
+    "close_change": 0.009597,
+    "pct5y": 100.0
   },
   {
     "date": "2024-12-13",
@@ -225,7 +243,8 @@
     "risk_score": 1,
     "intraday_up": 0.000381,
     "intraday_down": -0.009914,
-    "close_change": -0.006433
+    "close_change": -0.006433,
+    "pct5y": 99.5
   },
   {
     "date": "2024-12-20",
@@ -237,7 +256,8 @@
     "risk_score": 0,
     "intraday_up": 0.005635,
     "intraday_down": -0.036157,
-    "close_change": -0.019871
+    "close_change": -0.019871,
+    "pct5y": 98.1
   },
   {
     "date": "2024-12-27",
@@ -249,7 +269,8 @@
     "risk_score": 0,
     "intraday_up": 0.020048,
     "intraday_down": -0.004768,
-    "close_change": 0.006743
+    "close_change": 0.006743,
+    "pct5y": 98.1
   },
   {
     "date": "2025-01-03",
@@ -261,7 +282,8 @@
     "risk_score": 0,
     "intraday_up": -0.003601,
     "intraday_down": -0.023667,
-    "close_change": -0.004751
+    "close_change": -0.004751,
+    "pct5y": 97.8
   },
   {
     "date": "2025-01-10",
@@ -273,7 +295,8 @@
     "risk_score": -1,
     "intraday_up": 0.013222,
     "intraday_down": -0.022666,
-    "close_change": -0.019425
+    "close_change": -0.019425,
+    "pct5y": 96.0
   },
   {
     "date": "2025-01-17",
@@ -285,7 +308,8 @@
     "risk_score": 0,
     "intraday_up": 0.03225,
     "intraday_down": -0.009221,
-    "close_change": 0.029109
+    "close_change": 0.029109,
+    "pct5y": 98.6
   },
   {
     "date": "2025-01-24",
@@ -297,7 +321,8 @@
     "risk_score": 2,
     "intraday_up": 0.021932,
     "intraday_down": 0.001704,
-    "close_change": 0.01744
+    "close_change": 0.01744,
+    "pct5y": 99.9
   },
   {
     "date": "2025-01-31",
@@ -309,7 +334,8 @@
     "risk_score": 1,
     "intraday_up": 0.003224,
     "intraday_down": -0.022671,
-    "close_change": -0.00995
+    "close_change": -0.00995,
+    "pct5y": 98.6
   },
   {
     "date": "2025-02-07",
@@ -321,7 +347,8 @@
     "risk_score": 0,
     "intraday_up": 0.010057,
     "intraday_down": -0.019303,
-    "close_change": -0.002407
+    "close_change": -0.002407,
+    "pct5y": 97.9
   },
   {
     "date": "2025-02-14",
@@ -333,7 +360,8 @@
     "risk_score": 1,
     "intraday_up": 0.01684,
     "intraday_down": -0.003815,
-    "close_change": 0.01471
+    "close_change": 0.01471,
+    "pct5y": 99.8
   },
   {
     "date": "2025-02-21",
@@ -345,7 +373,8 @@
     "risk_score": 0,
     "intraday_up": 0.005364,
     "intraday_down": -0.017347,
-    "close_change": -0.0166
+    "close_change": -0.0166,
+    "pct5y": 97.1
   },
   {
     "date": "2025-02-28",
@@ -357,7 +386,8 @@
     "risk_score": 0,
     "intraday_up": 0.005076,
     "intraday_down": -0.029181,
-    "close_change": -0.00975
+    "close_change": -0.00975,
+    "pct5y": 95.7
   },
   {
     "date": "2025-03-07",
@@ -369,7 +399,8 @@
     "risk_score": -2,
     "intraday_up": 0.005305,
     "intraday_down": -0.048402,
-    "close_change": -0.030951
+    "close_change": -0.030951,
+    "pct5y": 92.3
   },
   {
     "date": "2025-03-14",
@@ -381,7 +412,8 @@
     "risk_score": -2,
     "intraday_up": -0.011235,
     "intraday_down": -0.046021,
-    "close_change": -0.022748
+    "close_change": -0.022748,
+    "pct5y": 90.6
   },
   {
     "date": "2025-03-21",
@@ -393,7 +425,8 @@
     "risk_score": -2,
     "intraday_up": 0.013547,
     "intraday_down": -0.007303,
-    "close_change": 0.005075
+    "close_change": 0.005075,
+    "pct5y": 90.6
   },
   {
     "date": "2025-03-28",
@@ -405,7 +438,8 @@
     "risk_score": -2,
     "intraday_up": 0.021066,
     "intraday_down": -0.016787,
-    "close_change": -0.015283
+    "close_change": -0.015283,
+    "pct5y": 88.2
   },
   {
     "date": "2025-04-04",
@@ -417,7 +451,8 @@
     "risk_score": -3,
     "intraday_up": 0.020493,
     "intraday_down": -0.091569,
-    "close_change": -0.09082
+    "close_change": -0.09082,
+    "pct5y": 78.8
   },
   {
     "date": "2025-04-11",
@@ -429,7 +464,8 @@
     "risk_score": -3,
     "intraday_up": 0.080263,
     "intraday_down": -0.04711,
-    "close_change": 0.057011
+    "close_change": 0.057011,
+    "pct5y": 84.3
   },
   {
     "date": "2025-04-18",
@@ -441,7 +477,8 @@
     "risk_score": -3,
     "intraday_up": 0.017918,
     "intraday_down": -0.026582,
-    "close_change": -0.015039
+    "close_change": -0.015039,
+    "pct5y": 82.6
   },
   {
     "date": "2025-04-25",
@@ -453,7 +490,8 @@
     "risk_score": 2,
     "intraday_up": 0.046455,
     "intraday_down": -0.034276,
-    "close_change": 0.045906
+    "close_change": 0.045906,
+    "pct5y": 86.9
   },
   {
     "date": "2025-05-02",
@@ -465,7 +503,8 @@
     "risk_score": 2,
     "intraday_up": 0.031762,
     "intraday_down": -0.016646,
-    "close_change": 0.029222
+    "close_change": 0.029222,
+    "pct5y": 90.5
   },
   {
     "date": "2025-05-09",
@@ -477,7 +516,8 @@
     "risk_score": 2,
     "intraday_up": 0.005879,
     "intraday_down": -0.018997,
-    "close_change": -0.004706
+    "close_change": -0.004706,
+    "pct5y": 89.8
   },
   {
     "date": "2025-05-16",
@@ -489,7 +529,8 @@
     "risk_score": 3,
     "intraday_up": 0.052776,
     "intraday_down": 0.022292,
-    "close_change": 0.052734
+    "close_change": 0.052734,
+    "pct5y": 95.9
   },
   {
     "date": "2025-05-23",
@@ -501,7 +542,8 @@
     "risk_score": 2,
     "intraday_up": 0.001717,
     "intraday_down": -0.032051,
-    "close_change": -0.026108
+    "close_change": -0.026108,
+    "pct5y": 92.0
   },
   {
     "date": "2025-05-30",
@@ -513,7 +555,8 @@
     "risk_score": 3,
     "intraday_up": 0.02418,
     "intraday_down": 0.007038,
-    "close_change": 0.018762
+    "close_change": 0.018762,
+    "pct5y": 94.4
   },
   {
     "date": "2025-06-06",
@@ -525,7 +568,8 @@
     "risk_score": 1,
     "intraday_up": 0.017792,
     "intraday_down": -0.008502,
-    "close_change": 0.014999
+    "close_change": 0.014999,
+    "pct5y": 96.9
   },
   {
     "date": "2025-06-13",
@@ -537,7 +581,8 @@
     "risk_score": 3,
     "intraday_up": 0.009839,
     "intraday_down": -0.006191,
-    "close_change": -0.003898
+    "close_change": -0.003898,
+    "pct5y": 95.9
   },
   {
     "date": "2025-06-20",
@@ -549,7 +594,8 @@
     "risk_score": 1,
     "intraday_up": 0.012357,
     "intraday_down": -0.004084,
-    "close_change": -0.001528
+    "close_change": -0.001528,
+    "pct5y": 95.0
   },
   {
     "date": "2025-06-27",
@@ -561,7 +607,8 @@
     "risk_score": 3,
     "intraday_up": 0.036837,
     "intraday_down": -0.004124,
-    "close_change": 0.034389
+    "close_change": 0.034389,
+    "pct5y": 100.0
   },
   {
     "date": "2025-07-04",
@@ -573,7 +620,8 @@
     "risk_score": 3,
     "intraday_up": 0.018075,
     "intraday_down": 0.000308,
-    "close_change": 0.017217
+    "close_change": 0.017217,
+    "pct5y": 100.0
   },
   {
     "date": "2025-07-11",
@@ -585,7 +633,8 @@
     "risk_score": 3,
     "intraday_up": 0.001731,
     "intraday_down": -0.012477,
-    "close_change": -0.003121
+    "close_change": -0.003121,
+    "pct5y": 99.8
   },
   {
     "date": "2025-07-18",
@@ -597,7 +646,8 @@
     "risk_score": 2,
     "intraday_up": 0.008924,
     "intraday_down": -0.009291,
-    "close_change": 0.005917
+    "close_change": 0.005917,
+    "pct5y": 99.9
   },
   {
     "date": "2025-07-25",
@@ -609,7 +659,8 @@
     "risk_score": 2,
     "intraday_up": 0.015727,
     "intraday_down": -0.002395,
-    "close_change": 0.014587
+    "close_change": 0.014587,
+    "pct5y": 100.0
   },
   {
     "date": "2025-08-01",
@@ -621,7 +672,8 @@
     "risk_score": 1,
     "intraday_up": 0.006008,
     "intraday_down": -0.027541,
-    "close_change": -0.023578
+    "close_change": -0.023578,
+    "pct5y": 98.6
   },
   {
     "date": "2025-08-08",
@@ -633,7 +685,8 @@
     "risk_score": 2,
     "intraday_up": 0.025192,
     "intraday_down": 0.005402,
-    "close_change": 0.024277
+    "close_change": 0.024277,
+    "pct5y": 99.9
   },
   {
     "date": "2025-08-15",
@@ -645,7 +698,8 @@
     "risk_score": 1,
     "intraday_up": 0.014382,
     "intraday_down": -0.003974,
-    "close_change": 0.009445
+    "close_change": 0.009445,
+    "pct5y": 99.8
   },
   {
     "date": "2025-08-22",
@@ -657,7 +711,8 @@
     "risk_score": 2,
     "intraday_up": 0.00451,
     "intraday_down": -0.016425,
-    "close_change": 0.002653
+    "close_change": 0.002653,
+    "pct5y": 99.9
   },
   {
     "date": "2025-08-29",
@@ -669,7 +724,8 @@
     "risk_score": 1,
     "intraday_up": 0.006389,
     "intraday_down": -0.00583,
-    "close_change": -0.001028
+    "close_change": -0.001028,
+    "pct5y": 99.5
   },
   {
     "date": "2025-09-05",
@@ -681,7 +737,8 @@
     "risk_score": 1,
     "intraday_up": 0.011205,
     "intraday_down": -0.01543,
-    "close_change": 0.003288
+    "close_change": 0.003288,
+    "pct5y": 99.8
   },
   {
     "date": "2025-09-12",
@@ -693,7 +750,8 @@
     "risk_score": 2,
     "intraday_up": 0.018315,
     "intraday_down": 0.000244,
-    "close_change": 0.015859
+    "close_change": 0.015859,
+    "pct5y": 99.9
   },
   {
     "date": "2025-09-19",
@@ -705,7 +763,8 @@
     "risk_score": 2,
     "intraday_up": 0.013294,
     "intraday_down": -0.005033,
-    "close_change": 0.012161
+    "close_change": 0.012161,
+    "pct5y": 100.0
   },
   {
     "date": "2025-09-26",
@@ -717,7 +776,8 @@
     "risk_score": 2,
     "intraday_up": 0.005276,
     "intraday_down": -0.014276,
-    "close_change": -0.0031
+    "close_change": -0.0031,
+    "pct5y": 99.8
   },
   {
     "date": "2025-10-03",
@@ -729,7 +789,8 @@
     "risk_score": 2,
     "intraday_up": 0.016131,
     "intraday_down": -0.000406,
-    "close_change": 0.010851
+    "close_change": 0.010851,
+    "pct5y": 100.0
   },
   {
     "date": "2025-10-10",
@@ -741,7 +802,8 @@
     "risk_score": 0,
     "intraday_up": 0.007265,
     "intraday_down": -0.02457,
-    "close_change": -0.024313
+    "close_change": -0.024313,
+    "pct5y": 98.3
   },
   {
     "date": "2025-10-17",
@@ -753,7 +815,8 @@
     "risk_score": 1,
     "intraday_up": 0.02619,
     "intraday_down": 0.000391,
-    "close_change": 0.017016
+    "close_change": 0.017016,
+    "pct5y": 99.1
   },
   {
     "date": "2025-10-24",
@@ -765,7 +828,8 @@
     "risk_score": 2,
     "intraday_up": 0.021474,
     "intraday_down": -0.001248,
-    "close_change": 0.01916
+    "close_change": 0.01916,
+    "pct5y": 100.0
   },
   {
     "date": "2025-10-31",
@@ -777,7 +841,8 @@
     "risk_score": 3,
     "intraday_up": 0.018942,
     "intraday_down": 0.003323,
-    "close_change": 0.007143
+    "close_change": 0.007143,
+    "pct5y": 99.8
   },
   {
     "date": "2025-11-07",
@@ -789,7 +854,8 @@
     "risk_score": 0,
     "intraday_up": 0.006158,
     "intraday_down": -0.03052,
-    "close_change": -0.016286
+    "close_change": -0.016286,
+    "pct5y": 98.8
   },
   {
     "date": "2025-11-14",
@@ -801,7 +867,8 @@
     "risk_score": 0,
     "intraday_up": 0.020971,
     "intraday_down": -0.012176,
-    "close_change": 0.000789
+    "close_change": 0.000789,
+    "pct5y": 98.5
   },
   {
     "date": "2025-11-21",
@@ -813,7 +880,8 @@
     "risk_score": -1,
     "intraday_up": 0.005382,
     "intraday_down": -0.03151,
-    "close_change": -0.019471
+    "close_change": -0.019471,
+    "pct5y": 96.3
   },
   {
     "date": "2025-11-28",
@@ -825,7 +893,8 @@
     "risk_score": 1,
     "intraday_up": 0.037539,
     "intraday_down": 0.004197,
-    "close_change": 0.037271
+    "close_change": 0.037271,
+    "pct5y": 99.6
   },
   {
     "date": "2025-12-05",
@@ -837,7 +906,8 @@
     "risk_score": 1,
     "intraday_up": 0.006817,
     "intraday_down": -0.007176,
-    "close_change": 0.003111
+    "close_change": 0.003111,
+    "pct5y": 99.8
   },
   {
     "date": "2025-12-12",
@@ -849,7 +919,8 @@
     "risk_score": 1,
     "intraday_up": 0.004812,
     "intraday_down": -0.009986,
-    "close_change": -0.006257
+    "close_change": -0.006257,
+    "pct5y": 98.6
   },
   {
     "date": "2025-12-19",
@@ -861,7 +932,8 @@
     "risk_score": 0,
     "intraday_up": 0.005006,
     "intraday_down": -0.015669,
-    "close_change": 0.001038
+    "close_change": 0.001038,
+    "pct5y": 98.8
   },
   {
     "date": "2025-12-26",
@@ -873,7 +945,8 @@
     "risk_score": 1,
     "intraday_up": 0.016281,
     "intraday_down": 0.003108,
-    "close_change": 0.013964
+    "close_change": 0.013964,
+    "pct5y": 99.9
   },
   {
     "date": "2026-01-02",
@@ -885,7 +958,8 @@
     "risk_score": 0,
     "intraday_up": -0.001404,
     "intraday_down": -0.015243,
-    "close_change": -0.010313
+    "close_change": -0.010313,
+    "pct5y": 99.0
   },
   {
     "date": "2026-01-09",
@@ -897,7 +971,8 @@
     "risk_score": 1,
     "intraday_up": 0.017481,
     "intraday_down": 0.004825,
-    "close_change": 0.015719
+    "close_change": 0.015719,
+    "pct5y": 100.0
   },
   {
     "date": "2026-01-16",
@@ -909,7 +984,8 @@
     "risk_score": 0,
     "intraday_up": 0.002878,
     "intraday_down": -0.011561,
-    "close_change": -0.003771
+    "close_change": -0.003771,
+    "pct5y": 99.6
   },
   {
     "date": "2026-01-23",
@@ -921,7 +997,8 @@
     "risk_score": 0,
     "intraday_up": -0.000758,
     "intraday_down": -0.021752,
-    "close_change": -0.003516
+    "close_change": -0.003516,
+    "pct5y": 99.1
   },
   {
     "date": "2026-01-30",
@@ -933,7 +1010,8 @@
     "risk_score": 1,
     "intraday_up": 0.012533,
     "intraday_down": -0.00648,
-    "close_change": 0.003387
+    "close_change": 0.003387,
+    "pct5y": 99.2
   },
   {
     "date": "2026-02-06",
@@ -945,7 +1023,8 @@
     "risk_score": 0,
     "intraday_up": 0.007789,
     "intraday_down": -0.022899,
-    "close_change": -0.00097
+    "close_change": -0.00097,
+    "pct5y": 99.0
   },
   {
     "date": "2026-02-13",
@@ -957,7 +1036,8 @@
     "risk_score": 0,
     "intraday_up": 0.008825,
     "intraday_down": -0.019871,
-    "close_change": -0.013867
+    "close_change": -0.013867,
+    "pct5y": 96.2
   },
   {
     "date": "2026-02-20",
@@ -969,7 +1049,8 @@
     "risk_score": 0,
     "intraday_up": 0.011657,
     "intraday_down": -0.008875,
-    "close_change": 0.010728
+    "close_change": 0.010728,
+    "pct5y": 98.0
   },
   {
     "date": "2026-02-27",
@@ -981,7 +1062,8 @@
     "risk_score": 0,
     "intraday_up": 0.006223,
     "intraday_down": -0.013616,
-    "close_change": -0.004433
+    "close_change": -0.004433,
+    "pct5y": 97.0
   },
   {
     "date": "2026-03-06",
@@ -993,7 +1075,8 @@
     "risk_score": -1,
     "intraday_up": 0.003217,
     "intraday_down": -0.024489,
-    "close_change": -0.020186
+    "close_change": -0.020186,
+    "pct5y": 93.6
   },
   {
     "date": "2026-03-13",
@@ -1005,7 +1088,8 @@
     "risk_score": -2,
     "intraday_up": 0.015587,
     "intraday_down": -0.017225,
-    "close_change": -0.015998
+    "close_change": -0.015998,
+    "pct5y": 90.9
   },
   {
     "date": "2026-03-20",
@@ -1017,7 +1101,8 @@
     "risk_score": -3,
     "intraday_up": 0.018412,
     "intraday_down": -0.023924,
-    "close_change": -0.018955
+    "close_change": -0.018955,
+    "pct5y": 89.4
   },
   {
     "date": "2026-03-27",
@@ -1029,7 +1114,8 @@
     "risk_score": -3,
     "intraday_up": 0.022307,
     "intraday_down": -0.023115,
-    "close_change": -0.021153
+    "close_change": -0.021153,
+    "pct5y": 87.1
   },
   {
     "date": "2026-04-03",
@@ -1041,7 +1127,8 @@
     "risk_score": 0,
     "intraday_up": 0.037812,
     "intraday_down": -0.008155,
-    "close_change": 0.033576
+    "close_change": 0.033576,
+    "pct5y": 89.6
   },
   {
     "date": "2026-04-10",
@@ -1053,7 +1140,8 @@
     "risk_score": 2,
     "intraday_up": 0.039965,
     "intraday_down": -0.007313,
-    "close_change": 0.035578
+    "close_change": 0.035578,
+    "pct5y": 94.6
   },
   {
     "date": "2026-04-17",
@@ -1065,7 +1153,8 @@
     "risk_score": 3,
     "intraday_up": 0.048502,
     "intraday_down": -0.003942,
-    "close_change": 0.045354
+    "close_change": 0.045354,
+    "pct5y": 100.0
   },
   {
     "date": "2026-04-24",
@@ -1077,7 +1166,8 @@
     "risk_score": 3,
     "intraday_up": 0.005968,
     "intraday_down": -0.011158,
-    "close_change": 0.005476
+    "close_change": 0.005476,
+    "pct5y": 100.0
   },
   {
     "date": "2026-05-01",
@@ -1089,7 +1179,8 @@
     "risk_score": 3,
     "intraday_up": 0.014995,
     "intraday_down": -0.007986,
-    "close_change": 0.009077
+    "close_change": 0.009077,
+    "pct5y": 100.0
   },
   {
     "date": "2026-05-08",
@@ -1101,7 +1192,8 @@
     "risk_score": 2,
     "intraday_up": 0.023704,
     "intraday_down": -0.007745,
-    "close_change": 0.023348
+    "close_change": 0.023348,
+    "pct5y": 100.0
   },
   {
     "date": "2026-05-15",
@@ -1113,7 +1205,8 @@
     "risk_score": 3,
     "intraday_up": 0.015974,
     "intraday_down": -0.008162,
-    "close_change": 0.001293
+    "close_change": 0.001293,
+    "pct5y": 99.8
   },
   {
     "date": "2026-05-22",
@@ -1125,7 +1218,8 @@
     "risk_score": 3,
     "intraday_up": 0.013204,
     "intraday_down": -0.010099,
-    "close_change": 0.00877
+    "close_change": 0.00877,
+    "pct5y": 99.9
   },
   {
     "date": "2026-05-29",
@@ -1137,7 +1231,8 @@
     "risk_score": 2,
     "intraday_up": 0.016848,
     "intraday_down": 0.003512,
-    "close_change": 0.014262
+    "close_change": 0.014262,
+    "pct5y": 100.0
   },
   {
     "date": "2026-06-05",
@@ -1149,7 +1244,8 @@
     "risk_score": 1,
     "intraday_up": 0.005388,
     "intraday_down": -0.027893,
-    "close_change": -0.0259
+    "close_change": -0.0259,
+    "pct5y": 98.6
   },
   {
     "date": "2026-06-12",
@@ -1161,7 +1257,8 @@
     "risk_score": 1,
     "intraday_up": 0.013463,
     "intraday_down": -0.019758,
-    "close_change": 0.006463
+    "close_change": 0.006463,
+    "pct5y": 99.0
   },
   {
     "date": "2026-06-19",
@@ -1173,7 +1270,8 @@
     "risk_score": 0,
     "intraday_up": 0.019708,
     "intraday_down": -0.003882,
-    "close_change": 0.009301
+    "close_change": 0.009301,
+    "pct5y": 99.1
   },
   {
     "date": "2026-06-26",
@@ -1185,7 +1283,8 @@
     "risk_score": 0,
     "intraday_up": 0.003924,
     "intraday_down": -0.027518,
-    "close_change": -0.01954
+    "close_change": -0.01954,
+    "pct5y": 97.5
   },
   {
     "date": "2026-07-03",
@@ -1197,7 +1296,8 @@
     "risk_score": 0,
     "intraday_up": 0.025392,
     "intraday_down": -0.000699,
-    "close_change": 0.017571
+    "close_change": 0.017571,
+    "pct5y": 99.0
   },
   {
     "date": "2026-07-10",
@@ -1209,7 +1309,8 @@
     "risk_score": 0,
     "intraday_up": 0.012921,
     "intraday_down": -0.008208,
-    "close_change": 0.012314
+    "close_change": 0.012314,
+    "pct5y": 99.7
   },
   {
     "date": "2026-07-17",
@@ -1221,7 +1322,8 @@
     "risk_score": 1,
     "intraday_up": 0.000807,
     "intraday_down": -0.019026,
-    "close_change": -0.015537
+    "close_change": -0.015537,
+    "pct5y": 97.9
   },
   {
     "date": "2026-07-24",
@@ -1233,7 +1335,8 @@
     "risk_score": 0,
     "intraday_up": 0.009152,
     "intraday_down": -0.010954,
-    "close_change": -0.006129
+    "close_change": -0.006129,
+    "pct5y": 97.1
   },
   {
     "date": "2026-07-31",
@@ -1245,7 +1348,8 @@
     "risk_score": 0,
     "intraday_up": 0.0135,
     "intraday_down": -0.01323,
-    "close_change": 0.010488
+    "close_change": 0.010488,
+    "pct5y": 98.2
   },
   {
     "date": "2026-08-07",
@@ -1257,7 +1361,8 @@
     "risk_score": 2,
     "intraday_up": 0.040584,
     "intraday_down": 0.002011,
-    "close_change": 0.035772
+    "close_change": 0.035772,
+    "pct5y": 100.0
   },
   {
     "date": "2026-08-14",
@@ -1269,7 +1374,8 @@
     "risk_score": 2,
     "intraday_up": 0.007613,
     "intraday_down": -0.005206,
-    "close_change": 0.003625
+    "close_change": 0.003625,
+    "pct5y": 99.9
   },
   {
     "date": "2026-08-21",
@@ -1281,7 +1387,8 @@
     "risk_score": 1,
     "intraday_up": 0.000632,
     "intraday_down": -0.018849,
-    "close_change": -0.014307
+    "close_change": -0.014307,
+    "pct5y": 99.0
   },
   {
     "date": "2026-08-28",
@@ -1293,7 +1400,8 @@
     "risk_score": 0,
     "intraday_up": 0.012654,
     "intraday_down": -0.004717,
-    "close_change": 0.004872
+    "close_change": 0.004872,
+    "pct5y": 99.2
   },
   {
     "date": "2026-09-04",
@@ -1305,7 +1413,8 @@
     "risk_score": 0,
     "intraday_up": 0.005835,
     "intraday_down": -0.01304,
-    "close_change": 0.000887
+    "close_change": 0.000887,
+    "pct5y": 99.1
   },
   {
     "date": "2026-09-11",
@@ -1317,7 +1426,8 @@
     "risk_score": 0,
     "intraday_up": -0.000102,
     "intraday_down": -0.017949,
-    "close_change": -0.007983
+    "close_change": -0.007983,
+    "pct5y": 98.2
   },
   {
     "date": "2026-09-18",
@@ -1329,7 +1439,8 @@
     "risk_score": 0,
     "intraday_up": 2.5e-05,
     "intraday_down": -0.019487,
-    "close_change": -0.000846
+    "close_change": -0.000846,
+    "pct5y": 98.1
   },
   {
     "date": "2026-09-25",
@@ -1341,7 +1452,8 @@
     "risk_score": 0,
     "intraday_up": 0.017213,
     "intraday_down": 0.001578,
-    "close_change": 0.012144
+    "close_change": 0.012144,
+    "pct5y": 99.3
   },
   {
     "date": "2026-10-02",
@@ -1353,7 +1465,8 @@
     "risk_score": 1,
     "intraday_up": 0.001454,
     "intraday_down": -0.016353,
-    "close_change": -0.002672
+    "close_change": -0.002672,
+    "pct5y": 98.9
   },
   {
     "date": "2026-10-09",
@@ -1365,7 +1478,8 @@
     "risk_score": 1,
     "intraday_up": 0.015772,
     "intraday_down": 0.000631,
-    "close_change": 0.011501
+    "close_change": 0.011501,
+    "pct5y": 99.9
   },
   {
     "date": "2026-10-16",
@@ -1377,7 +1491,8 @@
     "risk_score": 0,
     "intraday_up": 0.001297,
     "intraday_down": -0.023013,
-    "close_change": -0.019471
+    "close_change": -0.019471,
+    "pct5y": 96.8
   },
   {
     "date": "2026-10-23",
@@ -1389,7 +1504,8 @@
     "risk_score": 0,
     "intraday_up": 0.014487,
     "intraday_down": -0.006185,
-    "close_change": -0.004669
+    "close_change": -0.004669,
+    "pct5y": 95.8
   },
   {
     "date": "2026-10-30",
@@ -1401,7 +1517,8 @@
     "risk_score": -1,
     "intraday_up": 0.017675,
     "intraday_down": -0.012608,
-    "close_change": -0.00572
+    "close_change": -0.00572,
+    "pct5y": 94.8
   },
   {
     "date": "2026-11-06",
@@ -1413,7 +1530,8 @@
     "risk_score": -2,
     "intraday_up": 0.017876,
     "intraday_down": -0.030306,
-    "close_change": -0.026808
+    "close_change": -0.026808,
+    "pct5y": 90.6
   },
   {
     "date": "2026-11-13",
@@ -1425,7 +1543,8 @@
     "risk_score": 0,
     "intraday_up": 0.037401,
     "intraday_down": 0.006152,
-    "close_change": 0.025053
+    "close_change": 0.025053,
+    "pct5y": 94.1
   },
   {
     "date": "2026-11-20",
@@ -1437,6 +1556,7 @@
     "risk_score": -1,
     "intraday_up": -0.006093,
     "intraday_down": -0.02136,
-    "close_change": -0.019186
+    "close_change": -0.019186,
+    "pct5y": 91.2
   }
 ]
