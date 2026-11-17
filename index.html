@@ -94,6 +94,7 @@
 
   /* ===== 卡片期权摘要行 ===== */
   .etf-card-opt { font-size: 10px; color: #4a5568; margin-top: 5px; display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px dashed #e2e8f0; padding-top: 4px; }
+  .etf-card-pct { font-size: 10px; color: #718096; margin-top: 4px; }
   .etf-card-opt span b { color: #2b6cb0; }
 
   /* ===== 期权仪表盘 ===== */
@@ -835,6 +836,7 @@ function applyRealtimeToData(rtData) {
             intraday_up: null,
             intraday_down: null,
             close_change: rt.change_pct != null ? rt.change_pct / 100 : null,
+            pct5y: last.pct5y != null ? last.pct5y : null,   // 沿用上一根已算好的5年分位
           });
           if (p === "daily" && arr.length > 1500) arr.shift();
         }
@@ -863,6 +865,7 @@ function applyRealtimeToData(rtData) {
               intraday_up: null,
               intraday_down: null,
               close_change: rt.change_pct != null ? rt.change_pct / 100 : null,
+              pct5y: s.pct5y != null ? s.pct5y : null,   // 沿用上一交易日已算好的5年分位
             };
           }
         } else if (s.date >= barDate) {
@@ -1306,6 +1309,7 @@ function renderSummary() {
           <span class="rating-left">日:${ratingTag(code,"daily",lastDaily)} 周:${ratingTag(code,"weekly",lastWeekly)} 月:${ratingTag(code,"monthly",lastMonthly)} <span class="composite-wrap">综 ${compositeFromLast()}</span></span>
           ${peTag()}
         </div>
+        ${latest && latest.pct5y != null ? `<div class="etf-card-pct">价分位（5年）${Number(latest.pct5y).toFixed(1)}%</div>` : ""}
         ${optCardLine(code)}
       </div>`;
   }
@@ -1624,6 +1628,8 @@ function renderChart() {
         html += `<span style="color:#666">高</span> <b>${high.toFixed(decimals)}</b>${pctStr(high)}<br/>`;
         html += `<span style="color:#666">低</span> <b>${low.toFixed(decimals)}</b>${pctStr(low)}`;
         if (label) html += `<br/><span style="color:${labelColor};font-size:10px;font-weight:bold">[${label}]</span>`;
+        const pct5y = records[idx] ? records[idx].pct5y : null;
+        if (pct5y != null) html += `<br/><span style="color:#718096;font-size:10px">价分位（5年）${Number(pct5y).toFixed(1)}%</span>`;
         const maVals = [];
         params.forEach(p => {
           if (p.seriesName && p.seriesName.startsWith("MA") && p.value !== null && p.value !== undefined && !isNaN(p.value)) {

@@ -9,6 +9,7 @@ import sys
 import math
 import gzip
 import shutil
+from bisect import bisect_left, bisect_right, insort
 from datetime import datetime, timedelta, timezone
 
 import pandas as pd
@@ -79,6 +80,8 @@ def slim_records(records):
         }
         if "adj_close" in r:
             rec["adj_close"] = r["adj_close"]
+        if "pct5y" in r:
+            rec["pct5y"] = r["pct5y"]
         out.append(rec)
     return out
 
@@ -569,6 +572,11 @@ def fetch_kline_data(etf):
     print(f" → 最终{len(df)}条")
 
     result = {}
+    # 5年价格分位: 基于日线全历史计算, 周/月按"该bar日期之前最近一个交易日"映射,
+    # 保证同一天在不同周期看到的分位数一致。
+    pct_price_col = "adj_close" if "adj_close" in df.columns else "close"
+    pct_dates = list(df["date"])
+    pct_daily = calc_price_percentile_5y(pct_dates, list(df[pct_price_col]))
     for period_info in PERIODS:
         period = period_info["name"]
         max_bars = period_info["max_bars"]
@@ -597,6 +605,7 @@ def fetch_kline_data(etf):
                 close_change = (float(row["close"]) - prev_close) / prev_close
             else:
                 intraday_up = intraday_down = close_change = None
+            pct_k = bisect_right(pct_dates, row["date"]) - 1
             rec = {
                 "date": row["date"].strftime("%Y-%m-%d"),
                 "open": float(row["open"]), "high": float(row["high"]),
@@ -604,6 +613,7 @@ def fetch_kline_data(etf):
                 "volume": int(row["volume"]), "risk_score": scores[i],
                 "risk_label": RISK_LABELS[scores[i]],
                 "intraday_up": intraday_up, "intraday_down": intraday_down, "close_change": close_change,
+                "pct5y": pct_daily[pct_k] if pct_k >= 0 else None,
             }
             if "adj_close" in df_p.columns:
                 # 换月复权收盘价: 评级与胜率统计用它, 避免跨合约跳空混入未来收益
@@ -614,6 +624,34 @@ def fetch_kline_data(etf):
         opp_n = sum(1 for r in records if r["risk_score"] == -3)
         print(f"    {period}: {len(records)}条 巨大风险={risk_n} 巨大机会={opp_n}")
     return result
+
+
+def calc_price_percentile_5y(dates, prices):
+    """滚动5年价格分位(0-100): 当日收盘价在"近5年(自然日)收盘价"中的百分位。
+
+    用滑动窗口+有序表增量维护, 避免每根K线都重算整个窗口。
+    I0 传入 adj_close, 避免换月升贴水跳空污染价格水位。
+    """
+    out = [None] * len(prices)
+    win = []
+    j = 0
+    for i, (d, p) in enumerate(zip(dates, prices)):
+        if p is None or pd.isna(p):
+            out[i] = None
+            continue
+        p = float(p)
+        start = d - pd.DateOffset(years=5)
+        while j <= i and dates[j] < start:
+            q = prices[j]
+            if q is not None and not pd.isna(q):
+                k = bisect_left(win, float(q))
+                if k < len(win):
+                    win.pop(k)
+            j += 1
+        insort(win, p)
+        if len(win) >= 20:
+            out[i] = round(bisect_right(win, p) / len(win) * 100, 1)
+    return out
 
 
 def fetch_pe_data():
