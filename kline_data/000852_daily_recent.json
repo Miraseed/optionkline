@@ -3888,14 +3888,14 @@
   },
   {
     "date": "2026-11-17",
-    "open": 6111.0521,
-    "high": 6225.5617,
-    "low": 6055.7343,
+    "open": 6111.052,
+    "high": 6225.562,
+    "low": 6055.734,
     "close": 6092.3949,
     "volume": 185901690,
     "risk_score": -2,
     "intraday_up": 0.009885,
-    "intraday_down": -0.017663,
+    "intraday_down": -0.017664,
     "close_change": -0.011717,
     "pct5y": 27.5
   }
