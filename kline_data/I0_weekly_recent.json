@@ -1670,13 +1670,13 @@
     "open": 668.5,
     "high": 669.5,
     "low": 638.5,
-    "close": 640.5,
-    "volume": 681733,
-    "risk_score": -3,
+    "close": 646.0,
+    "volume": 986572,
+    "risk_score": -2,
     "intraday_up": 0.0,
     "intraday_down": -0.046303,
-    "close_change": -0.043316,
-    "adj_close": 640.5,
-    "pct5y": 47.1
+    "close_change": -0.035101,
+    "adj_close": 646.0,
+    "pct5y": 48.7
   }
 ]
