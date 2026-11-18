@@ -87752,14 +87752,14 @@
   {
     "date": "2026-11-18",
     "open": 27177.41,
-    "high": 27231.24,
-    "low": 26849.77,
-    "close": 26995.25,
-    "volume": 546374428,
+    "high": 27236.12,
+    "low": 26848.92,
+    "close": 27116.26,
+    "volume": 1400965307,
     "risk_score": -2,
-    "intraday_up": 0.008498,
-    "intraday_down": -0.00563,
-    "close_change": -0.000242,
-    "pct5y": 88.7
+    "intraday_up": 0.008679,
+    "intraday_down": -0.005661,
+    "close_change": 0.00424,
+    "pct5y": 88.8
   }
 ]
