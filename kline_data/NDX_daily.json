@@ -87779,13 +87779,13 @@
     "date": "2026-11-20",
     "open": 26184.76,
     "high": 26429.09,
-    "low": 25674.42,
-    "close": 25873.31,
-    "volume": 806238583,
+    "low": 24910.48,
+    "close": 25028.98,
+    "volume": 2673005942,
     "risk_score": -2,
     "intraday_up": -0.003317,
-    "intraday_down": -0.031777,
-    "close_change": -0.024276,
-    "pct5y": 87.3
+    "intraday_down": -0.060586,
+    "close_change": -0.056117,
+    "pct5y": 82.0
   }
 ]

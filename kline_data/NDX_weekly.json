@@ -18203,13 +18203,13 @@
     "date": "2026-11-20",
     "open": 27543.64,
     "high": 27749.35,
-    "low": 25674.42,
-    "close": 25873.31,
-    "volume": 6988700921,
+    "low": 24910.48,
+    "close": 25028.98,
+    "volume": 8855468280,
     "risk_score": -3,
     "intraday_up": -0.006956,
-    "intraday_down": -0.08121,
-    "close_change": -0.074093,
-    "pct5y": 87.3
+    "intraday_down": -0.108549,
+    "close_change": -0.104308,
+    "pct5y": 82.0
   }
 ]
