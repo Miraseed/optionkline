@@ -3396,13 +3396,13 @@
     "date": "2026-11-30",
     "open": 2.885,
     "high": 2.934,
-    "low": 2.831,
-    "close": 2.883,
-    "volume": 13752214964,
+    "low": 2.823,
+    "close": 2.9,
+    "volume": 22179800555,
     "risk_score": -1,
     "intraday_up": 0.025157,
-    "intraday_down": -0.010832,
-    "close_change": 0.007338,
-    "pct5y": 71.7
+    "intraday_down": -0.013627,
+    "close_change": 0.013277,
+    "pct5y": 73.5
   }
 ]

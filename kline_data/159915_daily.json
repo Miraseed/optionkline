@@ -47149,5 +47149,18 @@
     "intraday_down": -0.017612,
     "close_change": -0.008591,
     "pct5y": 52.1
+  },
+  {
+    "date": "2026-11-20",
+    "open": 2.26,
+    "high": 2.28,
+    "low": 2.23,
+    "close": 2.23,
+    "volume": 6816431962,
+    "risk_score": -2,
+    "intraday_up": -0.012132,
+    "intraday_down": -0.033795,
+    "close_change": -0.033795,
+    "pct5y": 44.7
   }
 ]

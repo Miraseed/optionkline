@@ -9129,13 +9129,13 @@
     "date": "2026-11-20",
     "open": 6.449,
     "high": 6.466,
-    "low": 6.226,
-    "close": 6.286,
-    "volume": 3054746528,
-    "risk_score": -1,
+    "low": 6.051,
+    "close": 6.053,
+    "volume": 4953004422,
+    "risk_score": -2,
     "intraday_up": -0.004465,
-    "intraday_down": -0.041416,
-    "close_change": -0.032179,
-    "pct5y": 60.6
+    "intraday_down": -0.06836,
+    "close_change": -0.068052,
+    "pct5y": 57.0
   }
 ]

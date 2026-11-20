@@ -9636,13 +9636,13 @@
     "date": "2026-11-20",
     "open": 4.068,
     "high": 4.075,
-    "low": 4.013,
-    "close": 4.06,
-    "volume": 8681717013,
-    "risk_score": -1,
+    "low": 3.97,
+    "close": 4.018,
+    "volume": 13223434006,
+    "risk_score": -2,
     "intraday_up": -0.001959,
-    "intraday_down": -0.017144,
-    "close_change": -0.005633,
-    "pct5y": 67.2
+    "intraday_down": -0.027676,
+    "close_change": -0.01592,
+    "pct5y": 66.3
   }
 ]

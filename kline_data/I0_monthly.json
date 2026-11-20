@@ -2202,13 +2202,13 @@
     "open": 672.0,
     "high": 694.5,
     "low": 638.5,
-    "close": 648.0,
-    "volume": 3868763,
+    "close": 652.5,
+    "volume": 4219874,
     "risk_score": -3,
     "intraday_up": 0.033482,
     "intraday_down": -0.049851,
-    "close_change": -0.035714,
-    "adj_close": 648.0,
-    "pct5y": 49.4
+    "close_change": -0.029018,
+    "adj_close": 652.5,
+    "pct5y": 50.6
   }
 ]

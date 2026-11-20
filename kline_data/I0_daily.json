@@ -44546,5 +44546,19 @@
     "close_change": 0.003096,
     "adj_close": 648.0,
     "pct5y": 49.4
+  },
+  {
+    "date": "2026-11-20",
+    "open": 650.5,
+    "high": 663.0,
+    "low": 650.5,
+    "close": 652.5,
+    "volume": 351111,
+    "risk_score": -1,
+    "intraday_up": 0.023148,
+    "intraday_down": 0.003858,
+    "close_change": 0.006944,
+    "adj_close": 652.5,
+    "pct5y": 50.6
   }
 ]
