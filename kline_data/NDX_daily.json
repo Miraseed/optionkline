@@ -87781,11 +87781,24 @@
     "high": 26429.09,
     "low": 24910.48,
     "close": 25028.98,
-    "volume": 2673005942,
+    "volume": 2687727469,
     "risk_score": -2,
     "intraday_up": -0.003317,
     "intraday_down": -0.060586,
     "close_change": -0.056117,
     "pct5y": 82.0
+  },
+  {
+    "date": "2026-11-23",
+    "open": 26889.29,
+    "high": 27018.88,
+    "low": 26386.42,
+    "close": 26779.89,
+    "volume": 1631351327,
+    "risk_score": -1,
+    "intraday_up": 0.079504,
+    "intraday_down": 0.054235,
+    "close_change": 0.069955,
+    "pct5y": 88.4
   }
 ]

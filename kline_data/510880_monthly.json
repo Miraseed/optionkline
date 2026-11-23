@@ -3098,12 +3098,12 @@
     "open": 3.442,
     "high": 3.488,
     "low": 3.318,
-    "close": 3.429,
-    "volume": 2604203978,
-    "risk_score": 1,
+    "close": 3.394,
+    "volume": 2718130324,
+    "risk_score": 0,
     "intraday_up": 0.008092,
     "intraday_down": -0.04104,
-    "close_change": -0.00896,
-    "pct5y": 98.3
+    "close_change": -0.019075,
+    "pct5y": 97.0
   }
 ]

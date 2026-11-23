@@ -38222,14 +38222,27 @@
   {
     "date": "2026-11-20",
     "open": 5826.368,
-    "high": 5841.4192,
+    "high": 5841.419,
     "low": 5648.627,
-    "close": 5648.6274,
-    "volume": 196777684,
+    "close": 5648.627,
+    "volume": 19677768400,
     "risk_score": -2,
     "intraday_up": -0.016414,
     "intraday_down": -0.048877,
     "close_change": -0.048877,
     "pct5y": 15.8
+  },
+  {
+    "date": "2026-11-23",
+    "open": 5563.288,
+    "high": 5841.181,
+    "low": 5541.9689,
+    "close": 5812.3197,
+    "volume": 213502543,
+    "risk_score": -2,
+    "intraday_up": 0.034089,
+    "intraday_down": -0.018882,
+    "close_change": 0.028979,
+    "pct5y": 18.3
   }
 ]
