@@ -8062,14 +8062,14 @@
   {
     "date": "2026-11-27",
     "open": 5563.288,
-    "high": 5997.5826,
+    "high": 5997.583,
     "low": 5541.969,
-    "close": 5925.3419,
-    "volume": 21431007094,
+    "close": 5799.0137,
+    "volume": 21550093833,
     "risk_score": -3,
     "intraday_up": 0.061777,
     "intraday_down": -0.018882,
-    "close_change": 0.048988,
-    "pct5y": 21.1
+    "close_change": 0.026624,
+    "pct5y": 18.0
   }
 ]
