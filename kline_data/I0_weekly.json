@@ -9424,15 +9424,15 @@
   {
     "date": "2026-11-27",
     "open": 652.5,
-    "high": 658.0,
+    "high": 663.5,
     "low": 648.5,
-    "close": 654.0,
-    "volume": 254266,
+    "close": 658.5,
+    "volume": 424103,
     "risk_score": -2,
-    "intraday_up": 0.008429,
+    "intraday_up": 0.016858,
     "intraday_down": -0.00613,
-    "close_change": 0.002299,
-    "adj_close": 654.0,
-    "pct5y": 50.8
+    "close_change": 0.009195,
+    "adj_close": 658.5,
+    "pct5y": 52.7
   }
 ]

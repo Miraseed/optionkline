@@ -14419,14 +14419,14 @@
   {
     "date": "2026-11-27",
     "open": 2.886,
-    "high": 2.887,
+    "high": 2.899,
     "low": 2.851,
-    "close": 2.875,
-    "volume": 1131006688,
+    "close": 2.888,
+    "volume": 1351599933,
     "risk_score": 0,
-    "intraday_up": -0.004483,
+    "intraday_up": -0.000345,
     "intraday_down": -0.016897,
-    "close_change": -0.008621,
-    "pct5y": 71.1
+    "close_change": -0.004138,
+    "pct5y": 72.4
   }
 ]

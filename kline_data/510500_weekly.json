@@ -9141,14 +9141,14 @@
   {
     "date": "2026-11-27",
     "open": 5.976,
-    "high": 6.202,
+    "high": 6.329,
     "low": 5.937,
-    "close": 6.16,
-    "volume": 701553738,
+    "close": 6.257,
+    "volume": 865030718,
     "risk_score": -3,
-    "intraday_up": 0.024616,
+    "intraday_up": 0.045597,
     "intraday_down": -0.019164,
-    "close_change": 0.017677,
-    "pct5y": 59.5
+    "close_change": 0.033702,
+    "pct5y": 60.6
   }
 ]
