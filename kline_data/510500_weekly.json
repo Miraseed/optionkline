@@ -9142,13 +9142,13 @@
     "date": "2026-11-27",
     "open": 5.976,
     "high": 6.329,
-    "low": 5.937,
-    "close": 6.126,
-    "volume": 1381297070,
+    "low": 5.92,
+    "close": 5.922,
+    "volume": 2963809461,
     "risk_score": -3,
     "intraday_up": 0.045597,
-    "intraday_down": -0.019164,
-    "close_change": 0.01206,
-    "pct5y": 59.1
+    "intraday_down": -0.021973,
+    "close_change": -0.021642,
+    "pct5y": 51.7
   }
 ]

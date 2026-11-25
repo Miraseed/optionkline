@@ -13198,13 +13198,13 @@
     "date": "2026-11-27",
     "open": 3.42,
     "high": 3.421,
-    "low": 3.366,
-    "close": 3.38,
-    "volume": 263800794,
+    "low": 3.352,
+    "close": 3.367,
+    "volume": 385417671,
     "risk_score": 0,
     "intraday_up": -0.002333,
-    "intraday_down": -0.018373,
-    "close_change": -0.01429,
-    "pct5y": 96.3
+    "intraday_down": -0.022456,
+    "close_change": -0.018081,
+    "pct5y": 95.7
   }
 ]
