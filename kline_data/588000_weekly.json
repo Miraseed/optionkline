@@ -4007,13 +4007,13 @@
     "date": "2026-11-27",
     "open": 1.287,
     "high": 1.353,
-    "low": 1.246,
-    "close": 1.254,
-    "volume": 25541170338,
+    "low": 1.223,
+    "close": 1.233,
+    "volume": 31611822701,
     "risk_score": -3,
     "intraday_up": 0.040769,
-    "intraday_down": -0.041538,
-    "close_change": -0.035385,
-    "pct5y": 70.5
+    "intraday_down": -0.059231,
+    "close_change": -0.051538,
+    "pct5y": 70.0
   }
 ]
