@@ -2266,12 +2266,12 @@
     "open": 4.084,
     "high": 4.216,
     "low": 3.952,
-    "close": 3.959,
-    "volume": 37885108276,
+    "close": 4.162,
+    "volume": 40913142795,
     "risk_score": -3,
     "intraday_up": 0.037146,
     "intraday_down": -0.027798,
-    "close_change": -0.026076,
-    "pct5y": 64.4
+    "close_change": 0.023862,
+    "pct5y": 71.0
   }
 ]
