@@ -120824,14 +120824,14 @@
   {
     "date": "2026-11-27",
     "open": 7262.61,
-    "high": 7295.35,
+    "high": 7304.1,
     "low": 7211.46,
-    "close": 7282.54,
-    "volume": 1122409617,
+    "close": 7297.49,
+    "volume": 1715427517,
     "risk_score": 1,
-    "intraday_up": 0.015672,
+    "intraday_up": 0.01689,
     "intraday_down": 0.003993,
-    "close_change": 0.013889,
+    "close_change": 0.01597,
     "pct5y": 89.2
   }
 ]

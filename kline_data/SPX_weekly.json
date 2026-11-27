@@ -25027,14 +25027,14 @@
   {
     "date": "2026-11-27",
     "open": 7227.41,
-    "high": 7295.6,
+    "high": 7304.1,
     "low": 6970.11,
-    "close": 7282.54,
-    "volume": 12157283019,
+    "close": 7297.49,
+    "volume": 12750300919,
     "risk_score": -1,
-    "intraday_up": 0.055744,
+    "intraday_up": 0.056974,
     "intraday_down": 0.008642,
-    "close_change": 0.053854,
+    "close_change": 0.056017,
     "pct5y": 89.2
   }
 ]
